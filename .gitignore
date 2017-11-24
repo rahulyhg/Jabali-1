@@ -1,0 +1,8 @@
+.htaccess
+error.log
+app/config.php
+uploads/2017/
+app/themes/
+app/modules/
+docs-n-stuff/
+admin/sql.php
