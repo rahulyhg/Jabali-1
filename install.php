@@ -3,7 +3,7 @@
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage App Instalation
 * @link https://docs.jabalicms.org/installation/
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.04
 * @license MIT - https://opensource.org/licenses/MIT
 **/
@@ -17,11 +17,11 @@ if (isset( $_POST['register'] ) ) {
 	$date = date( "Ymd H:i:s" );
     $email = $GLOBALS['JBLDB'] -> clean( $_POST['email'] );
     $site_name = $GLOBALS['JBLDB'] -> clean( $_POST['h_name'] );
+    $admin_name = $GLOBALS['JBLDB'] -> clean( $_POST['u_name'] );
     $social = array( "facebook" => "https://www.facebook.com/", "twitter" => "https://twitter.com/", "instagram" => "https://instagram.com/", "github" => "https://github.com/" );
 
     $hash = str_shuffle(md5($email .$date ) );
 
-    $name = "Admin User";
     $author = 1;
     $avatar = _IMAGES.'avatar.png';
     $company = "Jabali CMS";
@@ -109,7 +109,7 @@ if (isset( $_POST['register'] ) ) {
 	*Set Initial Settings So They Are Editable
 	*/
 	$GLOBALS['OPTIONS'] -> install ( 'Site Name', 'name', $site_name, $created );
-    $GLOBALS['OPTIONS'] -> install ( 'About', 'about', 'Coming Soon', $created );
+    $GLOBALS['OPTIONS'] -> install ( 'About', 'about', 'Long app description. Say something, in fifty words or so, about this app or organization. Or yourself.', $created );
     $GLOBALS['OPTIONS'] -> install ( 'Description', 'description', 'Built With Jabali', $created );
 	$GLOBALS['OPTIONS'] -> install ( 'Admin Email', 'email', $email , $created );
 	$GLOBALS['OPTIONS'] -> install ( 'Admin Phone', 'phone', '+254204404993', $created );
@@ -189,32 +189,28 @@ if (isset( $_POST['register'] ) ) {
 	*Create Admin Account
 	*/
     if ( $GLOBALS['JBLDB'] -> query( "INSERT INTO ". _DBPREFIX ."users (name, author, avatar, company, id, created, email, gender, authkey, level, link, location, excerpt, password, social, status, style, type, username) 
-    VALUES ('".$name."', '".$author."', '".$avatar."', '".$company."', '".$id."', '".$created."', '".$email."', '".$gender."', '".$authkey."', '".$level."', '".$link."', '".$location."', '".$excerpt."', '".$password."', '".$social."', '".$status."', '".$style."', '".$type."', '".$username."')" ) ) {
+    VALUES ('".$admin_name."', '".$author."', '".$avatar."', '".$company."', '".$id."', '".$created."', '".$email."', '".$gender."', '".$authkey."', '".$level."', '".$link."', '".$location."', '".$excerpt."', '".$password."', '".$social."', '".$status."', '".$style."', '".$type."', '".$username."')" ) ) {
 
         $GLOBALS['JBLDB'] -> query( "INSERT INTO ". _DBPREFIX ."posts (name, author, author_name, avatar, categories, created, details, gallery, authkey, level, link, excerpt, readings, status, subtitle, slug, tags, template, type, updated) 
-    VALUES ('Home', '1', '', '"._IMAGES."404.jpg"."', 'uncategorized', '".$created."', 'This is a sample page. Edit it or delete it alltogether.', '', '".md5( $created )."', 'public', '', '', '', 'published', 'Home', 'home', '', '', 'page', 'page', '".$created."')" );
+    VALUES ('Home', '1', '".$admin_name."', '"._IMAGES."404.jpg"."', 'uncategorized', '".$created."', 'This is a sample page. Edit it or delete it alltogether.', '', '".md5( $created )."', 'public', '', '', '', 'published', 'Home', 'home', '', '', 'page', 'page', '".$created."')" );
 
         $GLOBALS['JBLDB'] -> query( "INSERT INTO ". _DBPREFIX ."posts (name, author, author_name, avatar, categories, created, details, gallery, authkey, level, link, excerpt, readings, status, subtitle, slug, tags, template, type, updated) 
-    VALUES ('Hello World!', '1', 'Admin User', '"._IMAGES."placeholder.png"."', 'uncategorized', '".$created."', 'This is a sample article. Edit it or delete it alltogether.', '', '".md5( $created )."', 'public', 'hello-world', '', '', 'published', 'Hello', 'hello-world', 'starter', 'post', 'post', 'article', '".$created."')" );
+    VALUES ('Hello World!', '1', '".$admin_name."', '"._IMAGES."placeholder.png"."', 'uncategorized', '".$created."', 'This is a sample article. Edit it or delete it alltogether.', '', '".md5( $created )."', 'public', 'hello-world', '', '', 'published', 'Hello', 'hello-world', 'starter', 'post', 'post', 'article', '".$created."')" );
 
 		header("Location: "._ROOT."/login/jabali/" );
 
     } else {
         _shout_( "Error: " . $GLOBALS['JBLDB'] -> error(), "error");
     }
-} else { 
-
-    installSQLDB( $server["dbtype"] ); ?>
+} else { ?>
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    	<link rel="stylesheet" href="app/assets/css/materialize.css">
+    	<link rel="stylesheet" href="app/assets/css/colors.css">
     	<link rel="stylesheet" href="app/assets/css/material-icons.css">
     	<link rel="stylesheet" href="app/assets/css/jabali.css">
     	<script src="app/assets/js/jquery-3.2.1.min.js"></script>
-    	<script src="app/assets/js/materialize.min.js"></script>
-    	<script src="app/assets/js/material.js"></script>
     	<title>Admin Setup - Jabali CMS</title>
     </head>
     <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
@@ -224,32 +220,42 @@ if (isset( $_POST['register'] ) ) {
     			<div class="mdl-cell mdl-cell--4-col-desktop mdl-cell--4-col-tablet mdl-cell--12-col-phone light-blue">
     			    <div id="login_div" class="mdl-grid">
     			    <div class="mdl-cell mdl-cell--12-col">
-    			    <?php _shout_('Jabali Succesfully Installed<br>Set up your admin account', 'success'); ?>
+    			    <?php if( installSQLDB( $server["dbtype"] ) ){
+                        _shout_('Jabali Succesfully Installed! You can now set up your admin account', 'success');
+                    } else {
+                        _shout_('Oops! Something went wrong during Instalation. Process aborted.<br>Error: '.$GLOBALS['JBLDB'] -> error(), 'error');
+                    } ?>
                     </div>
     		          <form method="POST" action="" class="mdl-grid mdl-cell mdl-cell--12-col">
 
     		          <div class="input-field mdl-cell mdl-cell--12-col">
-    		          <i class="material-icons prefix">label</i>
-    		          <input name="h_name" id="h_name" type="text">
-    		          <label for="h_name" class="center-align">Site Name</label>
+        		          <i class="material-icons prefix">label</i>
+        		          <input name="h_name" id="h_name" type="text">
+        		          <label for="h_name" class="center-align">App Name</label>
     		          </div>
+
+                      <div class="input-field mdl-cell mdl-cell--12-col">
+                          <i class="material-icons prefix">label_outline</i>
+                          <input name="u_name" id="u_name" type="text">
+                          <label for="u_name" class="center-align">Adminstrator Names</label>
+                      </div>
 
     		          <div class="input-field mdl-cell mdl-cell--12-col">
     		          <i class="material-icons prefix">mail</i>
     		          <input name="email" id="email " type="text">
-    		          <label for="email " class="center-align">Email Address</label>
+    		          <label for="email " class="center-align">Adminstrator Email</label>
     		          </div>
 
     		          <div class="input-field mdl-cell mdl-cell--12-col">
     		          <i class="material-icons prefix">perm_identity</i>
     		          <input name="username" id="username" type="text">
-    		          <label for="username" class="center-align">Username</label>
+    		          <label for="username" class="center-align">Adminstrator Username</label>
     		          </div>
 
     		          <div class="input-field mdl-cell mdl-cell--12-col">
     		          <i class="material-icons prefix">lock</i>
     		          <input name="password" id="password" type="password">
-    		          <label for="password">Password</label>
+    		          <label for="password">Adminstrator Password</label>
     		          </div>
 
     		          <button class="mdl mdl-button mdl-js-button mdl-button--raised mdl-button--colored alignright" type="submit" name="register"><i class="material-icons">save</i> SUBMIT</button>
@@ -270,12 +276,5 @@ if (isset( $_POST['register'] ) ) {
         <script src="app/assets/js/getmdl-select.min.js"></script>
         <script src="app/assets/js/material.js"></script>
         <script src="app/assets/js/materialize.js"></script>
-        <script src="app/assets/js/nv.d3.js"></script>
-        <script src="app/assets/js/widgets/employer-form/employer-form.js"></script>
-        <script src="app/assets/js/widgets/line-chart/line-chart-nvd3.js"></script>
-        <script src="app/assets/js/list.js"></script>
-        <script src="app/assets/js/widgets/pie-chart/pie-chart-nvd3.js"></script>
-        <script src="app/assets/js/widgets/table/table.js"></script>
-        <script src="app/assets/js/widgets/todo/todo.js"></script>
     </html><?php
 }

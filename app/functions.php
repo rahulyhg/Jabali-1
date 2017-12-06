@@ -2,7 +2,7 @@
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Common functions
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.09
 * @link https://code.jabalicms.org/functions/
 * @license MIT - https://opensource.org/licenses/MIT
@@ -10,188 +10,28 @@
 
 /**
 * Install main instance of Jabali
+* @param string $db The type of database management system as per app configuration
 * @param string $prefix = Database prefix, defined in the config.php file.
 * @param array $tables = Array of the default database tables required by the app.
 **/
-function installSQLDB( $db = "MySQL")
+function installSQLDB( $dbtype = "MySQL")
 {
-	switch ($db) {
-		case 'MySQL':
-			$auto = "INT AUTO_INCREMENT";
-			break;
+	$dbtables = new Jabali\Lib\DBTables( $dbtype );
 
-		case 'SQLite':
-			$auto = "INTEGER AUTOINCREMENT";
-			break;
-		
-		default:
-			$auto = "INT AUTO_INCREMENT";
-			break;
+	foreach ( $dbtables -> tables as $table ) {
+		if( !$GLOBALS['JBLDB'] -> execute( $table ) ){
+			return false;
+		}
 	}
-	$prefix = _DBPREFIX;
 
-	$tables = array();
-	$tables[] = <<<SQL
-		CREATE TABLE IF NOT EXISTS {$prefix}users
-		( id {$auto},
-		authkey VARCHAR(100),
-		author VARCHAR(12),
-		author_name VARCHAR(20), 
-		avatar VARCHAR(100),
-		categories VARCHAR(20),  
-		company VARCHAR(100),
-		created DATETIME,
-		custom VARCHAR(150),
-		details TEXT,
-		email  VARCHAR(50) UNIQUE,
-		excerpt TEXT,
-		gender VARCHAR(8),
-		level VARCHAR(12),
-		link VARCHAR(100),
-		location VARCHAR(50),
-		name VARCHAR(100),
-		password VARCHAR(50),
-		phone VARCHAR(20),
-		social TEXT,
-		status VARCHAR(20),
-		style VARCHAR(100),
-		tags VARCHAR(200),
-		type VARCHAR(20),
-		updated DATE,
-		username VARCHAR(20) UNIQUE,
-		PRIMARY KEY(id, username)
-		)
-SQL;
-
-	$tables[] = <<<SQL
-		CREATE TABLE IF NOT EXISTS {$prefix}resources (
-		id {$auto},
-		name VARCHAR(100),
-		author VARCHAR(12),
-		avatar VARCHAR(20),
-		author_name VARCHAR(20), 
-		company VARCHAR(20),
-		created DATETIME,
-		custom VARCHAR(12),
-		details TEXT,
-		email  VARCHAR(50),
-		authkey VARCHAR(100),
-		level VARCHAR(12),
-		link VARCHAR(100),
-		location VARCHAR(50),
-		excerpt TEXT,
-		phone VARCHAR(20),
-		social VARCHAR(500),
-		status VARCHAR(20),
-		type VARCHAR(50),
-		updated DATE,
-		PRIMARY KEY(id)
-		)
-SQL;
-
-	$tables[] = <<<SQL
-		CREATE TABLE IF NOT EXISTS {$prefix}messages(
-		id {$auto},
-		authkey VARCHAR(100),
-		name VARCHAR(100),
-		author VARCHAR(20),
-		author_name VARCHAR(20),
-		created DATETIME,
-		details TEXT,
-		email  VARCHAR(50),
-		receipient VARCHAR(20),
-		level VARCHAR(12),
-		phone VARCHAR(20),
-		status VARCHAR(20),
-		type VARCHAR(50),
-		PRIMARY KEY(id)
-		)
-SQL;
-
-	$tables[] = <<<SQL
-		CREATE TABLE IF NOT EXISTS {$prefix}comments(
-		id {$auto},
-		authkey VARCHAR(100),
-		name VARCHAR(100),
-		author VARCHAR(20),
-		author_name VARCHAR(20),
-		created DATETIME,
-		details TEXT,
-		email  VARCHAR(50),
-		parent VARCHAR(20),
-		level VARCHAR(12),
-		link VARCHAR(100),
-		status VARCHAR(20),
-		type VARCHAR(50),
-		updated DATE,
-		PRIMARY KEY(id)
-		)
-SQL;
-
-	$tables[] = <<<SQL
-		CREATE TABLE IF NOT EXISTS {$prefix}posts(
-		name VARCHAR(300),
-		author VARCHAR(20),
-		author_name VARCHAR(100),
-		avatar VARCHAR(100),
-		categories VARCHAR(20),
-		id {$auto},
-		created DATETIME,
-		details TEXT,
-		gallery VARCHAR(500),
-		authkey VARCHAR(100),
-		level VARCHAR(12),
-		link VARCHAR(100),
-		excerpt TEXT,
-		readings VARCHAR(500),
-		status VARCHAR(20),
-		subtitle VARCHAR(100),
-		slug VARCHAR(300) UNIQUE,
-		tags VARCHAR(50),
-		template VARCHAR(50),
-		type VARCHAR(50),
-		updated DATE,
-		PRIMARY KEY(id)
-		)
-SQL;
-
-	$tables[] = <<<SQL
-		CREATE TABLE IF NOT EXISTS {$prefix}options (
-		id {$auto},
-		name VARCHAR(200),
-		code VARCHAR(100) UNIQUE,
-		details TEXT,
-		updated DATETIME,
-		PRIMARY KEY(id, code)
-		)
-SQL;
-
-	$tables[] = <<<SQL
-		CREATE TABLE IF NOT EXISTS {$prefix}menus (
-		id {$auto},
-		author VARCHAR(20),
-		avatar VARCHAR(100),
-		code VARCHAR(100) UNIQUE,
-		parent VARCHAR(20),
-		link VARCHAR(100),
-		location VARCHAR(100),
-		name VARCHAR(200),
-		type VARCHAR(50),
-		status VARCHAR(50),
-		updated DATETIME,
-		PRIMARY KEY(id, code)
-		)
-SQL;
-
-	foreach ( $tables as $table ) {
-		$GLOBALS['JBLDB'] -> execute( $table );
-	}
+	return true;
 } 
 
 /**
-* Load stylesheets
-* @param $link Path/link to stylesheet, relative if from theme, absolute if otherwise.
-@param $theme (OPTIONAL) parent theme from where stylesheet is being loaded. You can also ignore it if the stylesheet is from an external source.
+* Load stylesheet
+* @param string $link Path/link to script, relative if from theme, absolute if otherwise.
+* @param string $theme (OPTIONAL) parent theme from where style is being loaded. 
+* You can also ignore it if the style is from an external source.
 **/
 function loadStyle( $link, $theme = false )
 {
@@ -205,9 +45,10 @@ function loadStyle( $link, $theme = false )
 }
 
 /**
-* Load scripts
+* Load single script
 * @param $link Path/link to script, relative if from theme, absolute if otherwise.
-@param $theme (OPTIONAL) parent theme from where script is being loaded. You can also ignore it if the script is from an external source.
+* @param $theme (OPTIONAL) parent theme from where script is being loaded.
+* You can also ignore it if the script is from an external source.
 **/
 function loadScript( $link, $theme = false )
 {
@@ -221,25 +62,27 @@ function loadScript( $link, $theme = false )
 }
 
 /**
-* Load scripts
-* @param $link Path/link to script, relative if from theme, absolute if otherwise.
-@param $theme (OPTIONAL) parent theme from where script is being loaded. You can also ignore it if the script is from an external source.
+* Load image
+* @param string $link Path/link to image, relative if from theme, absolute if otherwise.
+* @param string/bool $theme (OPTIONAL) parent theme from where image is being loaded.
+* @param int $width The width of the image
+* @param int $height The height of the image
+* @param string $alt The alternative text to be shown if image cannot be found
+* @param string $class Optional CSS class to style the image
+* You can also ignore it if the image is from an external source.
 **/
 function loadImage( $link, $theme = false, $width = "100%", $height ="", $alt = "Image", $class = "" )
 {
-	if ( $theme !== false ) {
-		$themes = _THEMES.$theme.'/assets/';
-	} else {
-		$themes = '';
-	} ?>
+	$themes = ( $theme !== false ) ? _THEMES.$theme.'/assets/' : ''; ?>
 
 	<img src="<?php echo $themes.$link; ?>" width="<?php echo( $width ); ?>" alt="<?php echo( $alt )?>" class="<?php echo $class; ?>" /><?php 
 }
 
 /**
-* Load scripts
-* @param $link Path/link to script, relative if from theme, absolute if otherwise.
-@param $theme (OPTIONAL) parent theme from where script is being loaded. You can also ignore it if the script is from an external source.
+* Load multiple stylesheets at once
+* @param string $link Path/link to script, relative if from theme, absolute if otherwise.
+* @param string $theme (OPTIONAL) parent theme from where style is being loaded. 
+* You can also ignore it if the style is from an external source.
 **/
 function loadStyles( $links, $theme = false )
 {
@@ -255,9 +98,10 @@ function loadStyles( $links, $theme = false )
 }
 
 /**
-* Load scripts
+* Load multiple scripts at once
 * @param $link Path/link to script, relative if from theme, absolute if otherwise.
-@param $theme (OPTIONAL) parent theme from where script is being loaded. You can also ignore it if the script is from an external source.
+* @param $theme (OPTIONAL) parent theme from where script is being loaded.
+* You can also ignore it if the script is from an external source.
 **/
 function loadScripts( $links, $theme = false )
 {
@@ -274,8 +118,8 @@ function loadScripts( $links, $theme = false )
 
 /**
 * Display home logo
-* @param $width The width of the image.
-* @param $class Optional css class to style the image link
+* @param int $width The width of the image.
+* @param string $class Optional css class to style the image link
 **/
 function frontlogo( $width = "250px;", $class = "" )
 {
@@ -284,8 +128,8 @@ function frontlogo( $width = "250px;", $class = "" )
 
 /**
 * Display home logo
-* @param $width The width of the image.
-* @param $class Optional css class to style the image link
+* @param int $width The width of the image.
+* @param string $class Optional css class to style the image link
 **/
 function jblLogo( $width = "250px;", $class = "" )
 {
@@ -294,18 +138,18 @@ function jblLogo( $width = "250px;", $class = "" )
 
 /**
 * Display header logo
-* @param $width The width of the image.
-* @param $class Optional css class to style the image link
+* @param int $width The width of the image.
+* @param string $class Optional css class to style the image link
 **/
 function headerLogo( $width = "150px;", $class = ""  )
 {
-	echo '<a class = "'.$class.'" href="' ._ROOT. '"><img src="' . getOption( 'headerlogo' ) . '" width="' . $width . '"></a>';
+	echo ( '<a class = "'.$class.'" href="' ._ROOT. '"><img src="' . getOption( 'headerlogo' ) . '" width="' . $width . '"></a>' );
 }
 
 /**
 * Wrapper function for outputting alerts
-* @param $what The text/message to alert
-* @param $type The type of alert: informative alert, warning, error or success
+* @param string $what The text/message to alert
+* @param string $type The type of alert: informative alert, warning, error or success
 **/
 function _shout_( $what, $type = "alert" )
 {
@@ -346,16 +190,17 @@ function _shout_( $what, $type = "alert" )
 
 /**
 * Wrapper function for Javascript Window Alert
-* @param $message The message to alert
+* @param string $message The message to alert
 **/
 function showAlert( $message )
 {
-	?><script>
-	function showText() {
-	    alert( "<?php echo $message; ?>" );
-	}
+	?>
+	<script>
+		function showText() {
+		    alert( "<?php echo $message; ?>" );
+		}
 
-	showText();
+		showText();
 	</script><?php 
 }
 
@@ -364,21 +209,26 @@ function showAlert( $message )
 **/
 function showConf( $message, $yes = "confirm", $no = "cancel", $where = "" )
 {
-	?><script>
-	function confirmAcion() {
-    var txt;
-    if ( confirm( "<?php echo $message; ?>" ) == true ) {
-        txt = "<?php echo $yes; ?>";
-    } else {
-        txt = "<?php echo $no; ?>";
-    }
-    document.getElementById( "<?php echo $where; ?>" ).innerHTML = txt;
-	}
+	?>
+	<script>
+		function confirmAcion() {
+	    var txt;
+	    if ( confirm( "<?php echo $message; ?>" ) == true ) {
+	        txt = "<?php echo $yes; ?>";
+	    } else {
+	        txt = "<?php echo $no; ?>";
+	    }
+	    document.getElementById( "<?php echo $where; ?>" ).innerHTML = txt;
+		}
 
-	confirmAcion();
+		confirmAcion();
 	</script><?php 
 }
 
+function home()
+{
+	echo( _ROOT.'/' );
+}
 
 /**
 * Check if user has appropriate permisions
@@ -387,25 +237,17 @@ function showConf( $message, $yes = "confirm", $no = "cancel", $where = "" )
 **/
 function isCap( $cap )
 {
-	if ( $_SESSION[JBLSALT.'Cap'] == $cap ) {
-		return true;
-	} else {
-		return false;
-	}
+	return ( $_SESSION[JBLSALT.'Cap'] == $cap ) ? true : false;
 }
 
 /**
 * Check if current user is the record author
-* @param $author The user ID against which to check
+* @param int $author The user ID against which to check
 * @return bool
 **/
 function isAuthor( $author )
 {
-	if ( $_SESSION[JBLSALT.'Code'] == $author ) {
-		return true;
-	} else {
-		return false;
-	}
+	return ( $_SESSION[JBLSALT.'Code'] == $author ) ? true : false;
 }
 
 /**
@@ -415,27 +257,18 @@ function isAuthor( $author )
 **/
 function emailExists( $email )
 {
-	//select('users', 'email', ['email' => 'mail']);
-	$theEmail = $GLOBALS['JBLDB'] -> query( "SELECT email  FROM ". _DBPREFIX ."users WHERE email  ='".$email."'" );
-	if ( $GLOBALS['JBLDB'] -> numRows( $theEmail ) > 0 ) {
-		return true;
-	} else {
-		return false;
-	}
+	$theEmail = $GLOBALS['JBLDB'] -> select('users', 'email', ['email' => 'mail']);
+	return ( $GLOBALS['JBLDB'] -> numRows( $theEmail ) > 0 ) ? true : false;
 }
 
 /**
 * Check if user is viewing own profile
-* @param $profile The user ID to check
+* @param int $profile The user ID to check
 * @return bool
 **/
 function isProfile( $profile )
 {
-	if ( $_SESSION[JBLSALT.'Code'] == $profile ) {
-		return true;
-	} else {
-		return false;
-	}
+	return ( $_SESSION[JBLSALT.'Code'] == $profile ) ? true : false;
 }
 
 /**
@@ -448,14 +281,12 @@ function uploadFile( $file )
 	$upload = _UPLOADS . date('Y/m/d/') . basename( $file );
 
 	if ( file_exists( $upload) ) {
-    	return array( "status" => "fail", "message" => "Sorry, file already exists." );
+    	return array( 
+    		"status" => "fail",
+    		"message" => "Sorry, file already exists."
+    	);
 	} else {
-
-		if( move_uploaded_file( $file, $upload) ){
-			return true;
-		} else {
-			return false;
-		}
+		return move_uploaded_file( $file, $upload) ? true : false;
 	}
 }
 
@@ -584,23 +415,21 @@ function textSColor()
 * @param $code The code/slug of the option to fetch
 * @return The value of specified app option, null if option does not exist
 **/
-function getOption( $code )
+function getOption( $code, $default = "N/A" )
 {
 	$option = "";
-    $getOptions = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."options WHERE code='".$code."'" );
+    $getOptions = $GLOBALS['JBLDB'] -> select('options', ['code','details'], ['code' => $code]);
     if ( $getOptions && $GLOBALS['JBLDB'] -> numRows($getOptions) > 0 ) {
         while ( $siteOption = $GLOBALS['JBLDB'] -> fetchAssoc($getOptions) ) { 
 			if ( substr( $siteOption['details'], 0,1 ) == "[" || substr( $siteOption['details'], 0,1 ) == "{" ) {
 				$option = json_decode( $siteOption['details'], true );
 			} else {
-				$option = $siteOption['details'];
+				$option = ( $siteOption['details'] !== "" ) ? $siteOption['details'] : $default;
 			}
         }
     } else {
     	$option = null;
     }
-
-    //return $GLOBALS['OPTIONS'] -> getOption( $code );
     
     return $option;
 }
@@ -621,11 +450,7 @@ function showOption( $code )
 **/
 function isOption( $code )
 {
-    if ( !is_null( getOption( $code ) ) ) {
-        return true;
-    } else {
-    	return false;
-    }
+    return !is_null( getOption( $code ) ) ? true : false;
 
     //return $GLOBALS['OPTIONS'] -> optionExists( $code );
 }
@@ -667,7 +492,7 @@ function theFooter()
 **/
 function theAttribution( $class = "" )
 {
-    echo( '<a href="'.$GLOBALS['gattributionlink'].'" class="'.$class.'">'.$GLOBALS['gattribution'].'</a>');
+    echo( '<a href="'.$GLOBALS['gattributionlink'].'" class="'.$class.'">'.$GLOBALS['gattribution'].'</a>' );
 }
 
 /**
@@ -817,14 +642,14 @@ function tableHeader( $collums )
 			<div class="pmd-table-card">
 				<table class="table pmd-table mdl-shadow--2dp <?php primaryColor(); ?> sortable">
 					<thead>
-						<tr><?php
-						foreach ($collums as $collum ) { ?>
-							<th class="mdl-data-table__cell--non-numeric"><?php echo( strtoupper( $collum ) ); ?></th><?php
-						} ?>
+						<tr>
+						<?php foreach ( $collums as $collum ): ?>
+							<th class="mdl-data-table__cell--non-numeric"><?php echo( strtoupper( $collum ) ); ?></th>
+						<?php endforeach; ?>
 						</tr>
 					</thead>
 					<tbody><?php
-	}
+}
 
 /**
 * Outputs the body of table with defined data variables
@@ -840,48 +665,50 @@ function tableBody( $results, $fields, $names, $error = "No Records Found", $act
 				echo '<td class="mdl-data-table__cell--non-numeric" data-title="' . strtoupper( $name ) . '">'. $item[$field] .'</td>';
 			}
 			if ( !is_null( $actions )) {
-				echo( '<td class="mdl-data-table__cell--non-numeric" data-title="Actions">');
-				foreach( $actions as $action => $link ) {
-					switch ( $action ) {
-						case 'edit':
-							$icon = 'edit';
-							break;
+				 if ( isCap( 'admin' ) ) {
+					echo( '<td class="mdl-data-table__cell--non-numeric" data-title="Actions">');
+					foreach( $actions as $action => $link ) {
+						switch ( $action ) {
+							case 'edit':
+								$icon = 'edit';
+								break;
 
-						case 'view':
-							$icon = 'open_in_new';
-							break;
+							case 'view':
+								$icon = 'open_in_new';
+								break;
 
-						case 'email':
-							$icon = 'email';
-							break;
+							case 'email':
+								$icon = 'email';
+								break;
 
-						case 'call':
-							$icon = 'phone';
-							break;
+							case 'call':
+								$icon = 'phone';
+								break;
 
-						case 'copy':
-							$icon = 'content_copy';
-							break;
+							case 'copy':
+								$icon = 'content_copy';
+								break;
 
-						case 'profile':
-							$icon = 'perm_identity';
-							break;
+							case 'profile':
+								$icon = 'perm_identity';
+								break;
 
-						case 'reply':
-							$icon = 'reply';
-							break;
-						
-						default:
-							$icon = 'perm_identity';
-							break;
+							case 'reply':
+								$icon = 'reply';
+								break;
+							
+							default:
+								$icon = 'perm_identity';
+								break;
+						}
+						echo( '<a class="mdl-button mdl-button--icon" href="?'.$action.'='.$item[$link[0]].'&key='.$item['name'].'"><i class="material-icons">'.$icon.'</i></a>');
 					}
-					echo( '<a class="mdl-button mdl-button--icon" href="?'.$action.'='.$item[$link[0]].'&key='.$item['name'].'"><i class="material-icons">'.$icon.'</i></a>');
+					echo( '<form action="" method="POST" style="display: inline;" >');
+					csrf();
+					echo ( '<button class="mdl-button mdl-button--icon" type="submit" name="delete" value='.$item['id'].'"><i class="material-icons">delete</i></button>
+						</form>');
+					echo( '</td>');
 				}
-				echo( '<form action="" method="POST" style="display: inline;" >');
-				csrf();
-				echo ( '<button class="mdl-button mdl-button--icon" type="submit" name="delete" value='.$item['id'].'"><i class="material-icons">delete</i></button>
-					</form>');
-				echo( '</td>');
 			}
 			echo( '</tr>' );
 		}
@@ -893,9 +720,9 @@ function tableBody( $results, $fields, $names, $error = "No Records Found", $act
 /**
 * Outputs the body of table with defined data variables
 **/
-function tableBody2( $results, $fields, $names, $error = "No Records Found", $actions = null )
+function tableBody2( $callable, $fields, $names, $error = "No Records Found", $actions = null )
 {
-	resetLoop();
+	resetLoop( $callable );
 
 	echo( '<tr>' );
 	if ( hasRecords() ) {
@@ -903,7 +730,7 @@ function tableBody2( $results, $fields, $names, $error = "No Records Found", $ac
 			theRecord();
 			echo( '<td class="mdl-data-table__cell--non-numeric" data-title="' . strtoupper( $name ) . '">'. $item[$field] .'</td>' );
 			if ( !is_null( $actions ) ) {
-				echo( '<td class="mdl-data-table__cell--non-numeric" data-title="Actions">');
+				echo( '<td class="mdl-data-table__cell--non-numeric" data-title="Actions">' );
 				foreach( $actions as $action => $link ) {
 					switch ( $action ) {
 						case 'edit':
@@ -975,6 +802,10 @@ function form( $name, $enctype = 'multipart/form-data', $method = 'POST', $actio
 		</div>
 	<?php } ?>
 	</form><?php
+
+	$form = <<<FORM
+FORM;
+
 }
 
 /**
@@ -984,20 +815,28 @@ function form( $name, $enctype = 'multipart/form-data', $method = 'POST', $actio
 **/
 function isEmail( $data )
 {
-  if ( filter_var( $data, FILTER_VALIDATE_EMAIL) ) {
-    return true;
-  } else {
-    return false;
-  }
+  return filter_var( $data, FILTER_VALIDATE_EMAIL) ? true : false;
 }
 
 /**
-* Add Floating Action Button
+* Check if supplied number is even
+* @param $number Number to check
+* @return bool
 **/
-function newButton( $class, $type, $icon = "create" )
+function isEven( $number )
 {
-	echo ( '<a href="./'.$class.'?create='.$type.'" class="addfab mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-  <i class="material-icons">'.$icon.'</i></a>' );
+	return ($number % 2 == 0) ? true : false;
+}
+
+/**
+* Add Floating Action Button(fab) to create new record
+* @param string $table Database table to base on - users| posts | messages | comments | resources
+* @param string $type Type of record to create
+* @param string $icon Material icon to display in fab
+**/
+function newButton( $table, $type, $icon = "create" )
+{
+echo ( '<a href="./'.$table.'?create='.$type.'" class="addfab mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored"><i class="material-icons">'.$icon.'</i></a>' );
 }
 
 /**
@@ -1009,7 +848,7 @@ function generateCode() {
 }
 
 /**
-* Error hanling, Jabali style - include the active theme's error file or ender generic text if file does not exist
+* Error hanling, Jabali style - include the active theme's error template file or render generic text if file does not exist
 **/
 function error404( $id = "error-404", $code = "Error 404: Not Found", $message = 'The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. Go home by <a href="'._ROOT.'">clicking here.</a>', $class = "error-container" ) 
 { ?>
@@ -1046,16 +885,8 @@ function snuffle($text = "Umphh!")
 **/
 function isActiveX( $ext )
 {
-	if ( isOption( 'modules' ) ) {
-		$exts = getOption( 'modules' );
-	} else {
-		$exts = array();
-	}
-	if ( in_array( $ext, $exts ) ) {
-		return true;
-	} else {
-		return false;
-	}
+	$exts = isOption( 'modules' ) ? getOption( 'modules' ) : array();
+	return in_array( $ext, $exts ) ? true : false;
 }
 
 /**
@@ -1065,11 +896,7 @@ function isActiveX( $ext )
 **/
 function activeTheme( $theme )
 {
-	if ( getOption( 'activetheme' ) == $theme ) {
-		return true;
-	} else {
-		return false;
-	}
+	return ( getOption( 'activetheme' ) == $theme ) ? true : false;
 }
 
 /**
@@ -1105,7 +932,7 @@ function addShortCode( $tag, $callback )
 **/
 function doShortCodes( $str ) 
 {
-    return Lib\Shortcodes::instance()->doShortcode( $str );
+    return Lib\Shortcodes::instance() -> doShortcode( $str );
 }
 
 /**
@@ -1128,7 +955,7 @@ function csrf()
 /**
 * 
 **/
-function serviceWorker( $path = "./sw.js")
+function serviceWorker( $path = "sw.js")
 { ?>
 	<script>
 		if (navigator.serviceWorker.controller) {
@@ -1167,9 +994,7 @@ function doActions( $hook )
 			$callback = $callable[0];
 			$args = $callable[1];
 
-			if ( !is_array( $args ) ) {
-			 	$args = array( $args );
-			}
+			$args = is_array( $args ) ? $args : array( $args );
 
 			call_user_func_array($callback, $args );
 		}
@@ -1208,66 +1033,51 @@ function addRule( $rule, $callback )
 function rewriteRules( $rule, $args )
 {
 	$callback = $GLOBALS['GRules'][$rule];
-	if ( !is_array( $args ) ) {
-		$args = array( $args );
-	}
+
+	$args = is_array( $args ) ? $args : array( $args );
 
 	if ( isset( $callback ) && is_callable( $callback ) ) {
-		call_user_func_array($callback, $args );
+		call_user_func_array( $callback, $args );
 	}
 }
 
 /**
 * 
 **/
-function addSetting( $page, $label = "Options", $callable = "echo", $args = "" )
+function addSetting( $page, $group, $label = "Group Label", $title = "Options", $callable = "echo", $args = "" )
 {
 	if ( !isset( $GLOBALS['GSettings'][$page] ) ) {
 		$GLOBALS['GSettings'][$page] = array();
 	}
 
-	$GLOBALS['GSettings'][$page][] = array( $callable, $args, $label );
+	$GLOBALS['GSettings'][$page][$group] = array(
+		'callable' => $callable,
+		'args' => $args,
+		'label' => $label,
+		'title' => $title 
+	);
 }
 
 /**
 * 
 **/
-function doSetting( $page )
+function addSettingField( $page, $group, $id, $name = null, $label = null, $type = "text", $icon = "label", $attrs = null )
 {
-	$actions = $GLOBALS['GSettings'][$page];
-
-	if ( isset( $actions ) ) {
-		foreach ($actions as $callable ) {
-			$callback = $callable[0];
-			$args = $callable[1];
-
-			if ( !is_array( $args ) ) {
-			 	$args = array( $args );
-			}
-
-			call_user_func_array($callback, $args );
-		}
-	}
-}
-
-/**
-* 
-**/
-function addSettingField( $page, $id, $name = null, $label = null, $type = "text", $icon = "label", $attrs = null )
-{
-	if ( !isset( $GLOBALS['GSettingsField'][$page] ) ) {
-		$GLOBALS['GSettingsField'][$page] = array();
+	if ( !isset( $GLOBALS['GSettingsField'][$page][$group] ) ) {
+		$GLOBALS['GSettingsField'][$page][$group] = array();
 	}
 
-	if ( is_null( $label ) ) {
-		$label = $id;
-	}
+	$label = !is_null( $label ) ? $label : $id;
+	$name = !is_null( $name ) ? $name : $id;
 
-	if ( is_null( $id ) ) {
-		$name = $id;
-	}
-
-	$GLOBALS['GSettingsField'][$page][$id] = array( $name, $type, $label, $icon, $attrs );
+	$GLOBALS['GSettingsField'][$page][$group][] = array( 
+		'id' => $id,
+		'name' => $name, 
+		'type' => $type, 
+		'label' => $label, 
+		'icon' => $icon, 
+		'attrs' => $attrs 
+	);
 }
 
 /**
@@ -1275,16 +1085,17 @@ function addSettingField( $page, $id, $name = null, $label = null, $type = "text
 **/
 function renderSettingsForm( $page )
 {
-	echo '<title>'.$GLOBALS['GSettings'][$page][0][2].'</title>';
 	echo '<form class="mdl-cell mdl-cell--8-col '.$GLOBALS['GPrimary'].' mdl-card" name="'.$page.'" method="POST" action"" >
 		<div class="mdl-card__supporting-text">';
-	foreach ($GLOBALS['GSettingsField'][$page] as $id => $field ) {
-		doSettingField( $id, $field );
+	foreach ($GLOBALS['GSettings'][$page] as $group => $fields ) {
+		echo '<title>'.$fields['title'].' - '.getOption('name').'</title>';
+		echo ( '<h5>'.$fields['label'].'</h5>' );
+		foreach ( $GLOBALS['GSettingsField'][$page][$group] as $field ) {
+			doSettingField( $field, $group );
+		}
 	}
-	csrf();
 	echo '<input type="hidden" name="settings" value="'. $page .'">';
-	// Consider array-ing
-	//echo '<input type="hidden" name="settings[]" value="'. $page .'">';
+	csrf();
 	echo '
 		<button class="mdl-button mdl-button--fab mdl-button--colored alignright" type="submit"><i class="material-icons">save</i></button>
 		</div></form>';
@@ -1300,79 +1111,79 @@ function renderSettingsForm( $page )
 /**
 * 
 **/
-function doSettingField( $id, $field ){
+function doSettingField( $field, $group )
+{
+	$id = $field['id'];
+	$name = $field['name'];
+	$type = $field['type'];
+	$label = $field['label'];
+	$icon = $field['icon'];
+	$attrs = $field['attrs'];
 
-		$name = $field[0];
-		$type = $field[1];
-		$label = $field[2];
-		$icon = $field[3];
-		$attrs = $field[4];
+	$option = getOption($group);
+	$value = is_array( $option ) ? $option[$name] : $option;
 
-		$value = getOption($name);
-		if ( is_array( $value ) ) {
-			$value = $value[$id];
+	if ( !is_null( $attrs ) ) {
+		foreach ($attrs as $attr => $val) {
+			implode(" ", $attr . '="'. $val .'"' );
 		}
+	}
 
-		if ( !is_null( $attrs ) ) {
-			foreach ($attrs as $attr => $val) {
-				implode(" ", $attr . '="'. $val .'"' );
-			}
-		}
-		switch ( $type ) {
-			case 'text':
-				echo '<div class="input-field">
-				<i class="material-icons prefix">'. $icon .'</i>
-				<input type="text" id="'. $id .'" name="'. $name .'" value="'. $value .'">
-				<label for="'. $id .'" class="center-align">'. ucwords( $label ) .'</label>
-				</div>';
-				break;
-			case 'checkbox':
-				echo '<div class="">
-				<input type="checkbox" id="'. $id .'" name="'. $name .'" value="'. $value .'"'. getOption( $name ).'>
-				<label for="'. $id .'" class="center-align">'. ucwords( $label ) .'</label>
-				</div>';
-				break;
-			case 'radio':
-				echo '<div class="">
-				<input type="radio" id="'. $id .'" name="'. $name .'" value="'. $value .'">
-				<label for="'. $id .'" class="center-align">'. ucwords( $label ) .'</label>
-				</div>';
-				break;
-			case 'textarea':
-				echo '<div class="input-field">
-				<i class="material-icons prefix">'. $icon .'</i>
-				<textarea class="materialize-textarea" id="'. $id .'" name="'. $name .'">'. $value .'</textarea>
-				<label for="'. $id .'" class="center-align">'. ucwords( $label ) .'</label>
-				</div>';
-				break;
-				case 'switch':
-				echo '<div class="switch">
-			    <label>
-			      Off
-			      <input type="checkbox"  name="'. $name .'"  value="'. $value .'">
-			      <span class="lever"></span>'. $label .'
-			      </label>
-			  </div>';
-			  	break;
-				case 'file':
-				echo '<div class="file-field input-field">
-			      <div class="btn mdl-button--colored">
-			        <span class="material-icons">file_upload</span>
-			        <input type="file">
-			      </div>
-			      <div class="file-path-wrapper">
-			        <input name="'. $name .'" class="file-path validate" type="text" value="'. ucwords( $label ) .'">
-			      </div>
-			    </div>';
-			  	break;
-			
-			default:
-				echo '<div class="input-field">
-				<i class="material-icons prefix">label</i>
-				<input type="text" id="'. $name .'" name="'. $name .'" value="'. getOption( $name ) .'">
-				<label for="'. $name .'" class="center-align">'. ucwords( $name ) .'</label>
-				</div>';
-				break;
+	switch ( $type ) {
+		case 'text':
+			echo '<div class="input-field">
+			<i class="material-icons prefix">'. $icon .'</i>
+			<input type="text" id="'. $id .'" name="'. $group .'['.$name.']" value="'. $value .'">
+			<label for="'. $id .'" class="center-align">'. ucwords( $label ) .'</label>
+			</div>';
+			break;
+		case 'checkbox':
+			echo '<div class="">
+			<input type="checkbox" id="'. $id .'" name="'. $name .'[]" value="'. $value .'"'. getOption( $name ).'>
+			<label for="'. $id .'" class="center-align">'. ucwords( $label ) .'</label>
+			</div>';
+			break;
+		case 'radio':
+			echo '<div class="">
+			<input type="radio" id="'. $id .'" name="'. $name .'[]" value="'. $value .'">
+			<label for="'. $id .'" class="center-align">'. ucwords( $label ) .'</label>
+			</div>';
+			break;
+		case 'textarea':
+			echo '<div class="input-field">
+			<i class="material-icons prefix">'. $icon .'</i>
+			<textarea class="materialize-textarea" id="'. $id .'" name="'. $name .'[]">'. $value .'</textarea>
+			<label for="'. $id .'" class="center-align">'. ucwords( $label ) .'</label>
+			</div>';
+			break;
+			case 'switch':
+			echo '<div class="switch">
+		    <label>
+		      Off
+		      <input type="checkbox"  name="'. $name .'[]"  value="'. $value .'">
+		      <span class="lever"></span>'. $label .'
+		      </label>
+		  </div>';
+		  	break;
+			case 'file':
+			echo '<div class="file-field input-field">
+		      <div class="btn mdl-button--colored">
+		        <span class="material-icons">file_upload</span>
+		        <input type="file">
+		      </div>
+		      <div class="file-path-wrapper">
+		        <input name="'. $name .'[]" class="file-path validate" type="text" value="'. ucwords( $label ) .'">
+		      </div>
+		    </div>';
+		  	break;
+		
+		default:
+			echo '<div class="input-field">
+			<i class="material-icons prefix">label</i>
+			<input type="text" id="'. $id .'" name="'. $name .'[]" value="'. getOption( $name ) .'">
+			<label for="'. $name .'" class="center-align">'. ucwords( $name ) .'</label>
+			</div>';
+			break;
 	}
 }
 
@@ -1386,7 +1197,7 @@ function isEmptyDir( $dir )
 	if ( !is_dir( $dir ) ) return false;
 
 	foreach ( scandir( $dir ) as $file ) {
-		if( !in_array( $file, array( '.', '..', '.svn', '.git' ) ) ) return false;
+		return !in_array( $file, [ '.', '..', '.svn', '.git' ] ) ? false : true;
 	}
 
 	return true;
@@ -1399,8 +1210,10 @@ function isEmptyDir( $dir )
 **/
 function reCopy( $src, $dest )
 {
+    $umaskz = umask(0);
 	if ( is_dir( $dest ) ) {
-		die( "A directory by that name already exists.");
+		_shout_( "A directory by the name <code>".basename($dest)."</code> already exists.", "error");
+		exit();
 	} else {
 		mkdir( $dest );
 	}
@@ -1419,7 +1232,14 @@ function reCopy( $src, $dest )
 		}
 
 		closedir( $dir );
+
+    	umask( $umaskz );
+		return true;
+	} else {
+	    umask( $umaskz );
+		return false;
 	}
+
 }
 
 /**
@@ -1480,169 +1300,17 @@ function renderView( $view, $data = "" )
 }
 
 /**
-* Creates a RESTful API endpoint for Jabali App
-* @param array $elements An array of elements coming after ~/api/ in the request url
-* TODO - Move to App\Lib\REST() class
-**/
-function restApi( $elements )
-{
-	if ( !empty( $elements[0] && $elements[0] !== "themes" ) ) {
-		$table = strtoupper( $elements[0] );
-		$table = $GLOBALS[$table];
-	}
-	
-	$data = file_get_contents("php://input");
-	header("Access-Control-Allow-Origin: *");
-	header('Content-Type:Application/json' );
-
-	if ( empty( $elements[0] ) ) {
-		$d = array( "name" => "Jabali Ruby", 
-			"slug" => "ruby", 
-			"version" => "0.17.11", 
-			"author" => "Mauko Maunde", 
-			"screenshot" => "https://mauko.co.ke/app/assets/images/avatar.png", 
-			"description" => "Opensource web application framework with material design components for quick deployment.", 
-			"social" => array(
-				"facebook" => "https://facebook.com/maukoese",
-				"twitter" => "https://twitter.com/maukoese",
-				"github" => "https://github.com/maukoese",
-				"email" => "dev@jabalicms.org"
-			),
-			"website" => "https://jabalicms.org/",
-			"support" => "https://jabalicms.org/support",
-			"documentation" => "https://docs.jabalicms.org",
-			"download" => "https://jabalicms.org/dl/jabali/jabali_0.17.11.zip",
-			"licenses" => array(
-				"MIT" => "https://opensource.org/licenses/MIT",
-				"GNU" => "https://opensource.org/licenses/gpl-license",
-				"Apache" => "https://opensource.org/licenses/Apache-2.0"
-			),
-			"php" => "7.0+",
-			"mysql" => "5.0+",
-			"sqlite" => "3.0+",
-			"postgresql" => "5.0+"
-		);
-		echo json_encode( $d );
-	} elseif ( $elements[0] == "themes") {
-			$themes = array();
-            $path = _ABSTHEMES_;
-            if ( is_dir( $path ) ) {
-              $dir = new DirectoryIterator($path);
-              foreach ($dir as $fileinfo) {
-                  if ($fileinfo->isDir() && !$fileinfo->isDot()) {
-                      $themef = $fileinfo->getFilename();
-		              $theme = file_get_contents( _ABSTHEMES_.$themef."/".$themef.".json" );
-		              $theme = json_decode( $theme, true );
-
-		              $themes[$themef] = $theme;
-                  }
-              }
-            }
-
-            if ( !empty( $elements[1] ) ) {
-            	$themes = $themes[$elements[1]];
-            }
-			echo json_encode( $themes ) ;
-	} else {
-		if ( empty( $elements[1] ) ) {
-			echo json_encode( $table -> sweep() );
-		} else switch ( $elements[1] ) {
-			case 'create':
-				$details = json_decode( $data, true );
-				foreach ($details as $field => $value) {
-					$table -> $field = $value;
-				}
-				
-				echo json_encode( $table -> create() );
-				break;
-
-			case 'update':
-				$details = json_decode( $data, true );
-				foreach ($details as $field => $value) {
-					$table -> $field = $value;
-				}
-				
-				echo json_encode( $table -> update() );
-				break;
-			
-			case 'delete':
-				$details = json_decode( $data, true );
-				echo json_encode( (array) $table -> delete( /*$details['id']*/ $elements[2] ) );
-				break;
-
-			case 'view':
-				if ( empty( $elements[2] ) ) {
-					 echo json_encode( $table -> sweep() );
-				} elseif ( is_numeric( $elements[2] ) ) {
-					echo json_encode( $table -> getId( $elements[2] ) );
-				} else {
-					if ( empty( $elements[3] ) ) {
-						$type = substr( $elements[2], 0,-1);
-						echo json_encode( $table -> getTypes( $type ) );
-					} else {
-						if ( empty( $elements[4] ) ) {
-							if ( is_numeric( $elements[3] ) ) {
-								echo json_encode( $table -> getYear( $elements[3] ) );
-							} elseif ( $elements[3] == "writers") {
-								echo json_encode( listWriters() );
-							} elseif ( $elements[3] == "categories") {
-								echo json_encode( listCategories() );
-							} elseif ( $elements[3] == "tags" ) {
-								echo json_encode( listTags() );
-							} elseif ( $elements[3] == "portfolio") {
-								echo json_encode( listPortfolio() );
-							} else {
-
-							}
-						} else {
-
-							if ( is_numeric( $elements[3] ) ) {
-								if ( empty( $elements[5] ) ) {
-									$table -> getMonth( $elements[3], $elements[4] );
-								} else {
-									$table -> getDay( $elements[3], $elements[4], $elements[5]);
-								}
-							} elseif ( $elements[3] == "writers") {
-								$table -> getWriters( $elements[4] );
-							} elseif ( $elements[3] == "categories") {
-								$table -> getCategories( $elements[4] );
-							} elseif ( $elements[3] == "tags") {
-								$table -> getTags( $elements[4] );
-							} elseif ( $elements[3] == "portfolio") {
-								if ( $elements[4] == "clients" ) {
-									$table -> getClients( $elements[5] );
-								} elseif ( $elements[4] == "projects" ) {
-									 $table -> getProjects( $elements[5] ); 
-								}
-							} else {
-
-							}
-						}
-					}
-				}
-				break;
-			default:
-				echo json_encode( $table -> getId( $elements[1] ) );
-				break;
-		}
-	}
-}
-
-/**
 * Checks if suer/developer is in local/development environent
 * @return bool
 **/
 function isLocalhost()
 {
-    $whitelist = array( '127.0.0.1', '::1' );
-    if ( in_array( $_SERVER['REMOTE_ADDR'], $whitelist) ) {
-        return true;
-    }
+    return in_array( $_SERVER['REMOTE_ADDR'], [ '127.0.0.1', '::1' ] ) ? true : false;
 }
 
 /**
 * Checks if current color skin is active for current user
-* @param $theme The color theeeeeeme to check
+* @param string $theme The color theme to check
 **/
 function isTheme ( $theme)
 {
@@ -1664,8 +1332,8 @@ function isTheme ( $theme)
 
 /**
 * Install downloaded/uploaded theme/module
-* @param $source The theme/moule zip file to install
-* @param $dir The directory o which to extract - either _ABSTHEMES_(for themes) or _ABSX_(ffor modules)
+* @param string $source The theme/moule zip file to install
+* @param string $dir The directory o which to extract - either _ABSTHEMES_(for themes) or _ABSX_(ffor modules)
 **/
 function intallTheme( $source, $dir = _ABSTHEMES_ )
 {
@@ -1682,9 +1350,9 @@ function intallTheme( $source, $dir = _ABSTHEMES_ )
 
 /**
 * Add content to files during theme/module creation or file addition
-* @param $type - File type
-* @param $class - Class of file
-* @param $package - Package name
+* @param string $type - File type
+* @param string $class - Class of file
+* @param string $package - Package name
 **/
 
 function fileContents( $type, $package = null, $class = null )
@@ -1694,7 +1362,7 @@ function fileContents( $type, $package = null, $class = null )
 		$package['name'] = "Jabali";
 		$package['author'] = "Mauko Maunde";
 		$package['website'] = "https://jabalicms.org";
-		$package['version'] = "17.11";
+		$package['version'] = "18.01";
 	}
 	switch ( $type ) {
 		case 'php':
@@ -1781,11 +1449,10 @@ function theRecord()
 * Resets the global records array and the index, allowing us to have more than one Loopy instance in the same php script and query different data types.
 **/
 function resetLoop( $callback = "sweep", $args = [], $table = "posts" )
-{	if ( !is_array( $args ) ) {
-		$args = array( $args );
-	}
+{	
+	$args = is_array( $args ) ? $args : array( $args );
 	$table = strtoupper( $table );
-	$GLOBALS['grecords'] = call_user_func_array( array($GLOBALS[$table], $callback ), $args );
+	$GLOBALS['grecords'] = call_user_func_array( array( $GLOBALS[$table], $callback ), $args );
 	array_shift( $GLOBALS['grecords']);
 	$GLOBALS['grecord'] = null;
 	$GLOBALS['grecord_count'] = 0;
@@ -1857,7 +1524,7 @@ function theContent()
 **/
 function theExcerpt( $length = 250 )
 {
-	echo htmlspecialchars_decode( substr( doShortCodes( $GLOBALS['grecord']['details'] ), 0, $length ));
+	echo htmlspecialchars_decode( substr( doShortCodes( $GLOBALS['grecord']['excerpt'] ), 0, $length ) );
 }
 
 /**
@@ -1897,9 +1564,7 @@ function recordType()
 **/
 function theEmail( $text = null )
 {
-	if ( is_null( $text ) ) {
-		$text = $GLOBALS['grecord']['email'];
-	}
+	$text = !is_null( $text ) ? $text : $GLOBALS['grecord']['email'];
 	echo ( '<a href="mailto:'.$GLOBALS['grecord']['email'].'" >'.$text.'</a>' );
 }
 
@@ -1909,6 +1574,22 @@ function theEmail( $text = null )
 function recordEmail()
 {
 	return $GLOBALS['grecord']['email'];
+}
+
+/**
+* Outputs the email address associated with current record
+**/
+function theGender()
+{
+	echo ucwords( $GLOBALS['grecord']['gender'] );
+}
+
+/**
+* Returns the email address associated with current record
+**/
+function recordGender()
+{
+	return $GLOBALS['grecord']['gender'];
 }
 
 /**
@@ -1967,7 +1648,7 @@ function theCategories( $class = '' )
 /**
 * 
 **/
-function postCategories( $type = 'article', $class = '' )
+function recordCategories( $type = 'article', $class = '' )
 {
 	$tags = $GLOBALS['grecord']['categories'];
 	$type = $GLOBALS['grecord']['type'];
@@ -2000,10 +1681,20 @@ function theTags( $class = "" )
 	}
 }
 
+function theTemplate()
+{
+	echo( $GLOBALS['grecord']['template'] );
+}
+
+function recordTemplate()
+{
+	return $GLOBALS['grecord']['template'];
+}
+
 /**
 * 
 **/
-function postTags()
+function recordTags()
 {
 	$tags = $GLOBALS['grecord']['tags'];
 	$tags = explode(", ", $tags );
@@ -2027,14 +1718,14 @@ function theImage( $width = "100%", $height = "", $class = "featured-image" )
 /**
 * 
 **/
-function postImage(){
+function recordImage(){
 	echo( $GLOBALS['grecord']['avatar'] );
 }
 
 /**
 * 
 **/
-function theDate( $format = "M d, Y" )
+function theDate( $format = "D M d, Y" )
 {
 	$created = $GLOBALS['grecord']['created'];
 	$timed = strtotime( $created );
@@ -2101,8 +1792,7 @@ function headerTitle( $table = "dashboard" )
 **/
 function head()
 {
-	echo( '
-<!-- Basic App Metadata -->
+	echo( '<!-- Basic App Metadata -->
 <meta charset="'. getOption( 'charset' ) .'">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
@@ -2112,6 +1802,7 @@ function head()
 <meta name="background-color" content="#008aff"/>
 
 <!-- Make our app progressive -->
+
 <!-- Android  -->
 <meta name="theme-color" content="teal">
 <meta name="mobile-web-app-capable" content="yes">
@@ -2124,7 +1815,7 @@ function head()
 
 <!-- Pinned Sites  -->
 <meta name="application-name" content="'. getOption( 'name' ) .'">
-<meta name="msapplication-tooltip" content="'. getOption( 'name' ) .'">
+<meta name="msapplication-tooltip" content="'. getOption( 'description' ) .'">
 <meta name="msapplication-starturl" content="/">
 <link rel="icon" sizes="192x192" href="' . getOption( 'favicon' ) .'">
 
@@ -2132,14 +1823,21 @@ function head()
 <meta name="msapplication-TileImage" content="' . getOption( 'favicon' ) .'">
 <meta name="msapplication-TileColor" content="#008080">
 
+<!-- Browser Icon -->
 <link rel="shortcut icon" href="' . getOption( 'favicon' ) .'">
 
+<!-- App Manifest for adding to homescreen -->
 <link rel="manifest" href="'. _ROOT.'/manifest" >
-<link rel="alternate" type="application/rss+xml" href="'. _ROOT.'/feed/" title="'. getOption( 'name' ) .'">' );
+
+<!-- RSS/Atom feed -->
+<link rel="alternate" type="application/rss+xml" href="'. _ROOT.'/feed/" title="'. getOption( 'name' ) .'">
+
+<!-- Colors stylesheet -->
+<link rel="stylesheet" href="'. _STYLES .'colors.css">' );
 }
 
 /**
-* Generates a web manifest, making the app addable to homescreen
+* Generates a web manifest, making the app addable to homescreen/desktop
 **/
 function manifest()
 {
@@ -2151,12 +1849,32 @@ function manifest()
 	$manifest["theme_color"] = "teal";
 	$manifest["background_color"] = "white";
 	$manifest["description"] = getOption('description');
-	$manifest["icons"][] = array( 'src' => getOption('favicon'), 'type' => "image/png", 'sizes' => "96x96");
-	$manifest["icons"][] = array( 'src' => getOption('favicon'), 'type' => "image/png", 'sizes' => "144x144");
-	$manifest["icons"][] = array( 'src' => getOption('favicon'), 'type' => "image/png", 'sizes' => "192x192");
-	$manifest["icons"][] = array( 'src' => getOption('favicon'), 'type' => "image/png", 'sizes' => "300x300");
-	$manifest["related_applications"][] = array( 'platform' => "web", 'url' => "");
-	$manifest["related_applications"][] = array( 'platform' => "play", 'url' => "");
+	$manifest["icons"][] = array( 
+		'src' => getOption('favicon'), 
+		'type' => "image/png", 
+		'sizes' => "96x96"
+	);
+	$manifest["icons"][] = array( 
+		'src' => getOption('favicon'), 
+		'type' => "image/png", 
+		'sizes' => "144x144"
+	);
+	$manifest["icons"][] = array( 
+		'src' => getOption('favicon'), 
+		'type' => "image/png", 
+		'sizes' => "192x192");
+	$manifest["icons"][] = array( 
+		'src' => getOption('favicon'), 
+		'type' => "image/png", 
+		'sizes' => "300x300");
+	$manifest["related_applications"][] = array( 
+		'platform' => "web", 
+		'url' => ""
+	);
+	$manifest["related_applications"][] = array( 
+		'platform' => "play", 
+		'url' => ""
+	);
 
 	header("Access-Control-Allow-Origin: *");
 	header('Content-Type:Application/manifest+json' );
@@ -2169,7 +1887,7 @@ function manifest()
 **/
 function submitButton( $name = "create", $position = "alignright", $icon = "save", $form = false )
 {	csrf();
-	if ( $form == true ) $form = '</form>'; else $form = '';
+	$form = ( $form == true ) ? '</form>' : '';
 	echo( '<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored '.$position.'" type="submit" name="'.$name.'"><i class="material-icons">'.$icon.'</i></button>'.$form );
 }
 
@@ -2178,7 +1896,7 @@ function submitButton( $name = "create", $position = "alignright", $icon = "save
 **/
 function sendButton( $name = "create", $value = "", $class = "alignright" )
 {	csrf();
-	$value = !empty( $value ) ?? $name;
+	$value = !empty( $value ) ? $value : $name;
 	echo( '<button class="'.$class.'" type="submit" name="'.$name.'">'.$value.'</button>' );
 }
 
@@ -2258,26 +1976,24 @@ function noAccess( $access = null )
 **/
 function eMail( $receipients, $subject, $message, $cc = null, $attachments = null, $isHTML = true )
 {
-	$GLOBALS['MAILER'] -> From = getOption('email');
-	$GLOBALS['MAILER'] -> FromName = getOption('name');
-
-	if ( !is_array( $receipients ) ) {
-		$receipients = array( $receipients );
-	}
+	$receipients = is_array( $receipients ) ? $receipients : array( $receipients );
 
 	foreach ( $receipients as $email => $name ) {
 		$GLOBALS['MAILER'] -> addAddress( $email, $name );
 	}
 
-	if ( !is_array( $attachments )) {
-		$attachments = array( $attachments );
-	}
+	if ( !is_null( $attachments ) ) {
+		$attachments = is_array( $attachments ) ? $attachments : array( $attachments );
 
-	foreach ($attachments as $file => $name ) {
-		$GLOBALS['MAILER'] -> addAttachment( $file, $name);
+		foreach ($attachments as $file => $name ) {
+			$GLOBALS['MAILER'] -> addAttachment( $file, $name);
+		}
 	}
 
 	$GLOBALS['MAILER'] -> isHTML( $isHTML );
+
+	$GLOBALS['MAILER'] -> From = getOption('email');
+	$GLOBALS['MAILER'] -> FromName = getOption('name');
 
 	$GLOBALS['MAILER'] -> Subject = $subject;
 	$GLOBALS['MAILER'] -> Body = "<em>".$message."</em>";
@@ -2285,18 +2001,24 @@ function eMail( $receipients, $subject, $message, $cc = null, $attachments = nul
 
 	if(!$GLOBALS['MAILER'] -> send()) 
 	{
-	    return array( "status" => "fail", "message" => $GLOBALS['MAILER'] -> ErrorInfo );
+	    return array( 
+	    	"status" => "fail", 
+	    	"message" => $GLOBALS['MAILER'] -> ErrorInfo 
+	    );
 	} 
 	else 
 	{
-	    return array( "status" => "success", "message" => "Message has been sent successfully" );
+	    return array( 
+	    	"status" => "success", 
+	    	"message" => "Message has been sent successfully" 
+	    );
 	}
 }
 
 /**
 * Generate keys and authentication salts for Jabali apps
 **/
-function keyGen( string $key )
+function keyGen( $key )
 {
 	if ( $key == "salt" ) {
 		echo( md5( date( 'YYMMDDHHIISS').rand(89, 489900) ) );
@@ -2312,7 +2034,7 @@ function keyGen( string $key )
 /**
 * Wrapper function for the GUZZLE library for sending synchronous and assynchronous requests
 **/
-function guzzler( string $url, string $method, array $auth,  bool $async = false )
+function guzzler( $url, $method, $auth, $async = false )
 {
 	if ( $async !== false ) {
 		$request = new \GuzzleHttp\Psr7\Request( $method, $url );
@@ -2659,18 +2381,21 @@ function resetPass( $id, $key )
 function search( $query )
 {
 	$tables = array( "users", "posts", "resources" );
+	$results = array();
 	foreach ($tables as $table) {
-		$tableres = $GLOBALS['JBLDB'] -> selectLike( $table, "*", ["name" => $query, "details" => $query]);
+		$tableres = $GLOBALS['JBLDB'] -> selectLike( $table, "*", ["details" => $query]);
 		if ( $GLOBALS['JBLDB'] -> numRows( $tableres ) > 0 ) {
 			while ( $result = $GLOBALS['JBLDB'] -> fetchAssoc( $tableres ) ) {
-				$GLOBALS['grecords'] = array( $result );
+				$results[] = array( $result );
 			}
 		}
 	}
+	$GLOBALS['grecords'] = $results;
 	$GLOBALS['grecord'] = null;
-	$GLOBALS['grecord_count'] = count( $GLOBALS['grecords'] );
+	$GLOBALS['grecord_count'] = 0;
 	$GLOBALS['grecord_index'] = 0;
 	echo( '<title>Search: '.ucwords( $query ).' - '.getOption("name").'</title>');
+	$data = array( 'search' => 'Search: '.ucwords( $query ) );
 	require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/archive.php' );
 }
 
@@ -2686,8 +2411,6 @@ function fetchSingle( $slug )
 		blog( $slug );
 	} else {
 
-		//$GLOBALS['POSTS'] -> getSingle( $slug );
-		//resetLoop( 'getSingle', $slug );
 		$post = $GLOBALS['POSTS'] -> getSingle( $slug );
 
 		if ( !isset( $post['error'] ) ) {
@@ -2708,6 +2431,12 @@ function archiveHeader( $data, $text = 'From The Blog' )
 		echo( "Category: ".ucwords( $data['category']) );
 	} elseif ( isset($data['tag'])) {
 		echo( "Tag: ".ucwords( $data['tag']) );
+	} elseif ( isset($data['author'])) {
+		echo( "Author: ".ucwords( $data['author']) );
+	} elseif ( isset($data['page'])) {
+		echo( ucwords( $data['page']) );
+	} elseif ( isset($data['search'])) {
+		echo( ucwords( $data['search']) );
 	} else {
 		echo( $text );
 	}
@@ -2718,7 +2447,7 @@ function archiveHeader( $data, $text = 'From The Blog' )
 **/
 function blog( $title = "Blog", $limit = 10 )
 {
-	$posts = $GLOBALS['POSTS'] -> sweep();
+	$posts = $GLOBALS['POSTS'] -> sweep('article', 'created', $limit);
 	if ( $posts['status'] !== "fail" ) {?>
 	<title><?php echo( ucwords($title) ); ?> - <?php showOption( 'name' ); ?></title><?php
 	$data = array();
@@ -2729,28 +2458,46 @@ function blog( $title = "Blog", $limit = 10 )
 }
 
 /**
+* Fetch archive records
+**/
+function archive( $elements )
+{
+	$table = strtoupper( $elements[0] );
+	array_shift( $elements );
+	$type = substr( $elements[0], 0, -1);
+	array_shift( $elements );
+	$date = implode( '/', $elements );
+	$posts = $GLOBALS[$table] -> getCreated( $date, $type );
+	if ( $posts['status'] !== "fail" ) {?>
+	<title><?php echo( ucwords($type) ); ?>s Published in <?php echo( ucwords($date) ); ?> - <?php showOption( 'name' ); ?></title><?php
+	 $data = array();
+	 	require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/archive.php' );
+	 } else {
+	 	error404();
+	 }
+}
+
+/**
 * Fetches and renders posts by $author
 **/
 function authors( $author )
-{ ?>
-	<title>Author : @<?php echo( $author ); ?> - <?php showOption( 'name' ); ?></title><?php
-	$posts = $GLOBALS['JBLDB'] -> select( 'posts', '*', array( 'status' => 'published', 'type' => 'article', 'author' => $author ), array( 'created', 'DESC') );
-	if ( !isset( $post['error'] ) ) {
-		require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/archive.php' );
-	} else {
-		require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/404.php' );
-	}
+{
+	resetLoop( 'getAuthor', [$author, ['status' => 'published', 'type' => 'article'], [ 'created', 'DESC' ]] );
+	$user = $GLOBALS['USERS'] -> getSingle( $author );
+	$data = array( 'author' => ucwords( $GLOBALS['USERS'] -> name ) );
+	echo( '<title>Author : '. ucwords( $GLOBALS['USERS'] -> name ).' - '.getOption( 'name' ) .'</title>' );
+	require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/archive.php' );
 }
 
 /**
 * Fetches and renders records in category
 **/
 function category( $category, $type = "article" )
-{ ?>
+{ 
+	$category = str_replace('%20', ' ', $category);?>
 	<title><?php echo( ucwords( $type ) ); ?> Category : <?php echo( ucwords( $category ) ); ?> - <?php showOption( 'name' ); ?></title><?php
-	resetLoop( 'getCategories', [$category, $type] );
-	$data = array();
-	$data['category'] = ucwords( $category );
+	resetLoop( 'getCategories', [htmlspecialchars_decode($category), $type] );
+	$data = array( 'category' => ucwords( $category ) );
 	require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/archive.php' );
 }
 
@@ -2758,7 +2505,8 @@ function category( $category, $type = "article" )
 * Renders all records with tag
 **/
 function tag( $tag, $type = "article" )
-{ ?>
+{ 
+	$tag = str_replace('%20', ' ', $tag); ?>
 	<title><?php echo( ucwords( $type ) ); ?> Tag : <?php echo( ucwords( $tag ) ); ?> - <?php showOption( 'name' ); ?></title><?php
 	resetLoop( 'getTags', [$tag, $type] );
 	$data = array();
@@ -2772,45 +2520,45 @@ function tag( $tag, $type = "article" )
 **/
 function portfolio( $elements )
 {
-
 	if ( empty( $elements[0] )) { ?>
 		<title>Portfolio - <?php showOption( 'name' ); ?></title><?php
-		$posts = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."posts WHERE ( status = 'published' AND type = 'project' ) ORDER BY created DESC" );
-		if ( count( $posts ) > 0) {
-			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/archive.php' );
+		$posts = $GLOBALS['POSTS'] -> getTypes('project');
+		if ( file_exists( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/portfolio.php') ) {
+			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/portfolio.php' );
 		} else {
-			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/404.php' );
+			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/archive.php' );
 		}
 	} elseif ( $elements[0] == "categories" ) { ?>
 		<title>Category : <?php echo( ucwords( $elements[1] ) ); ?> - <?php showOption( 'name' ); ?></title><?php
-		$posts = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."posts WHERE ( status = 'published' AND type = 'project' AND category LIKE '%".$elements[1]."%' ) ORDER BY created DESC" );
-		if ( count( $posts ) > 0) {
-			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/archive.php' );
+		$posts = $GLOBALS['POSTS'] -> getCategories( $elements[1], 'project');
+		if ( file_exists( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/portfolio.php') ) {
+			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/portfolio.php' );
 		} else {
-			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/404.php' );
+			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/archive.php' );
 		}
 	} elseif ( $elements[0] == "clients" ) { ?>
-		<title>Category : <?php echo( ucwords( $elements[1] ) ); ?> - <?php showOption( 'name' ); ?></title><?php
-		$posts = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."users WHERE ( status = 'published' AND type = 'client' AND username LIKE '".$elements[1]."' ) ORDER BY created DESC" );
-		if ( count( $posts ) > 0) {
+		<title>Clients: <?php echo( ucwords( $elements[1] ) ); ?> - <?php showOption( 'name' ); ?></title><?php
+		$posts = $GLOBALS['USERS'] -> getTypes('client');
+		if ( file_exists( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/portfolio.php') ) {
+			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/portfolio.php' );
+		} else {
 			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/archive.php' );
-		} else {
-			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/404.php' );
 		}
-	} elseif ( $elements[0] == "projects" ) {
-		$posts = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."posts WHERE ( status = 'published' AND type = 'project' AND slug LIKE '".$elements[1]."' ) ORDER BY created DESC" );
-		if ( count( $posts ) > 0) {
-			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/post.php' );
+	} elseif ( $elements[0] == "projects" ) { ?>
+		<title>Portfolio - <?php showOption( 'name' ); ?></title><?php
+		$posts = $GLOBALS['POSTS'] -> getTypes('project');
+		if ( file_exists( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/portfolio.php') ) {
+			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/portfolio.php' );
 		} else {
-			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/404.php' );
-		}
-	} else { ?>
-		<title>Portfolio Project - <?php showOption( 'name' ); ?></title><?php
-		$posts = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."posts WHERE ( status = 'published' AND type = 'project' ) ORDER BY created DESC" );
-		if ( count( $posts ) > 0 ) {
 			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/archive.php' );
+		}
+	} else {  ?>
+		<title>Portfolio - <?php showOption( 'name' ); ?></title><?php
+		$posts = $GLOBALS['POSTS'] -> getTypes('project');
+		if ( file_exists( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/portfolio.php') ) {
+			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/portfolio.php' );
 		} else {
-			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/404.php' );
+			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/archive.php' );
 		}
 	}
 }
@@ -2823,16 +2571,16 @@ function users( $profile )
 {
 	if ( $profile == 'all' || $profile == "" ) { ?>
 		<title>All Users - <?php showOption( 'name' ); ?></title><?php
-		resetLoop( 'getState', 'active', 'users' );
+		resetLoop( 'getStatus', 'active', 'users' );
+		$data = array( 'page' => 'All Users' );
 		if( file_exists( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/users.php' ) ){
 			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/users.php' );
 		} else {
 			require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/archive.php' );
 		}
 	} else {
-		$GLOBALS['USERS'] -> getSingle ( $profile );
-
-		if ( $GLOBALS['USERS'] -> getSingle ( $profile ) ) {
+		$user = $GLOBALS['USERS'] -> getSingle ( $profile );
+		if ( !isset($user['error']) ) {
 			$GLOBALS['grecord'] = (array)$GLOBALS['USERS'];
 			if( file_exists( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/profile.php' ) ){
 				require_once( _ABSTHEMES_ . getOption( 'activetheme' ) .'/templates/profile.php' );
@@ -2844,3 +2592,32 @@ function users( $profile )
 		}
 	}
 }
+
+function validateClient($k, $s)
+{
+	return $GLOBALS['CLIENTS'][$k] == $s ? true  : false;
+}
+
+function getClients()
+{
+    $res = array();
+    $clients = $GLOBALS['JBLDB'] -> query("SELECT * FROM "._DBPREFIX."clients");
+    if( $clients && $GLOBALS['JBLDB'] -> numRows($clients) > 0 ){
+        while( $client = $GLOBALS['JBLDB'] -> fetchAssoc($clients) ){
+            $res['status'] = 'client';
+            $res[] = $client;
+        }
+    }
+    return $res;
+}
+
+function setClients()
+{
+    $res = array();
+    $clients = $GLOBALS['JBLDB'] -> query("SELECT * FROM "._DBPREFIX."clients");
+    if( $clients && $GLOBALS['JBLDB'] -> numRows($clients) > 0 ){
+        while( $client = $GLOBALS['JBLDB'] -> fetchAssoc($clients) ){
+            $GLOBALS['CLIENTS'][$client['appkey']] = $client['appsecret'];
+        }
+    }
+} 

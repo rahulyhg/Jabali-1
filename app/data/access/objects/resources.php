@@ -2,7 +2,7 @@
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Resurces Data Access Object
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @link https://docs.jabalicms.org/data/access/objects/resources/
 * @since 0.17.09
 * @license MIT - https://opensource.org/licenses/MIT
@@ -145,7 +145,10 @@ class Resources {
 
       return $resources;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
   }
 
@@ -162,7 +165,10 @@ class Resources {
 
       return $resources;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
   }
 
@@ -179,7 +185,10 @@ class Resources {
 
       return $resources;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
   }
 
@@ -196,7 +205,10 @@ class Resources {
 
       return $resources;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
   }
 
@@ -213,7 +225,10 @@ class Resources {
 
       return $resources;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
   }
 
@@ -230,7 +245,10 @@ class Resources {
 
       return $resources;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
   }
 
@@ -247,7 +265,10 @@ class Resources {
 
       return $resources;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
   }
 
@@ -264,7 +285,10 @@ class Resources {
 
       return $resources;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
   }
 
@@ -281,7 +305,10 @@ class Resources {
 
       return $resources;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
   }
 
@@ -308,14 +335,10 @@ class Resources {
 
       return $resources;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
-  }
-
-  public function sweepy( $type = "article"){
-
-    $conds = array( "status" => "published", "type" => $type );
-    $results = $GLOBALS['JBLDB'] -> select( $this -> table, $this -> allowed, $conds );
-    return new ResultSet( $resources );
   }
 }

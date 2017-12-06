@@ -3,7 +3,7 @@
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Form
 * @link https://docs.jabalicms.org/classes/forms/
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @version 0.17.06
 * @license MIT - https://opensource.org/licenses/MIT
 **/
@@ -43,15 +43,18 @@ if ( $GLOBALS['JBLDB'] -> numRows( $getPostCode ) > 0 ) {
 
             <div class="input-field mdl-cell mdl-cell--12-col">
               <h6><?php echo( ucfirst( $post -> type ) ); ?> Notes</h6>
-              <textarea class="materialize-textarea col s12" type="text" id="message" rows="5" name="excerpt">
-              <?php echo( $post -> excerpt ); ?>
-              </textarea>
+              <textarea class="materialize-textarea col s12" type="text" id="message" rows="5" name="excerpt"><?php echo( $post -> excerpt ); ?></textarea>
             </div>
           </div>
 
           <div class="mdl-card__menu">
-            <span class="alignright"><a href="<?php echo( $post -> link ); ?>"<button class="mdl-button mdl-button--icon mdl-button--colored" value="<?php echo( $post -> id ); ?>"><i class="material-icons">open_in_new</i></button></a></span>
-            <span class="alignright"><button class="mdl-button mdl-button--icon mdl-button--colored" type="submit" name="deletefile" value="<?php echo( $post -> id ); ?>"><i class="material-icons">delete</i></button></span>
+            <a class="mdl-button mdl-button--icon mdl-button--colored" href="?copy=<?php echo( $post -> id ); ?>&key=<?php echo( $post -> name ); ?>">
+              <i class="material-icons">content_copy</i>
+            </a>
+            <a class="mdl-button mdl-button--icon mdl-button--colored" href="<?php echo( $post -> link ); ?>">
+              <i class="material-icons">open_in_new</i>
+            </a>
+            <button class="mdl-button mdl-button--icon mdl-button--colored" type="submit" name="deletefile" value="<?php echo( $post -> id ); ?>"><i class="material-icons">delete</i></button>
           </div>
         </div>
       <?php if ( !isset( $_GET['x']) ) { ?>

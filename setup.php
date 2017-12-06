@@ -3,7 +3,7 @@
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Setup
 * @link https://docs.jabalicms.org/setup/
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.05
 * @license MIT - https://opensource.org/licenses/MIT
 **/
@@ -11,10 +11,45 @@
 
 function isLocalhost()
 {
-    $whitelist = array( '127.0.0.1', '::1' );
-    if ( in_array( $_SERVER['REMOTE_ADDR'], $whitelist) ) {
-        return true;
-    }
+    return in_array( $_SERVER['REMOTE_ADDR'], [ '127.0.0.1', '::1' ] ) ? true : false;
+}
+
+function _shout_( $what, $type = "alert" )
+{
+	//$color = ($type = 'alert') ? 'blue' ? ($type = 'warning') ? 'orange' ? ($type = 'error') ? 'red' ? ($type = 'success') ? 'green' : 'blue';
+	switch ( $type ) {
+	 	case 'alert':
+	 		$color = "blue";
+	 		break;
+	 	case 'warning':
+	 		$color = "orange";
+	 		break;
+	 	case 'error':
+	 		$color = "red";
+	 		break;
+	 	case 'success':
+	 		$color = "green";
+	 		break;
+	 	default:
+	 		$color = "blue";
+	 		break;
+	 } ?>
+	<div class="row alert" id="alert_box">
+	  <div class="col s12 m12">
+	    <div class="card <?php echo $color; ?> darken-1">
+	      <div class="row">
+	        <div class="col s12 m10">
+	          <div class="card-content white-text">
+	            <p><?php echo $what; ?></p>
+	        </div>
+	      </div>
+	      <div class="col s12 m2">
+	        <i class="material-icons" id="alert_close" aria-hidden="true" style="position: absolute; right: 10px; top: 10px; font-size: 20px; color: white; cursor:pointer;">clear</i>
+	      </div>
+	    </div>
+	   </div>
+	  </div>
+	</div><?php
 }
 
 if ( file_exists('app/config.php' ) ) {
@@ -35,13 +70,11 @@ if ( !file_exists( '.htaccess' ) ) {
 
 	if ( !isLocalhost() ) {
 		
-		/*$https = "RewriteCond %{HTTPS} off";
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]"; */
-		$text = "RewriteCond %{HTTPS} off\n";
-		fwrite( $rewrite,  $text );
+		$https = "RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+";
 
-		$text = "RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]\n";
-		fwrite( $rewrite,  $text );
+		fwrite( $rewrite,  $https );
 	}
 
 	if ( isLocalhost() && $_SERVER['DOCUMENT_ROOT'] !== __DIR__ ) {
@@ -132,9 +165,9 @@ if ( isset( $_POST['setup'] ) && $_POST['host'] != "" && $_POST['user'] != "" &&
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage App Configuration File
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.04
-* @link https://docs.jabalicms.org/functions/
+* @link https://docs.jabalicms.org/configuration/
 * @license MIT - https://opensource.org/licenses/MIT
 *
 * @param $server["dbhost"] The name of your host, usually localhost
@@ -168,23 +201,26 @@ define( "JBLAUTH", "'.$auth.'" );
 
 /**
 * OPTIONAL CONFIGURATIONS
+*
 * @param APP_SKIN Sets the default skin to use for non logged-in users. to use this setting, 
 * @see https://jabalicms.org/customization/setting-global-skin/
 * APP_SKIN defaults to "zahra". A list of available skins can be found here 
 * @link https://jabalicms.org/customization/skins/
-* @param APP_SCHEMA to use this setting, 
-* @see https://jabalicms.org/databases/set-schema/
+* @param APP_SCHEMA to use this setting, @see https://jabalicms.org/databases/set-schema/
 * @param APP_DB_PATH Sets the path to the directory where your NoSQL database is stored.
-* APP_DB_PATH defaults to /app/data/bases/
-* @see https://jabalicms.org/data/bases/
+* APP_DB_PATH defaults to /app/data/bases/ @see https://jabalicms.org/data/bases/
+* @param APP_DEBUG Sets debug mode to on - errors are shown to the user in browser.
+* APP_DEBUG defaults to logging all errors to a file - error.log instead of displaying them.
 *
 * These configurations are not necessary, but if you so wish you can override the Jabali
-* default configurations by setting them here. Just comment the code.
+* default configurations by setting them here. Just uncomment the code.
 */
 
 //define( "APP_SKIN", "" );
 //define( "APP_SCHEMA", "" );
-//define( "APP_DB_PATH", "" );';		
+//define( "APP_DB_PATH", "" );
+
+//define("APP_DEBUG", "");';		
 		fwrite( $dbfile, $config );
 		fclose( $dbfile );
 
@@ -214,12 +250,10 @@ define( "JBLAUTH", "'.$auth.'" );
 	<html lang="en" xmlns="https://www.w3.org/1999/html">
 		<head>
         	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		    <link rel="stylesheet" href="app/assets/css/materialize.css">
+		    <link rel="stylesheet" href="app/assets/css/colors.css">
 		    <link rel="stylesheet" href="app/assets/css/material-icons.css">
 		    <link rel="stylesheet" href="app/assets/css/jabali.css">
 		    <script src="app/assets/js/jquery-3.2.1.min.js"></script>
-		    <script src="app/assets/js/materialize.min.js"></script>
-		    <script src="app/assets/js/material.js"></script>
 			<title>Setup - Jabali CMS</title>
 		</head>
 
@@ -228,84 +262,83 @@ define( "JBLAUTH", "'.$auth.'" );
 				<main class="mdl-layout__content">
 					<div class="mdl-grid">
 						<div class="mdl-cell mdl-cell--4-col"></div>
-				        <form method="POST" action="" class="mdl-grid mdl-cell mdl-cell--5-col light-blue">
-					        <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--12-col-phone">
-						        <center>
-						        	<img src="app/assets/images/logo-w.png" width="200px;">
-						        </center>
-					        </div>
+						<div class="mdl-cell mdl-cell--4-col light-blue">
+					        <form method="POST" action="" class="mdl-grid">
+						        <div class="mdl-cell mdl-cell--12-col">
+						        	<?php _shout_('Before you get started, kindly note that:
+						        	<li>Jabali will create a new database for you if one doesn\'t already exist.</li>
+						        	<li>If the database does already exist, Jabali will create new tables with the prefix you specify.</li>
+						        	<li>Tables will only be created if they don\'t already exist.</li>
+						        	<li>To avoid conflicts, make sure your prefix is unique.</li>
+						        	<li>Double check your server details before proceeding.</li>
+						        	<p>If you are ready to install, close this dialog box by clicking the "X" in the top right corner.</p>', 'alert'); ?>
+						        </div>
 
-					        <div class="mdl-cell mdl-cell--2-col"></div>
-					        <div class="input-field mdl-cell mdl-cell--9-col">
-						        <i class="material-icons prefix">public</i>
-						        <input name="host" id="host" type="text" value="localhost">
-						        <label for="host" class="center-align">Database Host</label>
-					        </div>
+						        <div class="input-field mdl-cell mdl-cell--12-col">
+							        <i class="material-icons prefix">public</i>
+							        <input name="host" id="host" type="text" value="localhost">
+							        <label for="host" class="center-align">Database Host</label>
+						        </div>
 
-					        <div class="mdl-cell mdl-cell--2-col"></div>
-					        <div class="input-field mdl-cell mdl-cell--9-col">
-						        <i class="material-icons prefix">perm_identity</i>
-						        <input name="user" id="user" type="text" value="username">
-						        <label for="user" class="center-align">Database Username</label>
-					        </div>
+						        <div class="input-field mdl-cell mdl-cell--12-col">
+							        <i class="material-icons prefix">perm_identity</i>
+							        <input name="user" id="user" type="text" value="root">
+							        <label for="user" class="center-align">Database Username</label>
+						        </div>
 
-					        <div class="mdl-cell mdl-cell--2-col"></div>
-					        <div class="input-field mdl-cell mdl-cell--9-col">
-						        <i class="material-icons prefix">lock</i>
-						        <input name="password" id="password" type="text" value="password">
-						        <label for="password">Database Password</label>
-					        </div>
+						        <div class="input-field mdl-cell mdl-cell--12-col">
+							        <i class="material-icons prefix">lock</i>
+							        <input name="password" id="password" type="text">
+							        <label for="password">Database Password</label>
+						        </div>
 
-					        <div class="mdl-cell mdl-cell--2-col"></div>
-					        <div class="input-field mdl-cell mdl-cell--9-col">
-						        <i class="material-icons prefix">label</i>
-						        <input name="name" id="name" type="text" value="jabali">
-						        <label for="name" class="center-align">Database Name</label>
-					        </div>
+						        <div class="input-field mdl-cell mdl-cell--12-col">
+							        <i class="material-icons prefix">label</i>
+							        <input name="name" id="name" type="text" value="jabali">
+							        <label for="name" class="center-align">Database Name</label>
+						        </div>
 
-					        <div class="mdl-cell mdl-cell--2-col"></div>
-					        <div class="input-field mdl-cell mdl-cell--4-col">
-						        <i class="material-icons prefix">label_outline</i>
-						        <input name="prefix" id="prefix" type="text" value="db_">
-						        <label for="prefix" class="center-align">Database Prefix</label>
-					        </div>
+						        <div class="input-field mdl-cell mdl-cell--12-col">
+							        <i class="material-icons prefix">label_outline</i>
+							        <input name="prefix" id="prefix" type="text" value="db_">
+							        <label for="prefix" class="center-align">Database Prefix</label>
+						        </div>
 
-							<div class="input-field mdl-cell--5-col mdl-js-textfield mdl-textfield--floating-label getmdl-select">
-							<i class="material-icons prefix">data_usage</i>
-							<input class="mdl-textfield__input" id="type" name="dbtype" type="text" readonly tabIndex="-1" value="MySQL" >
-						        <label for="type" class="center-align">Database Type</label>
-							<label for="type"><i class="mdl-icon-toggle__label material-icons">keyboard_arrow_down</i></label>
-							<ul class="mdl-menu mdl-menu--top-left mdl-js-menu madge" for="type">
-							<li class="mdl-menu__item" data-val="MySQL">MySQL</li>
-							<li class="mdl-menu__item" data-val="SQLite">SQLite</li>
-							<li class="mdl-menu__item" data-val="PostgreSQL">PostgreSQL</li>
-							<!-- <li class="mdl-menu__item" data-val="MongoDB">MongoDB</li> -->
-							</ul>
-							</div>
-					        <input name="home" type="hidden" value="<?php 
-							if ( isLocalhost() ) { 
-					        	echo $protocol . $_SERVER['HTTP_HOST'] . '/' . basename( __DIR__ ); 
-					        } else { 
-					        	echo $protocol . $_SERVER['HTTP_HOST']; } ?>">
+								<div class="input-field mdl-cell mdl-cell--12-col getmdl-select">
+									<i class="material-icons prefix">data_usage</i>
+									<input class="mdl-textfield__input" id="type" name="dbtype" type="text" readonly tabIndex="-1" value="MySQL" >
+								    <label for="type" class="center-align">Database Type</label>
+									<ul class="mdl-menu mdl-menu--top-left mdl-js-menu light-blue" for="type">
+										<li class="mdl-menu__item" data-val="MySQL">MySQL</li>
+										<li class="mdl-menu__item" data-val="SQLite">SQLite</li>
+										<li class="mdl-menu__item" data-val="PostgreSQL">PostgreSQL</li>
+										<!-- <li class="mdl-menu__item" data-val="MongoDB">MongoDB</li> -->
+									</ul>
+								</div><br><br>
 
-					        <input name="dbport" type="hidden" value="<?php echo $_SERVER['SERVER_PORT']; ?>" />
-					        <input name="dbip" type="hidden" value="<?php echo $_SERVER['SERVER_ADDR']; ?>" />
+						        <input name="home" type="hidden" value="<?php 
+									if ( isLocalhost() ) { 
+							        	echo $protocol . $_SERVER['HTTP_HOST'] . '/' . basename( __DIR__ ); 
+							        } else { 
+							        	echo $protocol . $_SERVER['HTTP_HOST']; 
+							        } ?>">
+						        <input name="dbport" type="hidden" value="<?php echo $_SERVER['SERVER_PORT']; ?>" />
+						        <input name="dbip" type="hidden" value="<?php echo $_SERVER['SERVER_ADDR']; ?>" />
 
-					        <button class="addfab mdl-button mdl-button--fab mdl-js-button mdl-button--raised mdl-button--colored alignright" type="submit" name="setup"><i class="material-icons">arrow_forward</i></button>
-				        </form>
+						        <button class="addfab mdl-button mdl-button--fab mdl-js-button mdl-button--raised mdl-button--colored alignright" type="submit" name="setup"><i class="material-icons">arrow_forward</i></button>
+					        </form>
+				    	</div>
 					</div>
 				</main>
-				<script src="app/assets/js/d3.js"></script>
+		        <script type="text/javascript">
+		            $('#alert_close').click(function(){
+		            $( "#alert_box" ).fadeOut( "slow", function() {
+		            });
+		          }); 
+		        </script>
 				<script src="app/assets/js/getmdl-select.min.js"></script>
 				<script src="app/assets/js/material.js"></script>
 				<script src="app/assets/js/materialize.js"></script>
-				<script src="app/assets/js/nv.d3.js"></script>
-				<script src="app/assets/js/widgets/employer-form/employer-form.js"></script>
-				<script src="app/assets/js/widgets/line-chart/line-chart-nvd3.js"></script>
-				<script src="app/assets/js/list.js"></script>
-				<script src="app/assets/js/widgets/pie-chart/pie-chart-nvd3.js"></script>
-				<script src="app/assets/js/widgets/table/table.js"></script>
-				<script src="app/assets/js/widgets/todo/todo.js"></script>
 				<script src="app/assets/js/particles.js"></script>
 				<script type="text/javascript">
 					particlesJS('particles-js', 

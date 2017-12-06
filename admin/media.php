@@ -2,7 +2,7 @@
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Admin Media
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.04
 * @link https://docs.jabalicms.org/media/
 **/
@@ -14,7 +14,7 @@ require_once( 'header.php' ); ?>
 $file = explode('/', $file );
 $file = end( $file ); ?>
 <title><?php if ( isset( $_GET['src'] ) ) { echo( ' Viewing ' . ucfirst( $file. ' [ ' ) ); } else {
-echo( 'All Media [ ' ); } showOption( 'name' ); ?> ]</title>
+echo( 'All Media - ' ); } showOption( 'name' ); ?></title>
 <div class="mdl-grid ">
 	<?php if ( isset( $_GET['src'] ) ) { ?>
 		<div class="mdl-cell mdl-cell--8-col mdl-card <?php primaryColor(); ?> mdl-shadow--2dp " >

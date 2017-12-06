@@ -2,7 +2,7 @@
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Footer Layout
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.09
 * @license MIT - https://opensource.org/licenses/MIT
 * @link https://docs.jabalicms.org/views/footer/

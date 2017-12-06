@@ -1,9 +1,9 @@
-<?php
+,<?php
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Form
 * @link https://docs.jabalicms.org/classes/forms/
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @version 0.17.06
 * @license MIT - https://opensource.org/licenses/MIT
 **/
@@ -92,7 +92,7 @@ if ( !isset($user['error']) ) {
           </div>
 
           </div><div class="mdl-card__menu mdl-button mdl-button--icon">
-            <a href="<?php echo( $user['link'] ); ?>" target="_blank" >
+            <a href="<?php echo( _ROOT.'/users/'.$user['username'] ); ?>/" target="_blank" >
             <i class="material-icons">open_in_new</i>
             </a>
           </div>

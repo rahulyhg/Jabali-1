@@ -3,7 +3,7 @@
 * Fetch configuration, define basic constants and instantiate global classes
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Initialization
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.09
 * @link https://docs.jabalicms.org/init/
 * @license MIT - https://opensource.org/licenses/MIT
@@ -20,6 +20,7 @@ require_once ( 'app/config.php' );
 define( '_ABS_', __DIR__ );
 define( '_ABSAD_', _ABS_ . '/admin/' );
 define( '_ABSRES_', _ABS_ . '/app/' );
+define( '_ABSLIB_', _ABSRES_ . 'lib/' );
 define( '_ABSX_', _ABSRES_ . 'modules/' );
 define( '_ABSTHEMES_', _ABSRES_ . 'themes/' );
 define( '_ABSVIEWS_', _ABSRES_ . 'views/' );
@@ -59,10 +60,10 @@ define( '_EMAIL', 'jabali@mauko.co.ke' );
 define( '_PHONE', '+254 20 440 4993' );
 
 spl_autoload_register( function( $class ) {
-	$classf = str_replace( "Jabali\\", "", $class );
-	$classd = strtolower( str_replace( "\\", "/", $classf ) );
+	$classname = str_replace( "Jabali\\", "", $class );
+	$classpath = strtolower( str_replace( "\\", "/", $classname ) );
 
-	require_once ( 'app/' . $classd . '.php');
+	require_once ( 'app/' . $classpath . '.php');
 });
 
 /**
@@ -110,14 +111,22 @@ if ( isOption ( 'timezone' ) ) {
 	date_default_timezone_set( 'Africa/Nairobi' );
 }
 
-function jError($errno, $errstr) {
+/**
+* Custom error handling for Jabali
+**/
+function jError($errno, $errstr, $file, $line, $x ) {
 	$r = fopen(_ABS_.'/error.log', 'a');
-	fwrite ( $r, "Error [$errno] on ". date('Y-m-d H:i:s').": $errstr\n" );
+	$y = json_encode( $x );
+	fwrite ( $r, "Error [$errno] on ". date('Y-m-d H:i:s').": $errstr in $file on line $line.\n" );
 	fclose($r);
 }
-set_error_handler("jError");
 
-//installSQLDB( $server["dbtype"] );
+/**
+* Delegate error handling only if debug mode is off/not defined
+**/
+if ( !defined('APP_DEBUG') ) {
+	set_error_handler("jError");
+}
 
 /**
 * Autoload Classes

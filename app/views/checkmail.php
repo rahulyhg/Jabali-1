@@ -3,7 +3,7 @@
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Signup page Layout
 * @link https://docs.jabalicms.org/views/signup
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.09
 * @license MIT - https://opensource.org/licenses/MIT
 **/ ?>

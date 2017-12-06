@@ -2,7 +2,7 @@
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Options Data Access Object
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @link https://docs.jabalicms.org/data/access/objects/options/
 * @since 0.17.09
 * @license MIT - https://opensource.org/licenses/MIT
@@ -61,8 +61,8 @@ class Options {
     function getOption( $code )
     {
         $option = "";
-        $getOptions = $GLOBALS['JBLDB'] -> select('options', $this -> allowed, ['code' => $code]);
-        if ( $GLOBALS['JBLDB'] -> numRows($getOptions) > 0 ) {
+        $getOptions = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."options WHERE code='".$code."'" );
+        if ( $getOptions && $GLOBALS['JBLDB'] -> numRows($getOptions) > 0 ) {
             while ( $siteOption = $GLOBALS['JBLDB'] -> fetchAssoc($getOptions) ) { 
                 if ( substr( $siteOption['details'], 0,1 ) == "[" || substr( $siteOption['details'], 0,1 ) == "{" ) {
                     $option = json_decode( $siteOption['details'], true );
@@ -70,6 +70,8 @@ class Options {
                     $option = $siteOption['details'];
                 }
             }
+        } else {
+            $option = null;
         }
         
         return $option;
@@ -93,87 +95,87 @@ class Options {
         <title>General Site Options - <?php showOption( 'name' ); ?></title>
         <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--8-col-tablet mdl-cell--12-col-phone mdl-grid mdl-card mdl-shadow--2dp <?php primaryColor(); ?>">
             <div class=" mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--12-col-phone">
-            <form enctype="multipart/form-data" name="optionForm" method="POST" action="">
+            <form enctype="multipart/form-data" name="optionForm" method="POST" action="" class="mdl-grid">
 
                     <h5>Basic Details</h5>
 
-                    <div class="input-field">
+                    <div class="input-field mdl-cell mdl-cell--12-col">
                             <i class="material-icons prefix">label</i>
                         <input id="name" type="text" name="name" value="<?php showOption( 'name' ); ?>">
                         <label for="name" data-error="wrong" data-success="right" class="center-align">Site Name </label>
                     </div>
 
-                    <div class="input-field">
+                    <div class="input-field mdl-cell mdl-cell--12-col">
                             <i class="material-icons prefix">details</i>
                         <input id="description" type="text" name="description" value="<?php showOption( 'description' ); ?>">
                         <label for="description" class="center-align">Short Description </label>
                     </div>
 
-                    <div class="input-field">
+                    <div class="input-field mdl-cell mdl-cell--12-col">
                             <i class="material-icons prefix">details</i>
                         <textarea class="materialize-textarea" id="description" name="about" ><?php showOption( 'about' ); ?></textarea>
                         <label for="description" class="center-align">Long Description </label>
                     </div>
 
-                    <div class="input-field">
+                    <div class="input-field mdl-cell mdl-cell--6-col">
                             <i class="material-icons prefix">mail</i>
                         <input id="email" type="text" name="email" value="<?php showOption( 'email' ); ?>">
                         <label for="email" class="center-align">Admin Email </label>
                     </div>
 
-                    <div class="input-field">
+                    <div class="input-field mdl-cell mdl-cell--6-col">
                             <i class="material-icons prefix">phone</i>
                         <input id="phone" type="text" name="phone" value="<?php showOption( 'phone' ); ?>">
                         <label for="phone" class="center-align">Admin Phone </label>
                     </div>
 
-                    <div class="input-field">
+                    <div class="input-field mdl-cell mdl-cell--6-col">
                             <i class="material-icons prefix">copyright</i>
                         <input id="copyright" type="text" name="copyright" value="<?php theCopyright(); ?>">
                         <label for="copyright" class="center-align">Footer Copyright </label>
                     </div>
 
-                    <div class="input-field">
+                    <div class="input-field mdl-cell mdl-cell--6-col">
                             <i class="mdi mdi-format-color-text prefix"></i>
                         <input id="attribution" type="text" name="attribution" value="<?php showOption( 'attribution' ); ?>">
                         <label for="attribution" class="center-align">Footer Attribution </label>
                     </div>
 
-                    <div class="input-field">
+                    <div class="input-field mdl-cell mdl-cell--12-col">
                             <i class="mdi mdi-link prefix"></i>
                         <input id="attribution_link" type="text" name="attribution_link" value="<?php showOption( 'attribution_link' ); ?>">
                         <label for="attribution_link" class="center-align">Footer Attribution Link</label>
                     </div>
 
-                    <h5>Language</h5>
+                    <h5 class="mdl-cell mdl-cell--12-col">Language</h5>
 
-                    <div class="input-field">
+                    <div class="input-field mdl-cell mdl-cell--6-col">
                             <i class="material-icons prefix">details</i>
                         <input id="language" type="text" name="language" value="<?php showOption( 'language' ); ?>">
                         <label for="language" class="center-align">Site Language </label>
                     </div>
 
-                    <div class="input-field">
+                    <div class="input-field mdl-cell mdl-cell--6-col">
                             <i class="material-icons prefix">details</i>
                         <input id="language" type="text" name="charset" value="<?php showOption( 'charset' ); ?>">
                         <label for="language" class="center-align">Site Charset </label>
                     </div>
 
-                    <h5>Location</h5>
-
-                    <?php $GLOBALS['hGlobal'] -> countries(); ?>
-
-                    <?php $GLOBALS['hGlobal'] -> regions( strtolower( getOption( 'country' ) ) ); ?>
-
-                    <div class="input-field">
-                            <i class="material-icons prefix">room</i>
-                        <input id="attribution_link" type="text" name="city" value="<?php showOption( 'city' ); ?>">
-                        <label for="attribution_link" class="center-align">City</label>
+                    <h5 class="mdl-cell mdl-cell--12-col">Location</h5>
+                    <div class="mdl-cell mdl-cell--4-col">
+                        <?php $GLOBALS['hGlobal'] -> countries(); ?>
                     </div>
-
-                    <?php $GLOBALS['hGlobal'] -> timeZone(); ?>
-
-                    <div class="mdl-cell mdl-cell--6-col">
+                    <div class="mdl-cell mdl-cell--4-col">
+                        <?php $GLOBALS['hGlobal'] -> regions( strtolower( getOption( 'country' ) ) ); ?>
+                    </div>
+                    <div class="mdl-cell mdl-cell--4-col">
+                        <?php $GLOBALS['hGlobal'] -> cities( strtolower( getOption( 'country' ) ) ); ?>
+                    </div>
+                    <div class="mdl-cell mdl-cell--4-col">
+                        <?php $GLOBALS['hGlobal'] -> timeZone(); ?>
+                    </div>
+                    <div class="mdl-cell mdl-cell--4-col"></div>
+                    <div class="mdl-cell mdl-cell--4-col">
                       <input type="checkbox" id="registration" name="registration" <?php showOption( 'registration' ); ?> value="checked" />
                       <label for="registration">Allow User Registrations?</label>
                     </div>
@@ -643,7 +645,7 @@ class Options {
            </div></div><?php
     }
 
-	function colors(){ ?>
+	function color(){ ?>
 		<title>Skin Color Options - <?php showOption( 'name' ); ?></title>
 	        <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--9-col-tablet mdl-cell--12-col-phone">
 	        	<div class="mdl-card mdl-shadow--2dp <?php primaryColor(); ?>">
@@ -818,7 +820,61 @@ class Options {
 	        </div><?php 
 	}
 
-    function rest(){ ?>
+    function restful(){
+        if ( isset( $_GET['edit'] )) {?>
+            <title>Edit Client ID <?php echo( $_GET['edit'] ); ?> - <?php showOption( 'name' ); ?></title>
+            <div class="mdl-cell mdl-cell--5-col-desktop mdl-cell--5-col-tablet mdl-cell--12-col-phone mdl-card mdl-shadow--2dp <?php primaryColor(); ?>">
+                <div class="mdl-card__supporting-text">
+                    <?php $client = $GLOBALS['JBLDB'] -> select('clients', '*', ['id' => $_GET['edit']]);
+                    if( $client && $GLOBALS['JBLDB'] -> numRows($client) > 0 ):
+                    while( $client = $GLOBALS['JBLDB'] -> fetchAssoc($client) ): ?>
+                    <form method="POST" action="">
+                        <div class="input-field">
+                            <i class="material-icons prefix">apps</i>
+                            <input id="cname" type="text" name="cname" value="<?php echo( $client['id']) ?>">
+                            <label for="cname">App ID</label>
+                        </div>
+                        <div class="input-field">
+                            <i class="material-icons prefix">label</i>
+                            <input id="cname" type="text" name="cname" value="<?php echo( $client['name']) ?>">
+                            <label for="cname">App Name</label>
+                        </div>
+                        <div class="input-field">
+                            <i class="material-icons prefix">label_outline</i>
+                            <input id="cid" type="text" name="cid"  value="<?php echo( $client['appkey']) ?>">
+                            <label for="cid">App Key</label>
+                        </div>
+                        <div class="input-field">
+                            <i class="material-icons prefix">lock</i>
+                            <input id="ckey" type="text" name="ckey" value="<?php echo( $client['appsecret']) ?>">
+                            <label for="ckey">App Secret</label>
+                        </div>
+                        <?php csrf(); ?>
+
+                        <button type="submit" name="newclient" class="mdl-button mdl-button--colored mdl-button--fab alignright"><i class="material-icons">save</i></button>
+                    </form>
+                <?php endwhile; endif; ?>
+                </div>
+            </div>
+
+            <div class="mdl-cell mdl-cell--7-col-desktop mdl-cell--7-col-tablet mdl-cell--12-col-phone mdl-card mdl-shadow--2dp <?php primaryColor(); ?>">
+              
+              <div class="mdl-card__title">
+                    <span class="mdl-card__title-text">The Jabali REST-API</span>
+                  <div class="mdl-layout-spacer"></div>
+                  <div class="mdl-card__subtitle-text mdl-button mdl-button--icon">
+                       <a href="<?php echo _API; ?>">
+                           <i class="material-icons">open_in_new</i>
+                        </a>
+                  </div>
+              </div>
+              <div class="mdl-card__supporting-text"">
+                <?php tableHeader(['ID', 'Client', 'App Key', 'App Secret', 'Actions']);
+                tableBody(getClients(), ['id', 'name', 'appkey', 'appsecret'], ['ID', 'Client', 'App Key', 'App Secret'], "No Clients Found", ['edit' => ['id']]);
+                tableFooter(); ?>
+              </div>
+            </div><?php
+        } else { ?>
         <title>REST API Options - <?php showOption( 'name' ); ?></title>
         <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--8-col-tablet mdl-cell--12-col-phone mdl-card mdl-shadow--2dp <?php primaryColor(); ?>">
             <div class="mdl-card__title">
@@ -826,27 +882,11 @@ class Options {
               <div class="mdl-layout-spacer"></div>
             </div>
             <div class="mdl-card__supporting-text">
-              <table class="table pmd-table <?php primaryColor(); ?> mdl-color-text--white">
-                    <tr>
-                        <thead>
-                            <th>Client</th>
-                            <th>ID</th>
-                            <th>Key</th>
-                            <th>Actions</th>
-                        </thead>
-                    </tr>
-                    <tbody>
-                    <form method="POST" action="">
-                        <td data-title="Client"><input type="text" name="cname" value="<?php showOption( 'name' ); ?> Android"></ins></td>
-                        <td data-title="Client"><input type="text" name="cid" value="<?php echo JBLSALT; ?>"></td>
-                        <td data-title="Client"><input type="text" name="ckey" value="<?php echo JBLAUTH; ?>" ></td>
-                        <td data-title="Client"><button type="submit" name="deleteclient" value="" class="mdl-button mdl-button--icon"><i class="material-icons">delete</i></button><button type="submit" name="updateclient" class="mdl-button mdl-button--icon"><i class="material-icons">save</i></button></td>
-                    <?php csrf(); ?>
-                    </form>
-                    </tbody>
-                </table>
+                <?php tableHeader(['ID', 'Client', 'App Key', 'App Secret', 'Actions']);
+                tableBody(getClients(), ['id', 'name', 'appkey', 'appsecret'], ['ID', 'Client', 'App Key', 'App Secret'], "No Clients Found", ['edit' => ['id']]);
+                tableFooter(); ?>
 
-                <h5>Add New Client</h5>
+                <h5>Create New App</h5>
                 <form method="POST" action="">
                     <div class="input-field">
                         <i class="material-icons prefix">label</i>
@@ -856,12 +896,12 @@ class Options {
                     <div class="input-field">
                         <i class="material-icons prefix">label_outline</i>
                         <input id="cid" type="text" name="cid" value="<?php echo substr( str_shuffle( md5( md5( date( 'Y-m-d H-i-s' ) ) ) ), 0, 16); ?>">
-                        <label for="cid">Client ID</label>
+                        <label for="cid">App Key</label>
                     </div>
                     <div class="input-field">
                         <i class="material-icons prefix">lock</i>
                         <input id="ckey" type="text" name="ckey" value="<?php echo md5(md5(date('Y-m-d H-i-s'))); ?>">
-                        <label for="ckey">Client Key</label>
+                        <label for="ckey">App Secret</label>
                     </div>
                     <?php csrf(); ?>
 
@@ -921,6 +961,7 @@ class Options {
               </li>
         </ul>
         </div><?php
+        }
     }
 
 }

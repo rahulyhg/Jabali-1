@@ -3,7 +3,7 @@
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Login page Layout
 * @link https://docs.jabalicms.org/views/login/
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.09
 * @license MIT - https://opensource.org/licenses/MIT
 **/ ?>
@@ -16,7 +16,7 @@
 			if ( $_GET['alert'] == "password" ) {
 				_shout_('Wrong Password! Please Try Again', 'error');
 			} elseif ( $_GET['alert'] == "user" ) { 
-				_shout_('Wrong Email/Username! Please Try Again', 'error'); 
+				_shout_('Wrong ID/Email/Username! Please Try Again', 'error'); 
 			}
 			} ?>
 			<div class="mdl-grid">
@@ -40,7 +40,7 @@
 					<div class="input-field mdl-cell mdl-cell--12-col">
 						<i class="material-icons prefix">perm_identity</i>
 						<input name="user" id="email" type="text">
-						<label for="email" class="center-align">Username or Email</label>
+						<label for="email" class="center-align">ID, Username or Email</label>
 					</div>
 
 					<div class="input-field mdl-cell mdl-cell--12-col">

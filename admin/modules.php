@@ -2,7 +2,7 @@
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Modules Creation Client
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.06
 * @link https://docs.jabalicms.org/api/modules/
 **/
@@ -14,7 +14,19 @@ require_once( 'header.php' );
 
 if ( isset( $_POST['activemodule'] ) ) {
     $activex = $_POST['activemodule'];
-    $GLOBALS['OPTIONS'] -> update( 'activemodule', $activex, date('Y-m-d H:i:s') );
+    $modules = getOption('modules');
+    $modules[] = $activex;
+    $modules = json_encode( $modules );
+    $GLOBALS['OPTIONS'] -> update( 'modules', $modules, date('Y-m-d H:i:s') );
+}
+
+if ( isset( $_POST['deactivatemodule'] ) ) {
+    $activex = $_POST['deactivatemodule'];
+    $modules = getOption('modules');
+    // todo find module by array keys and unset
+    unset( $modules[$activex] );
+    $modules = json_encode( $modules );
+    $GLOBALS['OPTIONS'] -> update( 'modules', $modules, date('Y-m-d H:i:s') );
 }
 
 if ( isset( $_POST['createmodule'] ) ) {
@@ -127,7 +139,7 @@ $script = "\$(document).ready(function(){
       mkdir( $classes, 0777, true );
 
       $licensefile = fopen($moduledir.'LICENSE', 'w');
-      $modulefunctions = fopen( $moduledir.$slug.'.php', 'w');
+      $modulefunctions = fopen( $moduledir.'functions.php', 'w');
       $moduleclassfile = fopen( $moduledir.'classes/'.$slug.'.php', 'w');
       $modulestyles = fopen( $moduledir.'assets/css/'.$slug.'.css', 'w');
       $modulescripts = fopen( $moduledir.'assets/js/'.$slug.'.js', 'w');
@@ -161,6 +173,7 @@ if ( isset( $_POST['copymodule'] ) ) {
   $name = $_POST['modulename'];
   $slug = $_POST['moduleslug'];
   $description = $_POST['moduledescription'];
+  $category = $_POST['modulecategory'];
   $author = $_POST['moduleauthor'];
   $website = $_POST['modulewebsite'];
   $support = $_POST['modulesupport'];
@@ -172,15 +185,15 @@ if ( isset( $_POST['copymodule'] ) ) {
   $email = $_POST['moduleemail'];
   $version = $_POST['moduleversion'];
 
-  $comments = "
-  <?php
-  /**
-  * @package Jabali - The Plug-N-Play Framework
-  * @subpackage ". $name ."
-  * @author ". $author ."
-  * @link ". $website ."
-  * @since ". $version ."
-  **/\n";
+  $comments = "<?php
+/**
+* @package Jabali - The Plug-N-Play Framework
+* @subpackage ". $name ."
+* @author ". $author ."
+* @since ". $version ."
+* @link ". $website ."
+* @license ". $license ." - ". $licenselink  ."
+**/";
 
   $newmodule = _ABSX_ . $slug.'/';
   $oldmodule = _ABSX_ . $source.'/';
@@ -190,21 +203,39 @@ if ( isset( $_POST['copymodule'] ) ) {
   $images = _ABSX_ . $slug.'/assets/images/';
   $classes = _ABSX_ . $slug.'/classes/';
 
-  $headertext = $comments."?>";
-
-  $templatetext = $comments."?>\n";
-
-  $footerertext = $comments."?>\n";
-
-  $data = array( "name" => $name, "slug" => $slug, "version" => $version, "author" => $author, "category" => $category, "screenshot" => "", "description" => $description, "social" => array( "facebook" => $facebook, "twitter" => $twitter, "github" => $github, "email" => $email ), "website" => $website, "support" => $support, "download" => "https://jabali.io/modules/".$slug, "licenses" => array( $license => $licenselink ) );
+  $data = '{
+  "name": "'.$name.'",
+  "slug": "'.$slug.'",
+  "version": "'.$version.'",
+  "author": "'.$author.'",
+  "modified": "'.$author.'",
+  "category": "'.$category.'",
+  "screenshot": "app/assets/images/avatar.png",
+  "description": "'.$description.'",
+  "social": {
+    "facebook": "'.$facebook.'",
+    "twitter": "'.$twitter.'",
+    "github": "'.$github.'",
+    "email": "'.$email.'"
+  },
+  "link": "https://jabalicms.org/modules/'.$slug.'",
+  "website": "'.$website.'",
+  "support": "'.$support.'",
+  "download": "https://jabalicms.org/dl/modules/'.$slug.'.zip",
+  "licences": {
+    "'.$license.'": "'.$licenselink.'"
+  }
+}';
 
   if ( reCopy( $oldmodule, $newmodule ) ) {
-    file_put_contents($newmodule.$slug.'.php', $comments);
+    file_put_contents($newmodule.'functions.php', $comments);
     file_put_contents($newmodule.$slug.'.json', $data);
-    file_put_contents($css.$slug.'.css', $data);
-    file_put_contents($js.$slug.'.js', $data);
+    file_put_contents($css.$slug.'.css', str_replace('<?php', "/* Edit!!! */", $comments) );
+    file_put_contents($js.$slug.'.js', str_replace('<?php', "/* Edit!!! */", $comments) );
 
-    _shout_( 'New module created from '. $source.'! <a href="?edit='.$slug.'&key='.$slug.'.php">Click here</a> to edit', 'success' );
+    unlink( $newmodule.$source.'.json');
+
+    _shout_( 'Copy successful! '.$slug.' module created from '. $source.'! <a href="?edit='.$slug.'&key='.$slug.'.php">Click here</a> to edit', 'success' );
   } else {
     _shout_( 'Could not create module files. Make sure Jabali has the correct write permissions to the installation directory and try again.', 'error');
   }
@@ -425,7 +456,7 @@ if ( isset( $_GET['install'] ) ) {
       </div>
       <div class="mdl-cell mdl-cell--4-col <?php primaryColor(); ?> mdl-card">
         <div class="mdl_card__image">
-          <img src="<?php echo _IMAGES . 'placeholder.png'; ?>">
+          <img src="<?php echo _IMAGES . 'placeholder.png'; ?>" width="100%">
         </div>
         <div class="mdl-card__supporting-text">
           <h3>Module Social</h3>
@@ -901,6 +932,16 @@ if ( isset( $_GET['install'] ) ) {
                           echo "save";
                           } ?></i>
                         </button>
+                        <button class="mdl-button mdl-button--icon <?php if ( activex( $xD[ 'slug' ] ) ) {
+                          echo "mdl-button--colored";
+                        } ?>" id="<?php echo $xD[ 'slug' ] ; ?>" name="deactivemodule" value="<?php echo $xD[ 'slug' ] ; ?>" type="submit">
+                          <?php csrf(); ?>
+                            <i class="material-icons"><?php if ( isActiveX( $xD[ 'slug' ] ) ) {
+                          echo "clear";
+                        } else {
+                          echo "save";
+                          } ?></i>
+                        </button>
                     </div>
                         <?php } ?>
               <div class="mdl-layout-spacer"></div>
@@ -1015,7 +1056,7 @@ if ( isset( $_GET['install'] ) ) {
               <a id = "<?php echo $xD[ 'slug' ] ; ?>author" href="#" class="material-icons alignright">more_vert</a>
               <ul class="mdl-menu mdl-list mdl-js-menu mdl-js-ripple-effect mdl-menu--top-right <?php primaryColor(); ?> option-drop" for="<?php echo $xD[ 'slug' ] ; ?>author" style="overflow-y: auto;">
               <a href="?view=<?php echo $xD[ 'slug' ] ; ?>&key=<?php echo $xD[ 'name'] ; ?>" class="mdl-list__item"><i class="mdi mdi-details mdl-list__item-icon"></i><span style="padding-left: 20px">Full Details</span></a>
-              <a href="<?php echo $xD[ 'website'] ; ?>" class="mdl-list__item"><i class="mdi mdi-account mdl-list__item-icon"></i><span style="padding-left: 20px">Author: <?php echo $xD[ 'author' ] ; ?></span></a>
+              <a href="<?php echo $xD[ 'website'] ; ?>" class="mdl-list__item"><i class="mdi mdi-account mdl-list__item-icon"></i><span style="padding-left: 20px"><?php echo $xD[ 'author' ] ; ?></span></a>
               <div class="mdl-layout-spacer"></div>
               <a href="<?php echo $xD[ 'social' ]['facebook'] ; ?>" class="mdl-list__item"><i class="mdi mdi-facebook mdl-list__item-icon"></i><span style="padding-left: 20px">Facebook</span></a>
               <a href="<?php echo $xD[ 'social' ]['twitter'] ; ?>" class="mdl-list__item"><i class="mdi mdi-twitter mdl-list__item-icon"></i><span style="padding-left: 20px">Twitter</span></a>
@@ -1081,7 +1122,7 @@ if ( isset( $_GET['install'] ) ) {
                     <a id = "<?php echo $xD[ 'slug' ] ; ?>author" href="#" class="material-icons alignright">more_vert</a>
                     <ul class="mdl-menu mdl-list mdl-js-menu mdl-js-ripple-effect mdl-menu--top-right <?php primaryColor(); ?> option-drop" for="<?php echo $xD[ 'slug' ] ; ?>author" style="overflow-y: auto;">
                     <a href="?view=<?php echo $xD[ 'slug' ] ; ?>&key=<?php echo $xD[ 'name'] ; ?>" class="mdl-list__item"><i class="mdi mdi-details mdl-list__item-icon"></i><span style="padding-left: 20px">Full Details</span></a>
-                    <a href="<?php echo $xD[ 'website'] ; ?>" class="mdl-list__item"><i class="mdi mdi-account mdl-list__item-icon"></i><span style="padding-left: 20px">Author: <?php echo $xD[ 'author' ] ; ?></span></a>
+                    <a href="<?php echo $xD[ 'website'] ; ?>" class="mdl-list__item"><i class="mdi mdi-account mdl-list__item-icon"></i><span style="padding-left: 20px"><?php echo $xD[ 'author' ] ; ?></span></a>
                     <div class="mdl-layout-spacer"></div>
                     <a href="<?php echo $xD[ 'social' ]['facebook'] ; ?>" class="mdl-list__item"><i class="mdi mdi-facebook mdl-list__item-icon"></i><span style="padding-left: 20px">Facebook</span></a>
                     <a href="<?php echo $xD[ 'social' ]['twitter'] ; ?>" class="mdl-list__item"><i class="mdi mdi-twitter mdl-list__item-icon"></i><span style="padding-left: 20px">Twitter</span></a>

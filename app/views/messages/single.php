@@ -3,7 +3,7 @@
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Single Message View
 * @link https://docs.jabalicms.org/views/
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.10
 * @license MIT - https://opensource.org/licenses/MIT
 **/

@@ -1,7 +1,7 @@
 <?php
 /**
 * @package Jabali - The Plug-N-Play Framework
-* @subpackage Jabali CouchDB Data Access Layer
+* @subpackage Jabali MongoDB Data Access Layer
 * @author Mauko Maunde < hi@mauko.co.ke >
 * @link https://docs.jabalicms.org/data/access/layers/mysql/
 * @license MIT - https://opensource.org/licenses/MIT
@@ -10,34 +10,20 @@
 
 namespace Jabali\Data\Access\Layers;
 
-class CouchDB
+class MongoDB
 {
-
 	private $host;
 	private $user;
-	private $pass;
 	private $name;
 
 	private $conn;
 
-	function __construct( $dbhost, $dbuser, $dbpass, $dbname )
+	function __construct( $dbhost, $dbuser, $dbname )
 	{
-		$temp_conn = new \mysqli( $dbhost, $dbuser, $dbpass );
-		mysqli_query( $temp_conn, "CREATE DATABASE IF NOT EXISTS ". $dbname );
-		if ($temp_conn -> connect_errno) {
-		    printf("Connection failed: %s\n", $temp_conn -> connect_error );
-		    exit();
-		}
-
-		$this -> host = $dbhost;
-		$this -> user = $dbuser;
-		$this -> pass = $dbpass;
-		$this -> name = $dbname;
-
-		$this -> conn = new \mysqli( $this -> host, $this -> user, $this -> pass, $this -> name );
-		if ($this -> conn -> connect_errno) {
-		    printf("Connection failed: %s\n", $this -> conn -> connect_error);
-		    exit();
+		$client = new \MongoClient();
+		$this -> conn = $client -> $dbname;
+		if (!$this -> conn) {
+		    die("MongoDB connection aborted");
 		}
 
 	}
@@ -52,9 +38,9 @@ class CouchDB
 		return $this -> conn -> query( $sql );
 	}
 
-	function execute( $sql )
+	function execute( $table )
 	{
-		return $this -> conn -> query( $sql );
+		return $this -> conn -> createCollection( $table );
 	}
 
 	function error()
@@ -68,7 +54,7 @@ class CouchDB
 	**/
 	function fetchAssoc( $result )
 	{
-		return $result -> fetch_assoc();
+		return json_decode( $result, true );
 	}
 
 	/**
@@ -77,7 +63,7 @@ class CouchDB
 	**/
 	function fetchObject( $result )
 	{
-		return $result -> fetch_object();
+		return json_decode( $result );
 	}
 
 	/**
@@ -86,7 +72,7 @@ class CouchDB
 	**/
 	function fetchAll( $result )
 	{
-		return $result -> fetch_all();
+		return json_decode( $result, true );
 	}
 
 	/**
@@ -117,47 +103,12 @@ class CouchDB
 		return $sql;
 	}
 
-	function setVals( $vals )
+	function setVals( $cols, $vals )
 	{
-		$sql = " VALUES ( ";
-		if ( is_array( $vals ) ) {
-
-			array_walk( $vals, array( $this, 'clean' ) );
-			
-			foreach ( $vals as $val ) {
-				$values[] = "'" . $val . "'";
-			}
-
-			if ( count( $values ) > 0 ) {
-				$sql .= implode(", ", $values );
-			}
-
-		} else {
-			$sql .= "'" .$this -> clean( $vals ) . "'";
-		}
-
-		$sql .= " ) ";
-
-		return $sql;
-	}
-
-	function setVal( $cols, $vals )
-	{
-		$sql = "SET ";
 		if ( is_array( $cols ) && is_array( $vals ) ) {
-			array_walk( $cols, array( $this, 'clean' ) );
-			array_walk( $vals, array( $this, 'clean' ) );
-			$colvals = array_combine( $cols, $vals );
-			foreach ( $colvals as $col => $val ) {
-				$values[] = $col." = '" . $val . "'";
-			}
-
-			if ( count( $values ) > 0 ) {
-				$sql .= implode(", ", $values );
-			}
-
+			$sql = array_combine( $cols, $vals );
 		} else {
-			$sql .= $this -> clean( $cols ) . " = '" . $this -> clean( $vals ) . "'";
+			$sql = array( $cols => $vals );
 		}
 
 		return $sql;
@@ -194,23 +145,19 @@ class CouchDB
 		return $sql;
 	}
 
-
-
 	/**
 	* Creating Data
 	**/
 	function insert( $table, $cols, $vals, $conds = null )
 	{
-		$sql = "INSERT INTO " . _DBPREFIX.$table . " ( ";
-		$sql .= $this -> setCols( $cols );
-		$sql .= " )";
-		$sql .= $this -> setVals( $vals );
+		$collection = $this -> conn -> _DBPREFIX . $table;
+		$sql = $this -> setVals( $cols, $vals );
 
 		if ( !is_null( $conds ) ) {
 		 	$sql .= $this -> setCond( $conds );
 		}
 
-		return $this -> query( $sql ); 
+		return $collection -> insert( $sql ); 
 	}
 
 	function insertId()
@@ -220,88 +167,38 @@ class CouchDB
 
 	function update( $table, $cols, $vals, $conds = null )
 	{
-		$sql = "UPDATE " . _DBPREFIX . $table . " ";
-		$sql .= $this -> setVal( $cols, $vals );
-
-		if ( !is_null( $conds ) ) {
-		 	$sql .= $this -> setCond( $conds );
-		}
-
-		return $this -> query( $sql ); 
+		$collection = $this -> conn -> _DBPREFIX . $table;
+		$sql .= $this -> setVals( $cols, $vals );
+		return $collection -> update( $conds, ['$set' => $sql] ); 
 	}
 
 	/**
 	* Creating Data
 	**/
-	function sweep( $table )
+	function sweep( $table, $limit = 10 )
 	{
-		$sql = "SELECT * FROM " . _DBPREFIX . $table;
+		$collection = $this -> conn -> _DBPREFIX . $table;
 
-		return $this -> query( $sql ); 
+		return $collection -> find();
 	}
 
 	function select( $table, $cols, $conds = null, $order = null, $limit = null, $offset = null )
 	{
-		$sql = "SELECT ";
-		$sql .= $this -> setCols( $cols );
-		$sql .= " FROM ". _DBPREFIX . $table . " ";
+		$collection = $this -> conn -> _DBPREFIX . $table;
 
-		if ( !is_null( $conds ) ) {
-			$sql .= $this -> setCond( $conds );
-		}
-
-		if ( !is_null( $order ) ) {
-			$sql .= "ORDER BY ";
-			if ( is_array( $order ) ) {
-				$sql .= $order[0] ." ". $order[1];
-			} else {
-				$sql .= $order . " ASC";
-			}
-		}
-
-		if ( !is_null( $offset ) ) {
-			$sql .= "OFFSET " . $offset;
-		}
-
-		if ( !is_null( $limit ) ) {
-			$sql .= "LIMIT " . $limit;
-		}
-
-		return $this -> query( $sql );
+		return $this -> conn -> find($conds, $cols) ->limit( $limit ) -> skip( $offset ) -> sort($order);
 	}
 
 	function selectUnique( $table, $cols, $conds = null, $order = null, $limit = null, $offset = null )
 	{
-		$sql = "SELECT DISTINCT ";
-		$sql .= $this -> setCols( $cols );
-		$sql .= " FROM ". _DBPREFIX . $table . " ";
+		$collection = $this -> conn -> _DBPREFIX . $table;
 
-		if ( !is_null( $conds ) ) {
-			$sql .= $this -> setLike( $conds );
-		}
-
-		if ( !is_null( $order ) ) {
-			$sql .= "ORDER BY ";
-			if ( is_array( $order ) ) {
-				$sql .= $order[0] ." ". $order[1];
-			} else {
-				$sql .= $order . " DESC ";
-			}
-		}
-
-		if ( !is_null( $offset ) ) {
-			$sql .= "OFFSET " . $offset;
-		}
-
-		if ( !is_null( $limit ) ) {
-			$sql .= "LIMIT " . $limit;
-		}
-
-		return $this -> query( $sql );
+		return $this -> conn -> findOne($conds, $cols);
 	}
 
 	function selectLike( $table, $cols, $like = null, $order = null, $limit = null, $offset = null )
 	{
+		$collection = $this -> conn -> _DBPREFIX . $table;
 		$sql = "SELECT ";
 		$sql .= $this -> setCols( $cols );
 		$sql .= " FROM ". _DBPREFIX . $table . " ";
@@ -330,10 +227,9 @@ class CouchDB
 		return $this -> query( $sql );
 	}
 
-
-
 	function search( $table, $cols, $conds, $val = null )
 	{
+		$collection = $this -> conn -> _DBPREFIX . $table;
 		$sql = "SELECT ";
 		$sql .= $this -> setCols( $cols );
 		$sql .= " FROM". _DBPREFIX . $table . " ";
@@ -352,13 +248,8 @@ class CouchDB
 	**/
 	function delete( $table, $conds )
 	{
-		$sql = "DELETE FROM " . _DBPREFIX . $table . " ";
-		
-		if ( !is_null( $conds ) ) {
-		 	$sql .= $this -> setCond( $conds );
-		}
-
-		return $this -> query( $sql );
+		$collection = $this -> conn -> _DBPREFIX . $table;
+		return $collection -> remove( $conds, false );
 	}
 
 	/**
@@ -366,13 +257,8 @@ class CouchDB
 	**/
 	function rowsCount( $table, $cols )
 	{
-		$sql = "SELECT ";
-		$sql .= $this -> setCols( $cols );
-		$sql .= "FROM " . _DBPREFIX . $table . " ";
-
-		$result = $this -> query( $sql );
-
-		return $result -> num_rows;
+		$collection = $this -> conn -> _DBPREFIX . $table;
+		return $collection -> fetch();
 	}
 
 	/**

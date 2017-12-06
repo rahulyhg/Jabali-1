@@ -2,7 +2,7 @@
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Admin Posts
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.04
 * @link https://docs.jabalicms.org/posts/
 **/
@@ -10,7 +10,7 @@ session_start();
 require_once( '../init.php' );
 require_once( '../load.php' );
 
-if ( isset( $_POST['create'] ) ) {
+if ( isset( $_POST['create'] ) || isset( $_POST['copy'] ) ) {
 
     if ( empty( $_POST['name'] ) ) { $_POST['name'] = 'name'; }
     if ( empty( $_POST['author'] ) ) { $_POST['author'] = '1'; }
@@ -22,7 +22,7 @@ if ( isset( $_POST['create'] ) ) {
     $_POST['gallery'] = "none";
     if ( empty( $_POST['authkey'] ) ) { $_POST['authkey'] = str_shuffle( generateCode() ); }
     if ( empty( $_POST['level'] ) ) { $_POST['level'] = "public"; }
-    $_POST['excerpt'] = substr( $_POST['details'], 250 );
+    $_POST['excerpt'] = substr( $_POST['details'], 0, 250 );
     if ( empty( $_POST['readings'] ) ) { $_POST['readings'] = "none"; }
     if ( empty( $_POST['status'] ) ) { $_POST['status'] = "published"; }
     if ( empty( $_POST['subtitle'] ) ) { $_POST['subtitle'] = 'undefined'; }
@@ -80,7 +80,7 @@ if ( isset( $_POST['create'] ) ) {
     if ( isset( $create['error'] ) ) {
       _shout_( "Status: ".$create['status']."<br>Error: ".$create['error'], "error" );
     } else {
-      _shout_( "Status: ".$create['status'] );
+      _shout_( $create['message'] );
       header( "Location: ?edit=".$GLOBALS['JBLDB'] -> insertId() ."&key=".$_POST['type']);
       exit();
     }
@@ -98,7 +98,7 @@ if ( isset( $_POST['create'] ) ) {
     $_POST['id'] = $_POST['id'];
     if ( empty( $_POST['authkey'] ) ) { $_POST['authkey'] = str_shuffle( generateCode() ); }
     if ( empty( $_POST['level'] ) ) { $_POST['level'] = "public"; }
-    if ( empty( $_POST['excerpt'] ) ) { $_POST['excerpt'] = substr( $_POST['details'], 250 ); }
+    if ( empty( $_POST['excerpt'] ) ) { $_POST['excerpt'] = substr( $_POST['details'], 0, 250 ); }
     if ( empty( $_POST['readings'] ) ) { $_POST['readings'] = "none"; }
     if ( empty( $_POST['status'] ) ) { $_POST['status'] = "published"; }
     if ( empty( $_POST['subtitle'] ) ) { $_POST['subtitle'] = 'undefined'; }
@@ -168,7 +168,8 @@ showTitle('posts'); ?>
 
 <div class="mdl-grid"><?php
 
-$collumns = array( 'id', 'title', 'author', 'categories', 'tags', 'published', 'actions');
+$collumns = array( 'id', 'title', 'author', 'categories', 'tags', 'published');
+ if ( isCap( 'admin' ) ) array_push( $collumns, 'actions');
 $fields = array( 'id', 'name', 'author_name', 'categories', 'tags', 'created' );
 $rows = array( 'id', 'name', 'author', 'categories', 'tags', 'created' );
 $actions = array( 'edit' => ['id'], 'view' => ['id'], 'copy' => ['id'] );

@@ -3,7 +3,7 @@
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Form
 * @link https://docs.jabalicms.org/classes/forms/
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @version 0.17.06
 * @license MIT - https://opensource.org/licenses/MIT
 **/ ?>
@@ -23,7 +23,7 @@
 
       <div class="input-field mdl-cell--3-col mdl-js-textfield getmdl-select">
         <i class="material-icons prefix">keyboard_arrow_down</i>
-        <input class="mdl-textfield__input" id="type" name="template" type="text" readonly tabIndex="-1" value="post" >
+        <input class="mdl-textfield__input" id="type" name="template" type="text" readonly tabIndex="-1" value="single" >
         <label for="type" class="center-align">Template</label>
         <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu <?php primaryColor(); ?>" for="type"><?php
           $theme = getOption( 'activetheme' );

@@ -2,7 +2,7 @@
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Admin Options
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.04
 * @link https://docs.jabalicms.org/options/
 **/
@@ -10,41 +10,23 @@ session_start();
 require_once( '../init.php' );
 require_once( '../load.php' );
 
-addSetting( "general", [], array( $GLOBALS['OPTIONS'], "general" ) );
-addSetting( "types", [], array( $GLOBALS['OPTIONS'], "types") );
-addSetting( "social", [], array( $GLOBALS['OPTIONS'], "social" ) );
-addSetting( "color", [], array( $GLOBALS['OPTIONS'], "colors" ) );
-addSetting( "editor", [], array( $GLOBALS['OPTIONS'], "editor" ) );
-addSetting( "restful", [], array( $GLOBALS['OPTIONS'], "rest" ) );
-addSetting( "misc", [], array( $GLOBALS['OPTIONS'], "misc" ) );
-
 if ( isset( $_POST['settings'] ) ) {
-    foreach ($GLOBALS['GSettingsField'][ $_POST['settings'] ] as $id => $field ) {
+    foreach ($GLOBALS['GSettingsField'][ $_POST['settings'] ] as $group => $field ) {
+        $page = $_POST['settings'];
+        $label = $GLOBALS['GSettings'][$page][$group]['label'];
         $date = date( "Y-m-d" );
-        $name = $field[0];
-        $type = $field[1];
-        $label = $field[2];
-        $icon = $field[3];
-        $attrs = $field[4];
+        $value = json_encode( $_POST[$group] );
 
-        if ( is_array( $POST[$name] ) ) {
-            $value = json_encode( $_POST[$name] );
+        if ( !isOption( $group ) ) {
+            $GLOBALS['OPTIONS'] -> create ( $label, $group, $value, $date );
         } else {
-            $value = $_POST[$name];
-        }
-
-        if ( !isOption( $name ) ) {
-            $GLOBALS['OPTIONS'] -> create ( $label, $name, $value, $date );
-        } else {
-            $GLOBALS['OPTIONS'] -> update ( $name, $value, $date );
+            $GLOBALS['OPTIONS'] -> update ( $group, $value, $date );
         }
     }
 }
 
 if ( isset( $_POST['mystyle'] ) ) {
     $theme = $_POST['theme'];
-    // $cols = array( "style" );
-    // $vals = array( $theme );
     // $conds = array( "id" => $_SESSION[JBLSALT.'Code'] );
     // $GLOBALS['USERS'] -> getId( $_SESSION[JBLSALT.'Code'] );
     // $GLOBALS['USERS'] -> style = $theme;
@@ -149,7 +131,8 @@ if ( isset( $_POST['social'] ) ) {
 require_once( 'header.php' ); ?>
     <div class="mdl-grid" ><?php
         if ( isset( $_GET['settings'] )) {
-            doSetting( $_GET['settings'] );
+            $setting = $_GET['settings'];
+            $GLOBALS['OPTIONS'] -> $setting();
         } elseif ( isset( $_GET['options'] )) {
             renderSettingsForm( $_GET['options'] );
             require_once( 'footer.php' );

@@ -2,7 +2,7 @@
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Comments Data Access Object
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @link https://docs.jabalicms.org/data/access/objects/comments/
 * @since 0.17.11
 * @license MIT - https://opensource.org/licenses/MIT
@@ -136,7 +136,10 @@ class Comments {
 
       return $posts;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
   }
 
@@ -153,7 +156,10 @@ class Comments {
 
       return $posts;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
   }
 
@@ -170,7 +176,10 @@ class Comments {
 
       return $posts;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
   }
 
@@ -187,7 +196,10 @@ class Comments {
 
       return $posts;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
   }
 
@@ -204,7 +216,10 @@ class Comments {
 
       return $posts;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
   }
 
@@ -221,7 +236,10 @@ class Comments {
 
       return $posts;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
   }
 
@@ -238,7 +256,10 @@ class Comments {
 
       return $posts;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
   }
 
@@ -255,7 +276,10 @@ class Comments {
 
       return $posts;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
   }
 
@@ -281,14 +305,10 @@ class Comments {
 
       return $posts;
     } else{
-      return array( "status" => "fail", "error" => $GLOBALS['JBLDB'] -> error() );
+      return array( 
+        "status" => "fail", 
+        "error" => $GLOBALS['JBLDB'] -> error() 
+      );
     }
-  }
-
-  public function sweepy( $type = "article"){
-
-    $conds = array( "status" => "published", "type" => $type );
-    $results = $GLOBALS['JBLDB'] -> select( $this -> table, $this -> allowed, $conds );
-    return new ResultSet( $posts );
   }
 }

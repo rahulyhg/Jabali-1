@@ -2,7 +2,7 @@
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage App Conroller
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.04
 * @link https://docs.jabalicms.org/controller/
 * @license MIT - https://opensource.org/licenses/MIT
@@ -47,7 +47,11 @@ if ( !is_dir( $directory) ) {
 * Handle form actions for login/register/reset/confirmation/email/comments
 **/
 if ( isset( $_POST['login'] ) && $_POST['user'] !== "" && $_POST['password'] !== "" ) {
-  $USERS -> login();
+  if ( isset( $_GET['r'] ) ) {
+  	$USERS -> login( $_GET['r'] );
+  } else {
+  	$USERS -> login('admin/index?page=my dashboard');
+  }
 }
 
 if ( isset( $_POST['create'] ) ) {
@@ -129,17 +133,15 @@ if( !isset( $match ) || empty( $match ) || $match == "?logout" ) {
 	}
 	getFooter();
 } elseif ( isset( $GLOBALS['GRules'][$match] ) ) {
-	getHeader();
 	rewriteRules( $match, $elements );
-	getFooter();
 } else switch ( $match ) {
 	case "login":
 		if ( isset( $_SESSION[JBLSALT.'Code'] ) ) {
 			header( 'Location: '. _ROOT .'/admin/index?page=my dashboard' );
 			exit();
-		} else {
-			login( $elements[0] );
 		}
+
+		login( $elements[0] );
 		break;
 	case "register":
 		register( $elements[0] );
@@ -180,6 +182,10 @@ if( !isset( $match ) || empty( $match ) || $match == "?logout" ) {
 		getHeader();
 		comments( $elements );
 		getFooter();
+	case "archive":
+		getHeader();
+		archive( $elements );
+		getFooter();
 		break;
 	case "tags":
 		getHeader();
@@ -192,7 +198,15 @@ if( !isset( $match ) || empty( $match ) || $match == "?logout" ) {
 		getFooter();
 		break;
 	case "api":
-		restApi( $elements );
+		$key = isset( $_GET['k'] ) ? $_GET['k'] : null;
+	    $secret = isset( $_GET['s'] ) ? $_GET['s'] : null;
+	    $data = file_get_contents("php://input");
+	    $api = new Jabali\Lib\REST( $elements, $key, $secret, $data );
+
+	    header("Access-Control-Allow-Origin: *");
+	    header('Content-Type:Application/json' );
+
+	    echo( json_encode( $api -> retval ) );
 		break;
 	case "feed":
 		feed( $elements[0] );

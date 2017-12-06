@@ -2,7 +2,7 @@
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Themes Creation Client
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.06
 * @link https://docs.jabalicms.org/api/themes/
 **/
@@ -82,13 +82,18 @@ SOFTWARE.';
 
   $atemplatetext = $comments." ?>
 <?php //resetLoop(); ?>
+<h1><?php archiveHeader(\$data); ?></h1>
 <?php if( hasRecords() ): while( hasRecords() ): theRecord(); ?>
-  <?php theImage('100%'); ?>
-  <h1><?php theTitle(); ?></h1>
-  <p>Published by <?php theAuthor(); ?> on <?php theDate(); ?></p>
-  <p>In <?php theCategories(); ?></p>
-  <p>Tagged <?php theTags(); ?></p>
-  <article><?php theContent(); ?></article>
+  <div>
+    <figure><?php theImage('100%'); ?></figure>
+    <h1><?php theTitle(); ?></h1>
+    <p>Published by <?php theAuthor(); ?> on <?php theDate(); ?></p>
+    <p>In <?php theCategories(); ?></p>
+    <p>Tagged <?php theTags(); ?></p>
+    <article><?php theContent(); ?></article>
+    <button><?php theLink(); ?></button>
+  </div>
+  <br>
 <?php endwhile; endif; ?>";
 
   $templatetext = $comments." ?>
@@ -130,13 +135,18 @@ SOFTWARE.';
 
   $atemplatetext = $comments." ?>
 <?php //resetLoop(); ?>
+<h1><?php archiveHeader(\$data); ?></h1>
 <?php if( hasRecords() ): while( hasRecords() ): theRecord(); ?>
-  <?php theImage('100%'); ?>
-  <h1><?php theTitle(); ?></h1>
-  <p>Published by <?php theAuthor(); ?> on <?php theDate(); ?></p>
-  <p>In <?php theCategories(); ?></p>
-  <p>Tagged <?php theTags(); ?></p>
-  <article><?php theContent(); ?></article>
+  <div>
+    <?php theImage('100%'); ?>
+    <h1><?php theTitle(); ?></h1>
+    <p>Published by <?php theAuthor(); ?> on <?php theDate(); ?></p>
+    <p>In <?php theCategories(); ?></p>
+    <p>Tagged <?php theTags(); ?></p>
+    <article><?php theContent(); ?></article>
+    <button><?php theLink(); ?></button>
+  </div>
+  <br>
 <?php endwhile; endif; ?>";
 
   $templatetext = $comments." ?>
@@ -178,13 +188,18 @@ SOFTWARE.';
 
   $atemplatetext = $comments." ?>
 <?php //resetLoop(); ?>
+<h1><?php archiveHeader(\$data); ?></h1>
 <?php if( hasRecords() ): while( hasRecords() ): theRecord(); ?>
-  <?php theImage('100%'); ?>
-  <h1><?php theTitle(); ?></h1>
-  <p>Published by <?php theAuthor(); ?> on <?php theDate(); ?></p>
-  <p>In <?php theCategories(); ?></p>
-  <p>Tagged <?php theTags(); ?></p>
-  <article><?php theContent(); ?></article>
+  <div>
+    <?php theImage('100%'); ?>
+    <h1><?php theTitle(); ?></h1>
+    <p>Published by <?php theAuthor(); ?> on <?php theDate(); ?></p>
+    <p>In <?php theCategories(); ?></p>
+    <p>Tagged <?php theTags(); ?></p>
+    <article><?php theContent(); ?></article>
+    <button><?php theLink(); ?></button>
+  </div>
+  <br>
 <?php endwhile; endif; ?>";
 
   $templatetext = $comments." ?>
@@ -226,13 +241,18 @@ SOFTWARE.';
 
   $atemplatetext = $comments." ?>
 <?php //resetLoop(); ?>
+<h1><?php archiveHeader(\$data); ?></h1>
 <?php if( hasRecords() ): while( hasRecords() ): theRecord(); ?>
-  <?php theImage('100%'); ?>
-  <h1><?php theTitle(); ?></h1>
-  <p>Published by <?php theAuthor(); ?> on <?php theDate(); ?></p>
-  <p>In <?php theCategories(); ?></p>
-  <p>Tagged <?php theTags(); ?></p>
-  <article><?php theContent(); ?></article>
+  <div>
+    <?php theImage('100%'); ?>
+    <h1><?php theTitle(); ?></h1>
+    <p>Published by <?php theAuthor(); ?> on <?php theDate(); ?></p>
+    <p>In <?php theCategories(); ?></p>
+    <p>Tagged <?php theTags(); ?></p>
+    <article><?php theContent(); ?></article>
+    <button><?php theLink(); ?></button>
+  </div>
+  <br>
 <?php endwhile; endif; ?>";
 
   $templatetext = $comments." ?>
@@ -274,13 +294,18 @@ SOFTWARE.';
 
   $atemplatetext = $comments." ?>
 <?php //resetLoop(); ?>
+<h1><?php archiveHeader(\$data); ?></h1>
 <?php if( hasRecords() ): while( hasRecords() ): theRecord(); ?>
-  <?php theImage('100%'); ?>
-  <h1><?php theTitle(); ?></h1>
-  <p>Published by <?php theAuthor(); ?> on <?php theDate(); ?></p>
-  <p>In <?php theCategories(); ?></p>
-  <p>Tagged <?php theTags(); ?></p>
-  <article><?php theContent(); ?></article>
+  <div>
+    <figure><?php theImage('100%'); ?></figure>
+    <h1><?php theTitle(); ?></h1>
+    <p>Published by <?php theAuthor(); ?> on <?php theDate(); ?></p>
+    <p>In <?php theCategories(); ?></p>
+    <p>Tagged <?php theTags(); ?></p>
+    <article><?php theContent(); ?></article>
+    <button><?php theLink(); ?></button>
+  </div>
+  <br>
 <?php endwhile; endif; ?>";
 
   $templatetext = $comments." ?>
@@ -373,7 +398,7 @@ $script = "\$(document).ready(function(){
       mkdir( $classes, 0777, true );
 
       $licensefile = fopen($themedir.'LICENSE', 'w');
-      $themefunctions = fopen( $themedir.$slug.'.php', 'w');
+      $themefunctions = fopen( $themedir.'functions.php', 'w');
       $themeheader = fopen( $themedir.'header.php', 'w');
       $themefooter = fopen( $themedir.'footer.php', 'w');
       $themearchivetemplate = fopen( $themedir.'templates/archive.php', 'w');
@@ -417,7 +442,7 @@ $script = "\$(document).ready(function(){
         file_put_contents( $themedir.'assets/js/'.$base.'.js', file_get_contents( _SCRIPTS.$base.'.js') );
       }
 
-      _shout_( 'New theme created successfully! <a href="?edit='.$slug.'&key='.$slug.'.php">Click here</a> to edit.', 'success' );
+      _shout_( 'New theme created successfully! <a href="?edit='.$slug.'&key='.$slug.'.php">Click here</a> to edit.<br><form method="POST" action=""><button type="submit" class="mdl-button mdl-button--colored" name="activetheme" value="'.$slug.'" >ACTIVATE THEME</button><input type="hidden" name="csrf_token" value="' . CSRF . '" /></form>', 'success' );
     } else {
       _shout_( "Could not create theme files. Make sure Jabali has the correct write permissions to the installation directory and try again.", "error" );
     }
@@ -430,6 +455,7 @@ if ( isset( $_POST['copytheme'] ) ) {
   $name = $_POST['themename'];
   $slug = $_POST['themeslug'];
   $description = $_POST['themedescription'];
+  $category = $_POST['themecategory'];
   $author = $_POST['themeauthor'];
   $website = $_POST['themewebsite'];
   $support = $_POST['themesupport'];
@@ -441,15 +467,15 @@ if ( isset( $_POST['copytheme'] ) ) {
   $email = $_POST['themeemail'];
   $version = $_POST['themeversion'];
 
-  $comments = "
-  <?php
-  /**
-  * @package Jabali - The Plug-N-Play Framework
-  * @subpackage ". $name ."
-  * @author ". $author ."
-  * @link ". $website ."
-  * @since ". $version ."
-  **/\n";
+  $comments = "<?php
+/**
+* @package Jabali - The Plug-N-Play Framework
+* @subpackage ". $name ."
+* @author ". $author ."
+* @since ". $version ."
+* @link ". $website ."
+* @license ". $license ." - ". $licenselink  ."
+**/";
 
   $newtheme = _ABSTHEMES_ . $slug.'/';
   $oldtheme = _ABSTHEMES_ . $source.'/';
@@ -459,21 +485,39 @@ if ( isset( $_POST['copytheme'] ) ) {
   $images = _ABSTHEMES_ . $slug.'/assets/images/';
   $classes = _ABSTHEMES_ . $slug.'/classes/';
 
-  $headertext = $comments."?>";
-
-  $templatetext = $comments."?>\n";
-
-  $footerertext = $comments."?>\n";
-
-  $data = array( "name" => $name, "slug" => $slug, "version" => $version, "author" => $author, "category" => $category, "screenshot" => "", "description" => $description, "social" => array( "facebook" => $facebook, "twitter" => $twitter, "github" => $github, "email" => $email ), "website" => $website, "support" => $support, "download" => "https://jabali.io/themes/".$slug, "licenses" => array( $license => $licenselink ) );
+  $data = '{
+  "name": "'.$name.'",
+  "slug": "'.$slug.'",
+  "version": "'.$version.'",
+  "author": "'.$author.'",
+  "modified": "'.$author.'",
+  "category": "'.$category.'",
+  "screenshot": "app/assets/images/avatar.png",
+  "description": "'.$description.'",
+  "social": {
+    "facebook": "'.$facebook.'",
+    "twitter": "'.$twitter.'",
+    "github": "'.$github.'",
+    "email": "'.$email.'"
+  },
+  "link": "https://jabalicms.org/themes/'.$slug.'",
+  "website": "'.$website.'",
+  "support": "'.$support.'",
+  "download": "https://jabalicms.org/dl/themes/'.$slug.'.zip",
+  "licences": {
+    "'.$license.'": "'.$licenselink.'"
+  }
+}';
 
   if ( reCopy( $oldtheme, $newtheme ) ) {
-    file_put_contents($newtheme.$slug.'.php', $comments);
+    file_put_contents($newtheme.'functions.php', $comments);
     file_put_contents($newtheme.$slug.'.json', $data);
-    file_put_contents($css.$slug.'.css', $data);
-    file_put_contents($js.$slug.'.js', $data);
+    file_put_contents($css.$slug.'.css', str_replace('<?php', "/* Edit!!! */", $comments) );
+    file_put_contents($js.$slug.'.js', str_replace('<?php', "/* Edit!!! */", $comments) );
 
-    _shout_( 'New theme created from '. $source.'! <a href="?edit='.$slug.'&key='.$slug.'.php">Click here</a> to edit', 'success' );
+    unlink( $newtheme.$source.'.json');
+
+    _shout_( 'Copy successful! '.$slug.' theme created from '. $source.'! <a href="?edit='.$slug.'&key='.$slug.'.php">Click here</a> to edit', 'success' );
   } else {
     _shout_( 'Could not create theme files. Make sure Jabali has the correct write permissions to the installation directory and try again.', 'error');
   }
@@ -578,22 +622,29 @@ if ( isset( $_GET['install'] ) ) {
       </div>
 
       <div class="mdl-cell mdl-cell--4-col file-field input-field">
-        <button class="mdl-button mdl-button--fab mdl-button--colored alignright" type="submit" name="uploadtheme"><i class="material-icons">forward</i></button>
+        <button class="mdl-button mdl-button--fab mdl-button--colored alignright" type="submit" name="uploadtheme"><i class="material-icons">file_upload</i></button>
       </div>
     </form>
     <div class="mdl-cell mdl-cell--4-col file-field input-field mdl-card mdl-shadow--2dp <?php primaryColor(); ?>">
       
        <a class="mdl-button mdl-button--fab mdl-button--colored addfab" href="?create=theme"><i class ="material-icons">create</i></a>
       <div><?php
+        $themes = array();
         $path = _ABSTHEMES_;
         $dir = new DirectoryIterator($path);
         foreach ($dir as $fileinfo) {
             if ($fileinfo->isDir() && !$fileinfo->isDot()) {
                 $theme = $fileinfo->getFilename();
-                $xJson = file_get_contents( _ABSTHEMES_.$theme."/".$theme.".json" );
-                $xD = json_decode( $xJson, true ); ?>
-                      <a href="?copy=theme&source=<?php echo $xD[ 'slug' ] ; ?>" class="mdl-list__item"><i class="mdi mdi-content-copy mdl-list__item-icon"></i><span style="padding-left: 20px"><?php echo $xD[ 'name' ] ; ?></span></a><?php
+                if( file_exists( _ABSTHEMES_.$theme."/".$theme.".json" ) ) {
+                  $xJson = file_get_contents( _ABSTHEMES_.$theme."/".$theme.".json" );
+                  $xD = json_decode( $xJson, true ); 
+                  $themes[] = $xD['slug'];
+                }
             }
+        }
+        asort( $themes );
+        foreach ($themes as $theme) { ?>
+          <a href="?create=copy&source=<?php echo $theme; ?>" class="mdl-list__item"><i class="material-icons mdl-list__item-icon">content_copy</i><span style="padding-left: 20px"><?php echo ucwords( $theme ); ?></span></a><?php 
         } ?>
       </div>
     </div>
@@ -605,23 +656,32 @@ if ( isset( $_GET['install'] ) ) {
       <div class="mdl-cell mdl-cell--8-col <?php primaryColor(); ?> mdl-card">
       <div class="mdl-card__supporting-text">
         <div class="input-field getmdl-select">
-        <i class="material-icons prefix">content_copy</i>
-         <input class="mdl-textfield__input" id="type" name="source" type="text" readonly tabIndex="-1" value="<?php if (isset( $_GET['source'] ) ){ echo $_GET['source']; } else{ echo 'Select Source'; } ?>" >
+          <i class="material-icons prefix">content_copy</i>
+          <input class="mdl-textfield__input" id="type" name="source" type="text" readonly tabIndex="-1" value="<?php if (isset( $_GET['source'] ) ){ echo $_GET['source']; } else{ echo 'Select Source'; } ?>" >
            <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu <?php primaryColor(); ?> option-drop" for="type" style="max-height: 500px !important; overflow-y: auto;"><?php
-                    $path = _ABSTHEMES_;
-                    $dir = new DirectoryIterator($path);
-                    foreach ($dir as $fileinfo) {
-                        if ($fileinfo->isDir() && !$fileinfo->isDot()) {
-                            $theme = $fileinfo->getFilename(); ?>
-                                  <a href="?create=copy&source=<?php echo $theme; ?>" class="mdl-list__item"><i class="mdi mdi-pencil mdl-list__item-icon"></i><span style="padding-left: 20px"><?php echo ucwords( $theme ); ?></span></a><?php
-                        }
-                    } ?>
+            $themes = array();
+            $path = _ABSTHEMES_;
+            $dir = new DirectoryIterator($path);
+            foreach ($dir as $fileinfo) {
+                if ($fileinfo->isDir() && !$fileinfo->isDot()) {
+                    $theme = $fileinfo->getFilename();
+                    if( file_exists( _ABSTHEMES_.$theme."/".$theme.".json" ) ) {
+                      $xJson = file_get_contents( _ABSTHEMES_.$theme."/".$theme.".json" );
+                      $xD = json_decode( $xJson, true ); 
+                      $themes[] = $xD['slug'];
+                    }
+                }
+            }
+            asort( $themes );
+            foreach ($themes as $theme) { ?>
+              <a href="?create=copy&source=<?php echo $theme; ?>" class="mdl-list__item"><i class="mdi mdi-pencil mdl-list__item-icon"></i><span style="padding-left: 20px"><?php echo ucwords( $theme ); ?></span></a><?php 
+            } ?>
            </ul>
           <label for="type" >Select Source</label>
         </div>
         <div class="input-field">
           <i class="material-icons prefix">label</i>
-          <!-- To-Do: Generate randm fancy names for theme + lowecase for slug -->
+          <!-- To-Do: Generate random fancy names for theme + lowecase for slug -->
           <input type="text" id="themename" name="themename" required >
           <label for="themename" >Theme Name</label>
         </div>
@@ -637,12 +697,12 @@ if ( isset( $_GET['install'] ) ) {
         </div>
         <div class="input-field">
           <i class="material-icons prefix">description</i>
-          <textarea id="themedesc" name="themedescription" class="materialize-textarea"></textarea>
+          <textarea id="themedesc" name="themedescription" class="materialize-textarea">My amazing theme.</textarea>
           <label for="themedesc" >Theme Description</label>
         </div>
         <div class="input-field">
           <i class="material-icons prefix">bubble_chart</i>
-          <input type="text" id="themeversion" name="themeversion" value="<?php echo( "0.".date( 'Y.m' ) ); ?>">
+          <input type="text" id="themeversion" name="themeversion" value="<?php echo( "0.".date( 'y.m' ) ); ?>">
           <label for="themeversion" >Theme Version</label>
         </div>
         <div class="input-field">
@@ -685,22 +745,22 @@ if ( isset( $_GET['install'] ) ) {
           <h3>Theme Social</h3>
           <div class="input-field">
           <i class="fa fa-facebook prefix"></i>
-          <input type="text" id="themefb" name="themefacebook">
+          <input type="text" id="themefb" name="themefacebook" value="https://facebook.com/">
           <label for="themefb" >Facebook</label>
           </div>
           <div class="input-field">
             <i class="fa fa-twitter prefix"></i>
-            <input type="text" id="themetwitter" name="themetwitter">
+            <input type="text" id="themetwitter" name="themetwitter" value="https://twitter.com/">
             <label for="themetwitter" >Twitter</label>
           </div>
           <div class="input-field">
             <i class="fa fa-github prefix"></i>
-            <input type="text" id="themegithub" name="themegithub">
+            <input type="text" id="themegithub" name="themegithub" value="https://github.com/">
             <label for="themegithub" >Github</label>
           </div>
           <div class="input-field">
             <i class="fa fa-envelope prefix"></i>
-            <input type="text" id="themeemail" name="themeemail" required >
+            <input type="text" id="themeemail" name="themeemail">
             <label for="themeemail" >Email</label>
           </div>
         </div>
@@ -714,7 +774,7 @@ if ( isset( $_GET['install'] ) ) {
       <div class="mdl-card__supporting-text">
         <div class="input-field">
           <i class="material-icons prefix">label</i>
-          <!-- To-Do: Generate randm fancy names for theme + lowecase for slug -->
+          <!-- To-Do: Generate random fancy names for theme + lowecase for slug -->
           <input type="text" id="themename" name="themename" required >
           <label for="themename" >Theme Name</label>
         </div>
@@ -1299,7 +1359,7 @@ if ( isset( $_GET['install'] ) ) {
               <a id = "<?php echo $xD[ 'slug' ] ; ?>author" href="#" class="material-icons alignright">more_vert</a>
               <ul class="mdl-menu mdl-list mdl-js-menu mdl-js-ripple-effect mdl-menu--top-right <?php primaryColor(); ?> option-drop" for="<?php echo $xD[ 'slug' ] ; ?>author" style="overflow-y: auto;">
               <a href="?view=<?php echo $xD[ 'slug' ] ; ?>&key=<?php echo $xD[ 'name'] ; ?>" class="mdl-list__item"><i class="mdi mdi-details mdl-list__item-icon"></i><span style="padding-left: 20px">Full Details</span></a>
-              <a href="<?php echo $xD[ 'website'] ; ?>" class="mdl-list__item"><i class="mdi mdi-account mdl-list__item-icon"></i><span style="padding-left: 20px">Author: <?php echo $xD[ 'author' ] ; ?></span></a>
+              <a href="<?php echo $xD[ 'website'] ; ?>" class="mdl-list__item"><i class="mdi mdi-account mdl-list__item-icon"></i><span style="padding-left: 20px"><?php echo $xD[ 'author' ] ; ?></span></a>
               <div class="mdl-layout-spacer"></div>
               <a href="<?php echo $xD[ 'social' ]['facebook'] ; ?>" class="mdl-list__item"><i class="mdi mdi-facebook mdl-list__item-icon"></i><span style="padding-left: 20px">Facebook</span></a>
               <a href="<?php echo $xD[ 'social' ]['twitter'] ; ?>" class="mdl-list__item"><i class="mdi mdi-twitter mdl-list__item-icon"></i><span style="padding-left: 20px">Twitter</span></a>
@@ -1326,63 +1386,67 @@ if ( isset( $_GET['install'] ) ) {
 } else { ?>
   <title>Themes - <?php showOption( 'name' ); ?></title>
   <form method="POST" action="" class="mdl-grid"><?php
-      $path = _ABSTHEMES_;
-      $dir = new DirectoryIterator($path);
-      foreach ($dir as $fileinfo) {
-          if ($fileinfo->isDir() && !$fileinfo->isDot()) {
-              $theme = $fileinfo->getFilename();
-              if( file_exists( _ABSTHEMES_.$theme."/".$theme.".json" ) ) {
+    $themes = array();
+    $path = _ABSTHEMES_;
+    $dir = new DirectoryIterator($path);
+    foreach ($dir as $fileinfo) {
+        if ($fileinfo->isDir() && !$fileinfo->isDot()) {
+            $theme = $fileinfo->getFilename();
+            if( file_exists( _ABSTHEMES_.$theme."/".$theme.".json" ) ) {
               $xJson = file_get_contents( _ABSTHEMES_.$theme."/".$theme.".json" );
-              $xD = json_decode( $xJson, true ); ?>
-            <div class="mdl-cell mdl-cell--3-col-desktop mdl-cell--3-col-tablet mdl-cell--12-col-phone mdl-card mdl-shadow--4dp <?php primaryColor(); ?>">
-              <div class="mdl-card__title mdl-card--expand">
-                <h5 class="mdl-card__title-text"><?php echo $xD[ 'name' ] ; ?></h5>
-              <div class="mdl-layout-spacer"></div>
-              <div class="mdl-card__subtitle-text">
-                    <a id="<?php echo $xD[ 'slug' ] ; ?>web" href="<?php echo $xD[ 'website' ] ; ?>" class="material-icons">public</a>
-                    <div class="mdl-tooltip" for="<?php echo $xD[ 'slug' ] ; ?>web"><?php echo $xD[ 'name' ] ; ?> Help</div>
-                    <a id="<?php echo $xD[ 'slug' ] ; ?>help" href="<?php echo $xD[ 'support' ] ; ?>" class="material-icons">help</a>
-                    <div class="mdl-tooltip" for="<?php echo $xD[ 'slug' ] ; ?>help"><?php echo $xD[ 'name' ] ; ?> Help</div>
-              </div>
-              </div>
-            <div class="mdl-card__image">
-          <img src="imagen.php?s=008080_F_400_400&t=<?php echo $xD[ 'slug' ] ; ?>" width="100%" style="overflow: hidden;" >
-        </div>
-              <div class="mdl-card__actions mdl-card--border">
-                    <div class="input-field">
-                        <button class="mdl-button mdl-button--icon <?php if ( activeTheme( $xD[ 'slug' ] ) ) {
-                          echo "mdl-button--colored";
-                        } ?>" id="<?php echo $xD[ 'slug' ] ; ?>" name="activetheme" value="<?php echo $xD[ 'slug' ] ; ?>" type="submit">
-                            <i class="material-icons"><?php if ( activeTheme( $xD[ 'slug' ] ) ) {
-                          echo "check";
-                        } else {
-                          echo "save";
-                          } ?></i>
-                        </button>
-                    </div>
-              <div class="mdl-layout-spacer"></div>
-                    <a href="?edit=<?php echo $xD[ 'slug' ] ; ?>&key=<?php echo $xD[ 'slug' ] ; ?>.php" class="material-icons">create</a>
-                    <a id = "<?php echo $xD[ 'slug' ] ; ?>author" href="#" class="material-icons alignright">more_vert</a>
-                    <ul class="mdl-menu mdl-list mdl-js-menu mdl-js-ripple-effect mdl-menu--top-right <?php primaryColor(); ?> option-drop" for="<?php echo $xD[ 'slug' ] ; ?>author" style="overflow-y: auto;">
-                    <a href="?view=<?php echo $xD[ 'slug' ] ; ?>&key=<?php echo $xD[ 'name'] ; ?>" class="mdl-list__item"><i class="mdi mdi-details mdl-list__item-icon"></i><span style="padding-left: 20px">Full Details</span></a>
-                    <a href="<?php echo $xD[ 'website'] ; ?>" class="mdl-list__item"><i class="mdi mdi-account mdl-list__item-icon"></i><span style="padding-left: 20px">Author: <?php echo $xD[ 'author' ] ; ?></span></a>
-                    <div class="mdl-layout-spacer"></div>
-                    <a href="<?php echo $xD[ 'social' ]['facebook'] ; ?>" class="mdl-list__item"><i class="mdi mdi-facebook mdl-list__item-icon"></i><span style="padding-left: 20px">Facebook</span></a>
-                    <a href="<?php echo $xD[ 'social' ]['twitter'] ; ?>" class="mdl-list__item"><i class="mdi mdi-twitter mdl-list__item-icon"></i><span style="padding-left: 20px">Twitter</span></a>
-                    <a href="<?php echo $xD[ 'social' ]['github'] ; ?>" class="mdl-list__item"><i class="mdi mdi-github-circle mdl-list__item-icon"></i><span style="padding-left: 20px">Github</span></a>
-                    <a href="mailto:<?php echo $xD[ 'social' ][ 'email' ] ; ?>" class="mdl-list__item"><i class="mdi mdi-email mdl-list__item-icon"></i><span style="padding-left: 20px"><?php echo $xD[ 'social' ][ 'email' ] ; ?></span></a>
-                    </ul>
-              </div>
-              <?php csrf(); ?>
-            </div><?php }
-          }
-      } ?>
-    </form>
+              $xD = json_decode( $xJson, true ); 
+              $themes[] = $xD;
+            }
+        }
+    }
+    asort( $themes );
+    foreach ($themes as $xD) { ?>
+              <div class="mdl-cell mdl-cell--3-col-desktop mdl-cell--3-col-tablet mdl-cell--12-col-phone mdl-card mdl-shadow--4dp <?php primaryColor(); ?>">
+                <div class="mdl-card__title mdl-card--expand">
+                  <h5 class="mdl-card__title-text"><?php echo $xD[ 'name' ] ; ?></h5>
+                  <div class="mdl-layout-spacer"></div>
+                  <div class="mdl-card__subtitle-text">
+                        <a id="<?php echo $xD[ 'slug' ] ; ?>web" href="<?php echo $xD[ 'website' ] ; ?>" class="material-icons">public</a>
+                        <div class="mdl-tooltip" for="<?php echo $xD[ 'slug' ] ; ?>web"><?php echo $xD[ 'name' ] ; ?> Help</div>
+                        <a id="<?php echo $xD[ 'slug' ] ; ?>help" href="<?php echo $xD[ 'support' ] ; ?>" class="material-icons">help</a>
+                        <div class="mdl-tooltip" for="<?php echo $xD[ 'slug' ] ; ?>help"><?php echo $xD[ 'name' ] ; ?> Help</div>
+                  </div>
+                </div>
+                <div class="mdl-card__image">
+                  <img src="imagen.php?s=008080_F_400_400&t=<?php echo $xD[ 'slug' ] ; ?>" width="100%" style="overflow: hidden;" >
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                  <div class="input-field">
+                      <button class="mdl-button mdl-button--icon <?php if ( activeTheme( $xD[ 'slug' ] ) ) {
+                        echo "mdl-button--colored";
+                      } ?>" id="<?php echo $xD[ 'slug' ] ; ?>" name="activetheme" value="<?php echo $xD[ 'slug' ] ; ?>" type="submit">
+                          <i class="material-icons"><?php if ( activeTheme( $xD[ 'slug' ] ) ) {
+                        echo "check";
+                      } else {
+                        echo "save";
+                        } ?></i>
+                      </button>
+                  </div>
+                  <div class="mdl-layout-spacer"></div>
+                  <a href="?edit=<?php echo $xD[ 'slug' ] ; ?>&key=<?php echo $xD[ 'slug' ] ; ?>.php" class="material-icons">create</a>
+                  <a id = "<?php echo $xD[ 'slug' ] ; ?>author" href="#" class="material-icons alignright">more_vert</a>
+                  <ul class="mdl-menu mdl-list mdl-js-menu mdl-js-ripple-effect mdl-menu--top-right <?php primaryColor(); ?> option-drop" for="<?php echo $xD[ 'slug' ] ; ?>author" style="overflow-y: auto;">
+                  <a href="?view=<?php echo $xD[ 'slug' ] ; ?>&key=<?php echo $xD[ 'name'] ; ?>" class="mdl-list__item"><i class="mdi mdi-details mdl-list__item-icon"></i><span style="padding-left: 20px">Full Details</span></a>
+                  <a href="<?php echo $xD[ 'website'] ; ?>" class="mdl-list__item"><i class="mdi mdi-account mdl-list__item-icon"></i><span style="padding-left: 20px"><?php echo $xD[ 'author' ] ; ?></span></a>
+                  <div class="mdl-layout-spacer"></div>
+                  <a href="<?php echo $xD[ 'social' ]['facebook'] ; ?>" class="mdl-list__item"><i class="mdi mdi-facebook mdl-list__item-icon"></i><span style="padding-left: 20px">Facebook</span></a>
+                  <a href="<?php echo $xD[ 'social' ]['twitter'] ; ?>" class="mdl-list__item"><i class="mdi mdi-twitter mdl-list__item-icon"></i><span style="padding-left: 20px">Twitter</span></a>
+                  <a href="<?php echo $xD[ 'social' ]['github'] ; ?>" class="mdl-list__item"><i class="mdi mdi-github-circle mdl-list__item-icon"></i><span style="padding-left: 20px">Github</span></a>
+                  <a href="mailto:<?php echo $xD[ 'social' ][ 'email' ] ; ?>" class="mdl-list__item"><i class="mdi mdi-email mdl-list__item-icon"></i><span style="padding-left: 20px"><?php echo $xD[ 'social' ][ 'email' ] ; ?></span></a>
+                  </ul>
+                </div>
+                <?php csrf(); ?>
+              </div><?php 
+     } ?>
+  </form>
 
-     <div class="fixed-action-btn horizontal">
-    <a class="btn-floating btn-large accent">
-      <i class="large material-icons">add</i>
-    </a>
+  <div class="fixed-action-btn horizontal">
+    <a class="btn-floating btn-large accent"><i class="large material-icons">add</i></a>
     <ul>
       <li><a class="btn-floating red" href="?create=theme"><i class="material-icons">mode_edit</i></a></li>
       <li><a class="btn-floating green" href="?create=upload"><i class="material-icons">publish</i></a></li>

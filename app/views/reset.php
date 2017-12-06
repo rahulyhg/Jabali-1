@@ -2,7 +2,7 @@
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Password page Layout
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.09
 * @link https://docs.jabalicms.org/views/reset
 * @license MIT - https://opensource.org/licenses/MIT

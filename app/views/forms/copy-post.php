@@ -3,7 +3,7 @@
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Form
 * @link https://docs.jabalicms.org/classes/forms/
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @version 0.17.06
 * @license MIT - https://opensource.org/licenses/MIT
 **/
@@ -138,10 +138,21 @@ if ( $GLOBALS['JBLDB'] -> numRows( $getPostCode ) > 0 ) {
               <label for="created_t" class="center-align">at</label>
             </div>
           </div>
-          <p>Author: <a href="./users?view=<?php echo( $post -> author ); ?>&key=<?php echo( $post -> author_name ); ?>"><?php echo( $post -> author_name ); ?></a></p>
+
+
+          <div class="input-field mdl-js-textfield getmdl-select">
+            <i class="material-icons prefix">perm_identity</i>
+            <input class="mdl-textfield__input" id="atype" name="author" type="text" readonly tabIndex="-1" value="<?php echo( $post -> author_name ); ?>" >
+            <label for="atype" class="center-align">Author</label>
+            <ul class="mdl-menu mdl-menu--top-left mdl-js-menu <?php primaryColor(); ?>" for="atype">
+              <?php resetLoop('sweep', [], 'users'); if( hasRecords() ): while( hasRecords() ): theRecord(); ?>
+              <li class="mdl-menu__item" data-val="<?php theId(); ?>"><?php theTitle(); ?></li>
+              <?php endwhile; endif; ?>
+            </ul>
+          </div>
 
           <?php hiddenFields( ['author' => $post -> author, 'author_name' => $post -> author_name, 'level' => $post -> level, 'authkey' => $post -> authkey, 'id' => $post -> id, 'status' => $post -> status, 'type' => $post -> type, 'updated' => date( 'Y-m-d H:i:s') ] ); 
-          submitButton( 'update', 'addfab' ); ?>
+          submitButton( 'copy', 'addfab', 'content_copy' ); ?>
         </div>
       </div>
     </form><?php

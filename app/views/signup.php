@@ -3,7 +3,7 @@
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Signup page Layout
 * @link https://docs.jabalicms.org/views/signup
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.09
 * @license MIT - https://opensource.org/licenses/MIT
 *
@@ -37,7 +37,7 @@
 
 		  <div class="input-field mdl-cell mdl-cell--6-col">
 		  <i class="material-icons prefix">phone</i>
-		  <input  id="phone" name="phone" type="text" value="254">
+		  <input id="phone" name="phone" type="text" value="254">
 		  <label for="phone" >Phone Number</label>
 		  </div>
 

@@ -2,7 +2,7 @@
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Jabali PostgreSQL Data Access Layer
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @link https://docs.jabalicms.org/data/access/layers/postgre/
 * @license MIT - https://opensource.org/licenses/MIT
 * @since 0.17.09
@@ -191,7 +191,7 @@ class PostgreDB {
 		$sql .= " )";
 		$sql .= $this -> setVals( $vals );
 
-		if ( $conds !== null ) {
+		if ( !is_null( $conds ) ) {
 		 	$sql .= $this -> setCond( $conds );
 		}
 
@@ -231,11 +231,11 @@ class PostgreDB {
 		$sql .= $this -> setCols( $cols );
 		$sql .= " FROM ". _DBPREFIX . $table . " ";
 
-		if ( $conds !== null ) {
+		if ( !is_null( $conds ) ) {
 			$sql .= $this -> setCond( $conds );
 		}
 
-		if ( $order !== null ) {
+		if ( !is_null( $order ) ) {
 			$sql .= "ORDER BY ";
 			if ( is_array( $order ) ) {
 				$sql .= $order[0] ." ". $order[1];
@@ -244,11 +244,41 @@ class PostgreDB {
 			}
 		}
 
-		if ( $offset !== null ) {
+		if ( !is_null( $offset ) ) {
 			$sql .= "OFFSET " . $offset;
 		}
 
-		if ( $limit !== null ) {
+		if ( !is_null( $limit ) ) {
+			$sql .= "LIMIT " . $limit;
+		}
+
+		return $this -> query( $sql );
+	}
+
+	function selectUnique( $table, $cols, $conds = null, $order = null, $limit = null, $offset = null )
+	{
+		$sql = "SELECT DISTINCT ";
+		$sql .= $this -> setCols( $cols );
+		$sql .= " FROM ". _DBPREFIX . $table . " ";
+
+		if ( !is_null( $conds ) ) {
+			$sql .= $this -> setLike( $conds );
+		}
+
+		if ( !is_null( $order ) ) {
+			$sql .= "ORDER BY ";
+			if ( is_array( $order ) ) {
+				$sql .= $order[0] ." ". $order[1];
+			} else {
+				$sql .= $order . " DESC ";
+			}
+		}
+
+		if ( !is_null( $offset ) ) {
+			$sql .= "OFFSET " . $offset;
+		}
+
+		if ( !is_null( $limit ) ) {
 			$sql .= "LIMIT " . $limit;
 		}
 
@@ -261,11 +291,11 @@ class PostgreDB {
 		$sql .= $this -> setCols( $cols );
 		$sql .= " FROM ". _DBPREFIX . $table . " ";
 
-		if ( $like !== null ) {
+		if ( !is_null( $like ) ) {
 			$sql .= $this -> setLike( $like );
 		}
 
-		if ( $order !== null ) {
+		if ( !is_null( $order ) ) {
 			$sql .= "ORDER BY ";
 			if ( is_array( $order ) ) {
 				$sql .= $order[0] ." ". $order[1];
@@ -274,11 +304,11 @@ class PostgreDB {
 			}
 		}
 
-		if ( $offset !== null ) {
+		if ( !is_null( $offset ) ) {
 			$sql .= "OFFSET " . $offset;
 		}
 
-		if ( $limit !== null ) {
+		if ( !is_null( $limit ) ) {
 			$sql .= "LIMIT " . $limit;
 		}
 
@@ -291,7 +321,7 @@ class PostgreDB {
 		$sql .= $this -> setCols( $cols );
 		$sql .= " FROM". _DBPREFIX . $table . " ";
 
-		if ( $conds !== null ) {
+		if ( !is_null( $conds ) ) {
 			$sql .= $this -> setCond( $conds );
 		}
 
@@ -307,7 +337,7 @@ class PostgreDB {
 	{
 		$sql = "DELETE FROM " . _DBPREFIX . $table . " ";
 		
-		if ( $conds !== null ) {
+		if ( !is_null( $conds ) ) {
 		 	$sql .= $this -> setCond( $conds );
 		}
 

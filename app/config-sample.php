@@ -2,9 +2,10 @@
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage App Configuration File
-* @link https://docs.jabalicms.org/configuration/
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.04
+* @link https://docs.jabalicms.org/functions/
+* @license MIT - https://opensource.org/licenses/MIT
 *
 * @param $server["dbhost"] The name of your host, usually localhost
 * @param $server["dbuser"] Your server username
@@ -30,10 +31,10 @@ $server["dbtype"] = "MySQL";
 $server["dbport"] = "80";
 $server["dbip"] = "::1";
 
-define( "_ROOT", "http://localhost/jabali" );
+define( "_ROOT", "http://localhost/Jabali" );
 define( "_DBPREFIX", "db_" );
-define( "JBLSALT", "5ea3a742c24f72d6602646f126d4991e" );
-define( "JBLAUTH", "d2b40a378a4eed8032d80ae6e1535993929ebff7" );
+define( "JBLSALT", "e2af5d5b4cd06e9e3c85c23401765384" );
+define( "JBLAUTH", "00f3908488d6d9a35b0e781b1acb84b91c7693a1" );
 
 /**
 * OPTIONAL CONFIGURATIONS
@@ -47,10 +48,10 @@ define( "JBLAUTH", "d2b40a378a4eed8032d80ae6e1535993929ebff7" );
 * APP_DB_PATH defaults to /app/data/bases/
 * @see https://jabalicms.org/data/bases/
 *
-* These configurations are not necessary, but if you so wish you can override Jabali's
+* These configurations are not necessary, but if you so wish you can override the Jabali
 * default configurations by setting them here. Just comment the code.
 */
 
-//define('APP_SKIN', '');
-//define('APP_SCHEMA', '');
-//define('APP_DB_PATH', '');
+//define( "APP_SKIN", "" );
+//define( "APP_SCHEMA", "" );
+//define( "APP_DB_PATH", "" );

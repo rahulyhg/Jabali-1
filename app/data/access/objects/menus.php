@@ -2,7 +2,7 @@
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Menus Data Access Object
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @link https://docs.jabalicms.org/data/access/objects/menus/
 * @since 0.17.11
 * @license MIT - https://opensource.org/licenses/MIT
@@ -120,7 +120,7 @@ class Menus {
 
     foreach( $GLOBALS['GTypes'][$table] as $type => $level ){
          if ( !in_array($type, $inbuilt) ) {
-              echo '<a class="mdl-navigation__link" href="'._ADMIN.$table.'?view=list&type='.$type.'"><i class="mdl-color-text--white material-icons" role="presentation">'.$avatar.'</i>'.ucwords( $type ).'</a>';
+              echo '<a class="mdl-navigation__link" href="'._ADMIN.$table.'?type='.$type.'"><i class="mdl-color-text--white material-icons" role="presentation">'.$avatar.'</i>'.ucwords( $type ).'</a>';
          }
     }
   }

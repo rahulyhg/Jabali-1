@@ -3,7 +3,7 @@
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Form
 * @link https://docs.jabalicms.org/classes/forms/
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @version 0.17.06
 * @license MIT - https://opensource.org/licenses/MIT
 **/ ?>

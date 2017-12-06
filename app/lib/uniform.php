@@ -1110,6 +1110,26 @@ class Uniform {
     }
   }
 
+  function cities( $country ) {
+    switch ( $country ) {
+      case 'kenya':
+        return $this -> keCities();
+        break;
+
+      case 'us':
+        return $this -> usStates();
+        break;
+
+      case 'kenyn':
+        return $this -> keCounties();
+        break;
+      
+      default:
+        return $this -> keCounties();
+        break;
+    }
+  }
+
   function keCounties() {?>
         <div class="input-field mdl-js-textfield getmdl-select getmdl-select__fix-height">
       <i class="material-icons prefix">room</i>
@@ -1130,7 +1150,7 @@ class Uniform {
   function keCities() {?>
         <div class="input-field mdl-js-textfield getmdl-select getmdl-select__fix-height">
       <i class="material-icons prefix">room</i>
-          <input class="mdl-textfield__input" type="text" id="cities" name="region" readonly tabIndex="-1" placeholder="Location (Optional )" value="<?php showOption( 'region' ); ?>">
+          <input class="mdl-textfield__input" type="text" id="cities" name="city" readonly tabIndex="-1" value="<?php showOption( 'city' ); ?>">
           <ul for="cities" class="mdl-menu mdl-menu--bottom-left mdl-js-menu <?php primaryColor(); ?>" style="max-height: 300px !important; overflow-y: auto;"><?php 
               $county_list = "baringo, bomet, bungoma, busia, elgeyo-marakwet, embu, garissa, homa bay, isiolo, kakamega, kajiado, kapenguria, kericho, kiambu, kilifi, kirinyanga, kisii, kisumu, kitui, kwale, laikipia, lamu, machakos, makueni, mandera, marsabit, meru, migori, mombasa, muranga, nairobi, nakuru, nandi, narok, nyamira, nyandarua, nyeri, ol kalou, samburu, siaya, taita-taveta, tana river, tharaka-nithi, trans-nzoia, turkana, uasin-gishu, vihiga, wajir, west pokot";
               $counties = explode( ", ", $county_list );
@@ -1140,7 +1160,7 @@ class Uniform {
               }
                ?>
           </ul>
-          <label for="counties">City</label>
+          <label for="cities">City</label>
         </div><?php 
   }
 

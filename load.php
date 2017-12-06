@@ -3,7 +3,7 @@
 * Declare gobal variables and load theme/extension module functions
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Load Globals
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.09
 * @link https://docs.jabalicms.org/load/
 * @license MIT - https://opensource.org/licenses/MIT
@@ -49,6 +49,12 @@ $GLOBALS['gcopyright'] = getOption('copyright');
 loadSkins();
 
 /**
+* For rest API Clients
+**/
+$GLOBALS['CLIENTS'] = array();
+setClients();
+
+/**
 * Set the Cros-Site Request Forgery protection variable
 **/
 if ( !isset( $_SESSION['CSRF'] ) ) {
@@ -57,10 +63,18 @@ if ( !isset( $_SESSION['CSRF'] ) ) {
 
 define( 'CSRF', $_SESSION['CSRF'] );
 
+//
 if ( $_SERVER['REQUEST_METHOD'] !== "GET" ) {
 	if ( !isset( $_REQUEST['csrf_token'] ) || $_REQUEST['csrf_token'] !== $_SESSION['CSRF'] ) {
 		header( 'HTTP/1.1 403 Forbidden' );
 		exit();
+	}
+
+	if ( isset( $_REQUEST['k'] ) && $_REQUEST['s'] !== "") {
+		if( $GLOBALS['CLIENTS'][$_REQUEST['k']] !== $GLOBALS['CLIENTS'][$_REQUEST['s']] ){
+			header( 'HTTP/1.1 403 Forbidden' );
+			exit("Invalid app client key/secret");
+		}
 	}
 }
 
@@ -70,6 +84,10 @@ if ( $_SERVER['REQUEST_METHOD'] !== "GET" ) {
 if ( isOption ( 'modules' ) ) {
 	$exts = getOption( 'modules' );
 	foreach ( $exts as $ext ) {
+		if ( file_exists( _ABSX_.$ext.'/functions.php' ) ) {
+			require_once ( _ABSX_.$ext.'/functions.php' );
+		}
+		
 		require_once ( _ABSX_.$ext.'/'.$ext.'.php' );
 	}
 }
@@ -77,13 +95,18 @@ if ( isOption ( 'modules' ) ) {
 /**
 * Load Theme Functions, if any
 **/
+$themefiles = array();
 if ( isOption ( 'activetheme' ) ) {
 	$GLOBALS['GTheme'] = getOption( 'activetheme' );
-	$themefile = _ABSTHEMES_ . $GLOBALS['GTheme'] . '/' . $GLOBALS['GTheme'] . '.php';
+	$themefiles[] = _ABSTHEMES_ . $GLOBALS['GTheme'] . '/functions.php';
+	$themefiles[] = _ABSTHEMES_ . $GLOBALS['GTheme'] . '/'. $GLOBALS['GTheme'] . '.php';
 } else {
-	$themefile = _ABSTHEMES_ . 'eventually/eventually.php';
+	$themefiles[] = _ABSTHEMES_ . 'eventually/functions.php';
+	$themefiles[] = _ABSTHEMES_ . 'eventually/eventually.php';
 }
 
-if ( file_exists( $themefile ) ){
-	require_once( $themefile );
+foreach ($themefiles as $themefuncfile) {
+	if ( file_exists( $themefuncfile ) ){
+		require_once( $themefuncfile );
+	}
 }

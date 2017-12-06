@@ -2,7 +2,7 @@
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Admin Header
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @since 0.17.09
 * @link https://docs.jabalicms.org/dashboard/
 **/
@@ -193,24 +193,25 @@ $GLOBALS['GTextS'] = $GUSkin['texts']; ?>
                     <a href="messages?status=unread&key=inbox" class="mdl-button mdl-js-button mdl-js-ripple-effect">INBOX</a>
                 </li>
             </ul>
-
-         <!--  <a href="#" class="material-icons mdl-js-button mdl-badge mdl-badge--overlap mdl-button--icon notification" id="hvdrbtn">apps</a>
+          <?php if ( isCap( 'admin' ) ): ?>
+          <a href="#" class="material-icons mdl-js-button mdl-badge mdl-badge--overlap mdl-button--icon notification" id="hvdrbtn">apps</a>
           <ul class="mdl-menu mdl-list mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right option-drop <?php primaryColor(); ?>" for="hvdrbtn">
-          <a id="profile" href="users?view=<?php echo( $_SESSION[JBLSALT.'Code'] ); ?>&key=<?php echo( $_SESSION[JBLSALT.'Alias'] ); ?>" class="mdl-list__item"><i class="mdi mdi-account mdl-list__item-icon alignright"></i><span style="padding-left: 20px"><?php echo( $_SESSION[JBLSALT.'Alias'] ); ?></span></a>
-          <a id="profedit" href="./users?edit=<?php echo( $_SESSION[JBLSALT.'Code'] ); ?>&key=<?php echo( $_SESSION[JBLSALT.'Alias'] ); ?>" class="mdl-list__item"><i class="mdi mdi-account-edit mdl-list__item-icon"></i><span style="padding-left: 20px">Edit Account</span></a>
-          <a id="hdrbtn" href="<?php echo( _ROOT . '?logout' ); ?>" class="mdl-list__item"><i class="mdi mdi-exit-to-app mdl-list__item-icon"></i><span style="padding-left: 20px">Logout</span></a>
-          </ul> -->
+          <a href="themes?page=themes" class="mdl-list__item"><i class="mdl-list__item-icon alignright text--white material-icons" role="presentation">palette</i><span style="padding-left: 20px">Themes</span></a>
+          <a href="modules?page=extension modules" class="mdl-list__item"><i class="mdl-list__item-icon text--white material-icons" role="presentation">power</i><span style="padding-left: 20px">Modules</span></a>
+          <a href="posts?create=article" class="mdl-list__item"><i class="mdl-list__item-icon text--white material-icons" role="presentation">create</i><span style="padding-left: 20px">New Article</span></a>
+          </ul>
+        <?php endif; ?>
 
           <a href="#" class="material-icons mdl-js-button mdl-badge mdl-badge--overlap mdl-button--icon" id="dvdrbtn">more_vert</a>
           <ul class="mdl-menu mdl-list mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right <?php primaryColor(); ?>" for="dvdrbtn">
-            <?php
-            $default = array( 'general', 'color', 'misc', 'types', 'restful', 'social', 'editor' ); 
-            foreach( $GLOBALS['GSettings'] as $setting => $vals ): ?>
-              <?php if ( !in_array( $setting, $default ) ): ?>
-                <a id="profile" href="options?options=<?php echo( $setting ); ?>&page=<?php echo( ucwords( $vals[0][2] ) ); ?> Options" class="mdl-list__item"><i class="mdi mdi-settings mdl-list__item-icon"></i><span style="padding-left: 20px"><?php echo( ucwords( $vals[0][2] ) ); ?></span></a>
-              <?php endif ?>
-            <?php endforeach; ?>
-          <a id="hdrbtn" href="<?php echo( _ROOT . '/?logout' ); ?>" class="mdl-list__item"><i class="mdi mdi-exit-to-app mdl-list__item-icon"></i><span style="padding-left: 20px">Logout</span></a>
+            <?php if ( isCap( 'admin' ) ){
+              $default = array( 'general', 'color', 'misc', 'types', 'restful', 'social', 'editor' ); 
+              foreach( $GLOBALS['GSettings'] as $setting => $values ): if ( !in_array( $setting, $default ) ):
+                $x = array_shift( $values ); ?>
+                <a href="options?options=<?php echo( $setting ); ?>&page=<?php echo( ucwords( $x['title'] ) ); ?> Options" class="mdl-list__item"><i class="mdi mdi-settings mdl-list__item-icon"></i><span style="padding-left: 20px"><?php echo( ucwords( $x['title'] ) ); ?></span></a>
+              <?php endif; endforeach; 
+            } ?>
+            <a href="<?php echo( _ROOT . '/?logout' ); ?>" class="mdl-list__item"><i class="mdi mdi-exit-to-app mdl-list__item-icon"></i><span style="padding-left: 20px">Logout</span></a>
           </ul>
         </div>
       </header>
@@ -240,15 +241,13 @@ $GLOBALS['GTextS'] = $GUSkin['texts']; ?>
           $GLOBALS['MENUS'] -> drawer(); ?><?php
           if ( isCap( 'admin' ) ) { ?>
           <a id="media" class="mdl-navigation__link" href="media?view=all&key=media"><i class="mdl-color-text--white material-icons" role="presentation">image</i>Media</a>
-          <a id="themes" class="mdl-navigation__link" href="#"><i class="mdl-color-text--white material-icons" role="presentation">widgets</i>Extending</a>
+          <!-- <a id="themes" class="mdl-navigation__link" href="#"><i class="mdl-color-text--white material-icons" role="presentation">widgets</i>Extending</a>
           <ul class="mdl-menu mdl-list mdl-js-menu mdl-js-ripple-effect mdl-menu--top-left <?php primaryColor(); ?>" for="themes">
           <a class="mdl-navigation__link" href="themes?page=themes"><i class="mdl-color-text--white material-icons" role="presentation">palette</i><span>Themes</span></a>
           <a id="extensions" class="mdl-navigation__link" href="modules?page=extension modules"><i class="mdl-color-text--white material-icons" role="presentation">power</i>Modules</a>
-            </ul>
-          <?php } ?>
+            </ul> -->
           <a id="htools" class="mdl-navigation__link" href="#"><i class="mdl-color-text--white material-icons" role="presentation">import_export</i>Transfer</a>
-          <ul class="mdl-menu mdl-list mdl-js-menu mdl-js-ripple-effect mdl-menu--top-left <?php primaryColor(); ?>" for="htools"><?php
-          if ( isCap( 'admin' ) ) { ?>
+          <ul class="mdl-menu mdl-list mdl-js-menu mdl-js-ripple-effect mdl-menu--top-left <?php primaryColor(); ?>" for="htools">
           <a class="mdl-navigation__link" href="tools?page=import"><i class="mdl-color-text--white material-icons" role="presentation">arrow_downward</i><span>Import Data</span></a>
           <a class="mdl-navigation__link" href="tools?page=export"><i class="mdl-color-text--white material-icons" role="presentation">arrow_upward</i><span>Export Data</span></a>
           <?php } ?>

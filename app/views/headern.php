@@ -10,7 +10,32 @@
 <!doctype html>
 <html lang="en" xmlns="https://www.w3.org/1999/html">
 <head>
-    <?php head(); ?>
+    <link rel="shortcut icon" href="<?php 
+    if ( file_exists('./inc/config.php' ) ) {
+        showOption( 'favicon' );
+    } else {
+        echo _IMAGES."marker.png"; 
+    } ?>">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="<?php showOption( 'description' ); ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="<?php showOption( 'name' ); ?>">
+
+
+    <!-- Tile icon for Win8 (144x144 + tile color) -->
+    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileColor" content="#3372DF">
+
+    <link rel="manifest" href="<?php echo _ROOT.'manifest.php;' ?>">
 
     <link rel="stylesheet" href='<?php echo _STYLES; ?>lib/getmdl-select.min.css'>
     <link rel="stylesheet" href="<?php echo _STYLES; ?>lib/nv.d3.css">
@@ -19,6 +44,8 @@
     <link rel="stylesheet" href="<?php echo _STYLES; ?>materialdesignicons.min.css">
     <link rel="stylesheet" href="<?php echo _STYLES; ?>font-awesome.css">
     <link rel="stylesheet" href="<?php echo _STYLES; ?>jabali.css">
+    <link rel="stylesheet" href="<?php echo _STYLES; ?>colors.css">
+    <!-- <link rel="stylesheet" href="app/styles.php"> -->
     <style type="text/css">
     .mdl-menu__outline {
         background-color: <?php primaryColor(); ?>;

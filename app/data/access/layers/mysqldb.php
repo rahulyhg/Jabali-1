@@ -2,7 +2,7 @@
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Jabali MySQL Data Access Layer
-* @author Mauko Maunde
+* @author Mauko Maunde < hi@mauko.co.ke >
 * @link https://docs.jabalicms.org/data/access/layers/mysql/
 * @license MIT - https://opensource.org/licenses/MIT
 * @since 0.17.09
@@ -68,7 +68,7 @@ class MySQLDB
 	**/
 	function fetchAssoc( $result )
 	{
-		return $result -> fetch_assoc();
+		return mysqli_fetch_assoc( $result );
 	}
 
 	/**
@@ -194,8 +194,6 @@ class MySQLDB
 		return $sql;
 	}
 
-
-
 	/**
 	* Creating Data
 	**/
@@ -206,7 +204,7 @@ class MySQLDB
 		$sql .= " )";
 		$sql .= $this -> setVals( $vals );
 
-		if ( $conds !== null ) {
+		if ( !is_null( $conds ) ) {
 		 	$sql .= $this -> setCond( $conds );
 		}
 
@@ -246,11 +244,11 @@ class MySQLDB
 		$sql .= $this -> setCols( $cols );
 		$sql .= " FROM ". _DBPREFIX . $table . " ";
 
-		if ( $conds !== null ) {
+		if ( !is_null( $conds ) ) {
 			$sql .= $this -> setCond( $conds );
 		}
 
-		if ( $order !== null ) {
+		if ( !is_null( $order ) ) {
 			$sql .= "ORDER BY ";
 			if ( is_array( $order ) ) {
 				$sql .= $order[0] ." ". $order[1];
@@ -259,11 +257,41 @@ class MySQLDB
 			}
 		}
 
-		if ( $offset !== null ) {
+		if ( !is_null( $offset ) ) {
 			$sql .= "OFFSET " . $offset;
 		}
 
-		if ( $limit !== null ) {
+		if ( !is_null( $limit ) ) {
+			$sql .= "LIMIT " . $limit;
+		}
+
+		return $this -> query( $sql );
+	}
+
+	function selectUnique( $table, $cols, $conds = null, $order = null, $limit = null, $offset = null )
+	{
+		$sql = "SELECT DISTINCT ";
+		$sql .= $this -> setCols( $cols );
+		$sql .= " FROM ". _DBPREFIX . $table . " ";
+
+		if ( !is_null( $conds ) ) {
+			$sql .= $this -> setLike( $conds );
+		}
+
+		if ( !is_null( $order ) ) {
+			$sql .= "ORDER BY ";
+			if ( is_array( $order ) ) {
+				$sql .= $order[0] ." ". $order[1];
+			} else {
+				$sql .= $order . " DESC ";
+			}
+		}
+
+		if ( !is_null( $offset ) ) {
+			$sql .= "OFFSET " . $offset;
+		}
+
+		if ( !is_null( $limit ) ) {
 			$sql .= "LIMIT " . $limit;
 		}
 
@@ -276,11 +304,11 @@ class MySQLDB
 		$sql .= $this -> setCols( $cols );
 		$sql .= " FROM ". _DBPREFIX . $table . " ";
 
-		if ( $like !== null ) {
+		if ( !is_null( $like ) ) {
 			$sql .= $this -> setLike( $like );
 		}
 
-		if ( $order !== null ) {
+		if ( !is_null( $order ) ) {
 			$sql .= "ORDER BY ";
 			if ( is_array( $order ) ) {
 				$sql .= $order[0] ." ". $order[1];
@@ -289,18 +317,16 @@ class MySQLDB
 			}
 		}
 
-		if ( $offset !== null ) {
+		if ( !is_null( $offset ) ) {
 			$sql .= "OFFSET " . $offset;
 		}
 
-		if ( $limit !== null ) {
+		if ( !is_null( $limit ) ) {
 			$sql .= "LIMIT " . $limit;
 		}
 
 		return $this -> query( $sql );
 	}
-
-
 
 	function search( $table, $cols, $conds, $val = null )
 	{
@@ -308,7 +334,7 @@ class MySQLDB
 		$sql .= $this -> setCols( $cols );
 		$sql .= " FROM". _DBPREFIX . $table . " ";
 
-		if ( $conds !== null ) {
+		if ( !is_null( $conds ) ) {
 			$sql .= $this -> setCond( $conds );
 		}
 
@@ -324,7 +350,7 @@ class MySQLDB
 	{
 		$sql = "DELETE FROM " . _DBPREFIX . $table . " ";
 		
-		if ( $conds !== null ) {
+		if ( !is_null( $conds ) ) {
 		 	$sql .= $this -> setCond( $conds );
 		}
 
