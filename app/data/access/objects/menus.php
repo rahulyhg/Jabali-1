@@ -12,7 +12,7 @@ namespace Jabali\Data\Access\Objects;
 
 class Menus {
 
-  public $name;
+  public $title;
   public $author;
   public $author_name;
   public $id;
@@ -25,15 +25,15 @@ class Menus {
   public $status;
   public $type;
   public $updated;
-  public $allowed = array( "name", "author", "author_name", "id", "created", "details", "for", "level", "link", "status", "type", "updated" );
+  public $allowed = array( "title", "author", "author_name", "id", "created", "details", "for", "level", "link", "status", "type", "updated" );
 
   private $table = "messages";
 
     /**
   * Create menu
   **/
-  function create( $name, $author, $avatar, $code, $for, $link, $location, $status, $type ){
-    if( $GLOBALS['JBLDB'] -> query( "INSERT INTO ". _DBPREFIX ."menus ( name, author, avatar, code, parent, link, location, status, type ) VALUES ( '".$name."', '".$author."', '".$avatar."', '".$code."', '".$for."', '".$link."', '".$location."', '".$status."', '".$type."')" ) ) {
+  function create( $title, $author, $avatar, $code, $for, $link, $location, $status, $type ){
+    if( $GLOBALS['JBLDB'] -> query( "INSERT INTO ". _DBPREFIX ."menus ( title, author, avatar, code, parent, link, location, status, type ) VALUES ( '".$title."', '".$author."', '".$avatar."', '".$code."', '".$for."', '".$link."', '".$location."', '".$status."', '".$type."')" ) ) {
                printf("<div id=\"success\" class=\"alert green\"><span>%s</span></div>", "");
                 _shout_( "Menu Created Successfully!", "success" );
           } else {
@@ -44,14 +44,14 @@ class Menus {
    /**
    * Create menu - with suppressed success message
    **/
-   function install( $name, $author, $avatar, $code, $for, $link, $location, $status, $type ){
-        if( !$GLOBALS['JBLDB'] -> query( "INSERT INTO ". _DBPREFIX ."menus ( name, author, avatar, code, parent, link, location, status, type ) VALUES ( '".$name."', '".$author."', '".$avatar."', '".$code."', '".$for."', '".$link."', '".$location."', '".$status."', '".$type."')" ) ) {
+   function install( $title, $author, $avatar, $code, $for, $link, $location, $status, $type ){
+        if( !$GLOBALS['JBLDB'] -> query( "INSERT INTO ". _DBPREFIX ."menus ( title, author, avatar, code, parent, link, location, status, type ) VALUES ( '".$title."', '".$author."', '".$avatar."', '".$code."', '".$for."', '".$link."', '".$location."', '".$status."', '".$type."')" ) ) {
              _shout_( "Error: ".$GLOBALS['JBLDB']->error()."!", "error" );
        }
    }
 
-  function update( $name, $author, $avatar, $code, $for, $link, $location, $status, $type ){
-    if( $GLOBALS['JBLDB'] -> query( "UPDATE ". _DBPREFIX ."menus SET name='".$name."', author='".$author."', avatar='".$avatar."', code='".$code."', parent='".$for."', link='".$link."', location='".$location."', status='".$status."', type='".$type."' WHERE code ='".$code."' " ) ) {
+  function update( $title, $author, $avatar, $code, $for, $link, $location, $status, $type ){
+    if( $GLOBALS['JBLDB'] -> query( "UPDATE ". _DBPREFIX ."menus SET title='".$title."', author='".$author."', avatar='".$avatar."', code='".$code."', parent='".$for."', link='".$link."', location='".$location."', status='".$status."', type='".$type."' WHERE code ='".$code."' " ) ) {
          _shout_("Menu Updated Successfully!", "success");
     } else {
          _shout_("Error: ".$GLOBALS['JBLDB']->error()."!", "error");
@@ -132,13 +132,13 @@ class Menus {
     $getMenu = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."menus WHERE type = 'drop' AND author = 'jabali' AND location = 'drawer' AND status = 'checked' AND code = '".$code."'" );
     if ( $GLOBALS['JBLDB'] -> numRows( $getMenu ) > 0 ) {
       while ( $menus = $GLOBALS['JBLDB'] -> fetchAssoc( $getMenu) ) {
-        echo '<a class="mdl-navigation__link" id= "'.$menus['code'].'" href="'.$menus["link"].'"><i class="mdl-color-text--white material-icons" role="presentation">'.$menus["avatar"].'</i>'.$menus["name"].'</a>';
+        echo '<a class="mdl-navigation__link" id= "'.$menus['code'].'" href="'.$menus["link"].'"><i class="mdl-color-text--white material-icons" role="presentation">'.$menus["avatar"].'</i>'.$menus["title"].'</a>';
         if ( $menus['type'] == "drop" ) {
           $subMenu = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."menus WHERE type != 'drop' AND location = 'drawer' AND status = 'checked' AND parent = '".$menus['code']."'" );
           if ( $GLOBALS['JBLDB'] -> numRows( $subMenu ) > 0 ) { ?>
             <ul class="mdl-menu mdl-list mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-left <?php primaryColor(); ?>" for="<?php echo( $menus['code'] ); ?>"><?php
             while ( $menusub = $GLOBALS['JBLDB'] -> fetchAssoc( $subMenu) ) {
-              echo '<a class="mdl-navigation__link" href="'.$menusub["link"].'"><i class="mdl-color-text--white material-icons" role="presentation">'.$menusub["avatar"].'</i>'.$menusub["name"].'</a>';
+              echo '<a class="mdl-navigation__link" href="'.$menusub["link"].'"><i class="mdl-color-text--white material-icons" role="presentation">'.$menusub["avatar"].'</i>'.$menusub["title"].'</a>';
             }
             $this -> drawerTypes( $code );
             echo "</ul>";
@@ -155,13 +155,13 @@ class Menus {
     $getMenu = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."menus WHERE type = 'drop' AND author != 'jabali' AND location = 'drawer' AND status = 'checked'" );
     if ( $GLOBALS['JBLDB'] -> numRows( $getMenu ) > 0 ) {
       while ( $menus = $GLOBALS['JBLDB'] -> fetchAssoc( $getMenu) ) {
-        echo '<a class="mdl-navigation__link" code= "'.$menus['code'].'" href="'.$menus["link"].'"><i class="mdl-color-text--white material-icons" role="presentation">'.$menus["avatar"].'</i>'.$menus["name"].'</a>';
+        echo '<a class="mdl-navigation__link" code= "'.$menus['code'].'" href="'.$menus["link"].'"><i class="mdl-color-text--white material-icons" role="presentation">'.$menus["avatar"].'</i>'.$menus["title"].'</a>';
         if ( $menus['type'] == "drop" ) {
           $subMenu = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."menus WHERE type != 'drop' AND location = 'drawer' AND status = 'checked' AND parent = '".$menus['code']."'" );
           if ( $GLOBALS['JBLDB'] -> numRows( $subMenu ) > 0 ) { ?>
             <ul class="mdl-menu mdl-list mdl-js-menu mdl-js-ripple-effect mdl-menu--top-left <?php primaryColor(); ?>" for="<?php echo( $menus['code'] ); ?>"><?php
             while ( $menusub = $GLOBALS['JBLDB'] -> fetchAssoc( $subMenu) ) {
-              echo '<a class="mdl-navigation__link" href="'.$menusub["link"].'"><i class="mdl-color-text--white material-icons" role="presentation">'.$menusub["avatar"].'</i>'.$menusub["name"].'</a>';
+              echo '<a class="mdl-navigation__link" href="'.$menusub["link"].'"><i class="mdl-color-text--white material-icons" role="presentation">'.$menusub["avatar"].'</i>'.$menusub["title"].'</a>';
                                    $this -> drawerTypes( $menus['code'] );
             }
             echo "</ul>";
@@ -178,13 +178,13 @@ class Menus {
     $getMenu = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."menus WHERE location = 'header' AND state = 'checked' ORDER BY code DESC" );
     if ( $GLOBALS['JBLDB'] -> numRows( $getMenu ) > 0 ) {
          while ( $menus = $GLOBALS['JBLDB'] -> fetchAssoc( $getMenu) ) {
-              echo '<a class="mdl-list__item" code= "'.$menus['code'].'" href="'.$menus["link"].'">'.$menus["name"].'</a>';
+              echo '<a class="mdl-list__item" code= "'.$menus['code'].'" href="'.$menus["link"].'">'.$menus["title"].'</a>';
               if ( $menus['type'] == "drop" ) {
                    $subMenu = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."menus WHERE type != 'drop' AND location = 'drawer' AND state = 'checked' AND for = '".$menus['code']."'" );
                    if ( $GLOBALS['JBLDB'] -> numRows( $subMenu ) > 0 ) { ?>
                         <ul class="mdl-menu mdl-list mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-left <?php primaryColor(); ?>" for="<?php echo( $menus['code'] ); ?>"><?php
                         while ( $menusub = $GLOBALS['JBLDB'] -> fetchAssoc( $subMenu) ) {
-                             echo '<a class="mdl-navigation__link" href="'.$menusub["link"].'"><i class="mdl-color-text--white material-icons" role="presentation">'.$menusub["avatar"].'</i>'.$menusub["name"].'</a>';
+                             echo '<a class="mdl-navigation__link" href="'.$menusub["link"].'"><i class="mdl-color-text--white material-icons" role="presentation">'.$menusub["avatar"].'</i>'.$menusub["title"].'</a>';
                         }
                         echo "</ul>";
                    }
@@ -200,13 +200,13 @@ class Menus {
     $getMenu = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."menus WHERE location = 'main' AND state = 'checked' ORDER BY code DESC" );
     if ( $GLOBALS['JBLDB'] -> numRows( $getMenu ) > 0 ) {
          while ( $menus = $GLOBALS['JBLDB'] -> fetchAssoc( $getMenu) ) {
-              echo '<a class="mdl-list__item" code= "'.$menus['code'].'" href="'.$menus["link"].'">'.$menus["name"].'</a>';
+              echo '<a class="mdl-list__item" code= "'.$menus['code'].'" href="'.$menus["link"].'">'.$menus["title"].'</a>';
               if ( $menus['type'] == "drop" ) {
                    $subMenu = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."menus WHERE type != 'drop' AND location = 'drawer' AND state = 'checked' AND for = '".$menus['code']."'" );
                    if ( $GLOBALS['JBLDB'] -> numRows( $subMenu ) > 0 ) { ?>
                         <ul class="mdl-menu mdl-list mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-left <?php primaryColor(); ?>" for="<?php echo( $menus['code'] ); ?>"><?php
                         while ( $menusub = $GLOBALS['JBLDB'] -> fetchAssoc( $subMenu) ) {
-                             echo '<a class="mdl-navigation__link" href="'.$menusub["link"].'"><i class="mdl-color-text--white material-icons" role="presentation">'.$menusub["avatar"].'</i>'.$menusub["name"].'</a>';
+                             echo '<a class="mdl-navigation__link" href="'.$menusub["link"].'"><i class="mdl-color-text--white material-icons" role="presentation">'.$menusub["avatar"].'</i>'.$menusub["title"].'</a>';
                         }
                         echo "</ul>";
                    }
@@ -222,13 +222,13 @@ class Menus {
     $getMenu = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."menus WHERE location = 'footer' AND state = 'checked' ORDER BY code DESC" );
     if ( $GLOBALS['JBLDB'] -> numRows( $getMenu ) > 0 ) {
          while ( $menus = $GLOBALS['JBLDB'] -> fetchAssoc( $getMenu) ) {
-              echo '<a class="mdl-list__item" code= "'.$menus['code'].'" href="'.$menus["link"].'">'.$menus["name"].'</a>';
+              echo '<a class="mdl-list__item" code= "'.$menus['code'].'" href="'.$menus["link"].'">'.$menus["title"].'</a>';
               if ( $menus['type'] == "drop" ) {
                    $subMenu = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."menus WHERE type != 'drop' AND location = 'drawer' AND state = 'checked' AND for = '".$menus['code']."'" );
                    if ( $GLOBALS['JBLDB'] -> numRows( $subMenu ) > 0 ) { ?>
                         <ul class="mdl-menu mdl-list mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-left <?php primaryColor(); ?>" for="<?php echo( $menus['code'] ); ?>"><?php
                         while ( $menusub = $GLOBALS['JBLDB'] -> fetchAssoc( $subMenu) ) {
-                             echo '<a class="mdl-navigation__link" href="'.$menusub["link"].'"><i class="mdl-color-text--white material-icons" role="presentation">'.$menusub["avatar"].'</i>'.$menusub["name"].'</a>';
+                             echo '<a class="mdl-navigation__link" href="'.$menusub["link"].'"><i class="mdl-color-text--white material-icons" role="presentation">'.$menusub["avatar"].'</i>'.$menusub["title"].'</a>';
                         }
                         echo "</ul>";
                    }
@@ -279,7 +279,7 @@ class Menus {
             </div>
 
             <div class="mdl-cell mdl-cell--5-col">
-              <b><?php echo( $menu[0]['name'] ); ?></b> <a class="alignrght" href="<?php echo( $menu[0]['link'] ); ?>"><?php echo( $menu[0]['link'] ); ?></a>
+              <b><?php echo( $menu[0]['title'] ); ?></b> <a class="alignrght" href="<?php echo( $menu[0]['link'] ); ?>"><?php echo( $menu[0]['link'] ); ?></a>
             </div>
 
             <div class="mdl-cell mdl-cell--4-col">
@@ -321,7 +321,7 @@ function subMenu( $code ) {
                     } 
                     echo( $icon ); ?></i></a>
                          </td>
-                    <td class="mdl-data-table__cell--non-numeric" data-title=""><?php echo( $menui['name'] ); ?></td>
+                    <td class="mdl-data-table__cell--non-numeric" data-title=""><?php echo( $menui['title'] ); ?></td>
                     <td class="mdl-data-table__cell--non-numeric" data-title=""><?php echo( $menui['link'] ); ?></td>
                </tr>
                     
@@ -361,7 +361,7 @@ function uMenu( ) {
                     } 
                     echo( $icon ); ?></i></a>
                          </td>
-                    <td class="mdl-data-table__cell--non-numeric" data-title=""><?php echo( $menui['name'] ); ?></td>
+                    <td class="mdl-data-table__cell--non-numeric" data-title=""><?php echo( $menui['title'] ); ?></td>
                     <td class="mdl-data-table__cell--non-numeric" data-title=""><?php echo( $menui['link'] ); ?></td>
                </tr>
                     
@@ -403,7 +403,7 @@ function headMenu( ) {
                     } 
                     echo( $icon ); ?></i></a>
                          </td>
-                    <td class="mdl-data-table__cell--non-numeric" data-title=""><?php echo( $menui['name'] ); ?></td>
+                    <td class="mdl-data-table__cell--non-numeric" data-title=""><?php echo( $menui['title'] ); ?></td>
                     <td class="mdl-data-table__cell--non-numeric" data-title=""><?php echo( $menui['link'] ); ?></td>
                </tr>
                     

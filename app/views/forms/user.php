@@ -85,7 +85,7 @@
               $centers = $GLOBALS['JBLDB'] -> query( "SELECT name, id FROM ". _DBPREFIX ."users WHERe type = 'organization' ORDER BY name" );
               if ( $GLOBALS['JBLDB'] -> numRows( $centers ) > 0 ) {
               while ( $center = $GLOBALS['JBLDB'] -> fetchAssoc( $centers ) ) {
-              echo '<li class="mdl-menu__item" data-val="'.$center['id'].'">'.$center['name'].'</li>';
+              echo '<li class="mdl-menu__item" data-val="'.$center['id'].'">'.$center['title'].'</li>';
               }
               }
               echo '<center>Your Organization Not Listed? <br><a href="./users?create=organization">Register it Now</a></center>'; ?>
@@ -164,6 +164,8 @@
             <label for="<?php echo( $key ); ?>"><?php echo( ucwords( $key ) ); ?></label>
             </div><?php } ?>
           </div>
+
+          <?php hiddenFields( ['author' => $_SESSION[JBLSALT.'Username'], 'author_name' => $_SESSION[JBLSALT.'Alias'], 'updated' => date( 'Y-m-d H:i:s') ] ); ?>
           <div class="mdl-card__menu">
             <a class="material-icons mdl-button mdl-button--icon" href="users?type=subscriber">clear</a>
           </div>

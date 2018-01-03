@@ -11,14 +11,14 @@
 $getPostCode = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."posts WHERE id = '".$data."'" );
 if ( $GLOBALS['JBLDB'] -> numRows( $getPostCode ) > 0 ) {
   while ( $post = $GLOBALS['JBLDB'] -> fetchObject( $getPostCode ) ){
-    $names = explode( " ", $post -> name ); ?>
-    <title>Edit <?php echo( $post -> name ); ?> - <?php showOption( 'name' ); ?></title>
+    $names = explode( " ", $post -> title ); ?>
+    <title>Edit <?php echo( $post -> title ); ?> - <?php showOption( 'name' ); ?></title>
     <form enctype="multipart/form-data" name="postForm" method="POST" action="" style="width:100%;" class="mdl-grid">
         <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--8-col-tablet mdl-cell--12-col-phone mdl-grid mdl-card mdl-shadow--2dp mdl-card--expand <?php primaryColor(); ?>">
           <div class="mdl-card__supporting-text mdl-cell mdl-cell--12-col mdl-grid">
             <div class="input-field mdl-cell mdl-cell--12-col">
               <i class="material-icons prefix">label</i>
-              <input id="name" type="text" name="name" value="<?php echo( $post -> name ); ?> Copy">
+              <input id="name" type="text" name="title" value="<?php echo( $post -> title ); ?> Copy">
               <label for="name" data-error="wrong" data-success="right" class="center-align">Title</label>
             </div>
 

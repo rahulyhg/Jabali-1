@@ -192,21 +192,36 @@ if( !isset( $match ) || empty( $match ) || $match == "?logout" ) {
 		tag( $elements[0] );
 		getFooter();
 		break;
+	case 'test':
+		print_r( $GLOBALS['NUSERS'] -> collumns );
+		break;
 	case "users":
 		getHeader();
 		users( $elements[0] );
 		getFooter();
 		break;
 	case "api":
-		$key = isset( $_GET['k'] ) ? $_GET['k'] : null;
-	    $secret = isset( $_GET['s'] ) ? $_GET['s'] : null;
+		$key = $_GET['k'] ?? null;
+	    $secret = $_GET['s'] ?? null;
 	    $data = file_get_contents("php://input");
 	    $api = new Jabali\Lib\REST( $elements, $key, $secret, $data );
+	    $recs = $api -> retval;
+	    // $json = [];
+	    // foreach ( $recs as $rec ) {
+	    // 	if ( isset( $rec['social'] ) ) {
+	    // 		$dec = json_decode( $rec['social'], true );
+		   //  	$rec['social'] = $dec;
+		    	
+		   //  	$json[] = $rec;
+	    // 	} else {
+	    // 		$json = $recs;
+	    // 	}
+	    // }
 
 	    header("Access-Control-Allow-Origin: *");
 	    header('Content-Type:Application/json' );
 
-	    echo( json_encode( $api -> retval ) );
+	    echo( json_encode( $recs ) );
 		break;
 	case "feed":
 		feed( $elements[0] );

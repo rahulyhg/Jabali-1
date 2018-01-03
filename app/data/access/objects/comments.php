@@ -12,7 +12,7 @@ namespace Jabali\Data\Access\Objects;
 
 class Comments {
 
-  public $name;
+  public $title;
   public $author;
   public $author_name;
   public $avatar;
@@ -33,14 +33,14 @@ class Comments {
   public $template;
   public $type;
   public $updated;
-  public $allowed = array( "name", "author", "author_name", "avatar", "categories", "id", "created", "details", "gallery", "level", "link", "excerpt", "readings", "status", "subtitle", "slug", "tags", "template", "type", "updated" );
+  public $allowed = array( "title", "author", "author_name", "avatar", "categories", "id", "created", "details", "gallery", "level", "link", "excerpt", "readings", "status", "subtitle", "slug", "tags", "template", "type", "updated" );
 
   private $table = "messages";
 
   public function create(){
-    $cols = array( "name", "author", "author_name", "avatar", "categories", "created", "details", "gallery", "authkey", "level", "link", "excerpt", "readings", "status", "subtitle", "slug", "tags", "updated", "template", "type" );
+    $cols = array( "title", "author", "author_name", "avatar", "categories", "created", "details", "gallery", "authkey", "level", "link", "excerpt", "readings", "status", "subtitle", "slug", "tags", "updated", "template", "type" );
 
-    $vals = array( $this -> name, $this -> author, $this -> author_name, $this -> avatar, $this -> categories, $this -> created, $this -> details, $this -> gallery, $this -> authkey, $this -> level, $this -> link, $this -> excerpt, $this -> readings, $this -> status, $this -> subtitle, $this -> slug, $this -> tags, $this -> updated, $this -> template, $this -> type );
+    $vals = array( $this -> title, $this -> author, $this -> author_name, $this -> avatar, $this -> categories, $this -> created, $this -> details, $this -> gallery, $this -> authkey, $this -> level, $this -> link, $this -> excerpt, $this -> readings, $this -> status, $this -> subtitle, $this -> slug, $this -> tags, $this -> updated, $this -> template, $this -> type );
 
     if ( $GLOBALS['JBLDB'] -> insert( $this -> table, $cols, $vals ) ) {
       return array( "status" => "Post created successfully with id ". $GLOBALS['JBLDB'] -> insertId() );
@@ -50,9 +50,9 @@ class Comments {
   }
 
   public function update(){
-    $cols = array( "name", "author", "author_name", "avatar", "categories", "created", "details", "gallery", "authkey", "level", "link", "excerpt", "readings", "status", "subtitle", "slug", "tags", "updated", "template", "type" );
+    $cols = array( "title", "author", "author_name", "avatar", "categories", "created", "details", "gallery", "authkey", "level", "link", "excerpt", "readings", "status", "subtitle", "slug", "tags", "updated", "template", "type" );
 
-    $vals = array( $this -> name, $this -> author, $this -> author_name, $this -> avatar, $this -> categories, $this -> created, $this -> details, $this -> gallery, $this -> authkey, $this -> level, $this -> link, $this -> excerpt, $this -> readings, $this -> status, $this -> subtitle, $this -> slug, $this -> tags, $this -> updated, $this -> template, $this -> type );
+    $vals = array( $this -> title, $this -> author, $this -> author_name, $this -> avatar, $this -> categories, $this -> created, $this -> details, $this -> gallery, $this -> authkey, $this -> level, $this -> link, $this -> excerpt, $this -> readings, $this -> status, $this -> subtitle, $this -> slug, $this -> tags, $this -> updated, $this -> template, $this -> type );
 
     $conds = array( "id" => $this -> id );
 
@@ -123,7 +123,7 @@ class Comments {
     }
   }
 
-  public function getCategories( $category, $type = "article" ){
+  public function getCategories( $category, $type = "comment" ){
 
     $conds = array( "template" => $skin, "type" => $type );
     $results = $GLOBALS['JBLDB'] -> select( $this -> table, $this -> allowed, $conds );
@@ -143,7 +143,7 @@ class Comments {
     }
   }
 
-  public function getCompany( $company, $type = "article" ){
+  public function getCompany( $company, $type = "comment" ){
 
     $conds = array( "template" => $skin );
     $results = $GLOBALS['JBLDB'] -> select( $this -> table, $this -> allowed, $conds );
@@ -163,7 +163,7 @@ class Comments {
     }
   }
 
-  public function getCreated( $date, $type = "article" ){
+  public function getCreated( $date, $type = "comment" ){
 
     $conds = array( "template" => $skin );
     $results = $GLOBALS['JBLDB'] -> select( $this -> table, $this -> allowed, $conds );
@@ -183,7 +183,7 @@ class Comments {
     }
   }
 
-  public function getLevel( $level, $type = "article" ){
+  public function getLevel( $level, $type = "comment" ){
 
     $conds = array( "template" => $skin );
     $results = $GLOBALS['JBLDB'] -> select( $this -> table, $this -> allowed, $conds );
@@ -203,13 +203,13 @@ class Comments {
     }
   }
 
-  public function getLocation( $location, $type = "article" ){
+  public function getLocation( $location, $type = "comment" ){
 
-    $conds = array( "template" => $skin );
+    $conds = array( "location" => $location, "type" => $type );
     $results = $GLOBALS['JBLDB'] -> select( $this -> table, $this -> allowed, $conds );
     if ( $GLOBALS['JBLDB'] -> numRows( $results ) > 0 ) {
       $posts = array();
-            while ( $post = $GLOBALS['JBLDB'] -> fetchAssoc( $results )) {
+      while ( $post = $GLOBALS['JBLDB'] -> fetchAssoc( $results )) {
         $posts[] = $post;
         $posts['status'] = "success";
       }     
@@ -223,13 +223,13 @@ class Comments {
     }
   }
 
-  public function getState( $status, $type = "article" ){
+  public function getState( $status, $type = "comment" ){
 
-    $conds = array( "template" => $skin );
+    $conds = array( "status" => $status, "type" => $type );
     $results = $GLOBALS['JBLDB'] -> select( $this -> table, $this -> allowed, $conds );
     if ( $GLOBALS['JBLDB'] -> numRows( $results ) > 0 ) {
       $posts = array();
-            while ( $post = $GLOBALS['JBLDB'] -> fetchAssoc( $results )) {
+      while ( $post = $GLOBALS['JBLDB'] -> fetchAssoc( $results )) {
         $posts[] = $post;
         $posts['status'] = "success";
       }     
@@ -243,7 +243,7 @@ class Comments {
     }
   }
 
-  public function getTypes( $type = "article", $limit = 10 ){
+  public function getTypes( $type = "comment", $limit = 10 ){
 
     $conds = array( "type" => $type );
     $results = $GLOBALS['JBLDB'] -> select( $this -> table, $this -> allowed, $conds );
@@ -263,7 +263,7 @@ class Comments {
     }
   }
 
-  public function getUpdated( $date, $type = "article" ){
+  public function getUpdated( $date, $type = "comment" ){
 
     $conds = array( "updated" => $date );
     $results = $GLOBALS['JBLDB'] -> select( $this -> table, $this -> allowed, $conds );
@@ -293,7 +293,7 @@ class Comments {
     }
   }
 
-  public function sweep( $type = "article", $limit = 10 ){
+  public function sweep( $type = "comment", $limit = 10 ){
 
     $conds = array( "status" => "published", "type" => $type );
     $results = $GLOBALS['JBLDB'] -> select( $this -> table, $this -> allowed, $conds );

@@ -57,7 +57,7 @@ if ( !isset( $message['error'] ) ) {
               <li>
               <div class="collapsible-header"><i class="material-icons">label_outline</i>
 
-              <b><?php echo( $note['name'] ); ?></b><span class="alignright"><?php
+              <b><?php echo( $note['title'] ); ?></b><span class="alignright"><?php
               echo( $note['created'] ); ?></span>
               </div>
               <div class="collapsible-body"><span class="alignright">
@@ -82,7 +82,7 @@ if ( !isset( $message['error'] ) ) {
         <p>Add Comment</p>
         <form>
           <div class="input-field">
-            <input id="name" name="name" type="text">
+            <input id="name" name="title" type="text">
             <label for="name">Title</label>
           </div>
 

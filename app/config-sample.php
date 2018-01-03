@@ -22,14 +22,17 @@
 * @param JBLAUTH Used in conjuction with JBLSALT for authentication and 
 * prevention of Cross-site Request Forgery(CSRF). Also unique and app-specific
 **/
-
+$server = [];
 $server["dbhost"] = "localhost";
 $server["dbuser"] = "root";
 $server["dbpass"] = "";
 $server["dbname"] = "jabali";
+$server["dbprefix"] = "db_";
 $server["dbtype"] = "MySQL";
 $server["dbport"] = "80";
 $server["dbip"] = "::1";
+
+define( 'appconfig', $server );
 
 define( "_ROOT", "http://localhost/Jabali" );
 define( "_DBPREFIX", "db_" );

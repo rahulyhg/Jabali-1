@@ -1,4 +1,4 @@
-,<?php
+<?php
 /**
 * @package Jabali - The Plug-N-Play Framework
 * @subpackage Form
@@ -7,12 +7,10 @@
 * @version 0.17.06
 * @license MIT - https://opensource.org/licenses/MIT
 **/
-$user = $GLOBALS['USERS'] -> getsId($data);
-if ( !isset($user['error']) ) {
-    $names = explode( " ", $user['name'] );
-
-    ?><title>Editing <?php echo( $user['name'] ); ?> - <?php showOption( 'name' ); ?></title>
-    <form enctype="multipart/form-data" name="registerUser" method="POST" action="" class="mdl-grid" >
+$user = $GLOBALS['USERS'] -> getsId( $data );
+if ( !isset( $user['error'] ) ) {
+    $names = explode( " ", $user['title'] ); ?>
+    <form enctype="multipart/form-data" name="editUser" method="POST" action="" class="mdl-grid" >
         <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--8-col-tablet mdl-cell--12-col-phone <?php primaryColor(); ?> mdl-card mdl-shadow--2dp">
           <div class="mdl-card__supporting-text mdl-grid">
             <div class="input-field mdl-cell mdl-cell--6-col">
@@ -32,7 +30,7 @@ if ( !isset($user['error']) ) {
                <input class="mdl-textfield__input" id="type" name="type" type="text" readonly tabIndex="-1" placeholder="<?php echo( ucfirst( $user['type'] ) ); ?>" value="<?php echo( ucwords( $user['type'] ) ); ?>">
               <label for="type" class="center-align">Type</label>
                  <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu <?php primaryColor(); ?>" for="type"><?php
-                   if ( $_SESSION[JBLSALT.'Cap'] == "admin"  ) {
+                   if ( isCap( "admin" )  ) {
                     echo( '<li class="mdl-menu__item" data-val="admin">Admin</li>' );
                    } ?>
                    <li class="mdl-menu__item" data-val="organization">Organization<i class="mdl-color-text--white mdi mdi-city alignright" role="presentation"></i></li>

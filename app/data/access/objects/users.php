@@ -27,7 +27,7 @@ class Users
   public $level;
   public $link;
   public $location;
-  public $name;
+  public $title;
   public $phone;
   public $social;
   public $status;
@@ -50,7 +50,7 @@ class Users
     "level", 
     "link", 
     "location", 
-    "name", 
+    "title", 
     "phone", 
     "social", 
     "status", 
@@ -87,7 +87,7 @@ class Users
       "level", 
       "link", 
       "location", 
-      "name", 
+      "title", 
       "phone", 
       "social", 
       "status", 
@@ -115,7 +115,7 @@ class Users
       $this -> level, 
       $this -> link, 
       $this -> location, 
-      $this -> name, 
+      $this -> title, 
       $this -> phone, 
       $this -> social, 
       $this -> status, 
@@ -161,7 +161,7 @@ class Users
       "level", 
       "link", 
       "location", 
-      "name", 
+      "title", 
       "phone", 
       "social", 
       "status", 
@@ -189,7 +189,7 @@ class Users
       $this -> level, 
       $this -> link, 
       $this -> location, 
-      $this -> name, 
+      $this -> title, 
       $this -> phone, 
       $this -> social, 
       $this -> status, 
@@ -705,7 +705,7 @@ class Users
 
     if ( !isset( $userDetails['error']) ) {
       if ( $this -> password == $password ) {
-        $_SESSION[JBLSALT.'Alias'] = $this -> name;
+        $_SESSION[JBLSALT.'Alias'] = $this -> title;
         $_SESSION[JBLSALT.'Username'] = $this -> username;
         $_SESSION[JBLSALT.'Code'] = $this -> id;
         $_SESSION[JBLSALT.'Email'] = $this -> email;
@@ -743,7 +743,7 @@ class Users
       $this -> hash = str_shuffle(md5( $email.$date ) );
       $this -> abbr = substr( $_POST['lname'], 0,3 );
 
-      $this -> name = $_POST['fname'].' '.$_POST['lname'];
+      $this -> title = $_POST['fname'].' '.$_POST['lname'];
       $this -> author = substr( $hash, 20 );
       $this -> created = date( "Y-m-d H:i:s" );
       $this -> avatar = _IMAGES.'avatar.png';

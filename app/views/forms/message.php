@@ -14,7 +14,7 @@
 
                 <div class="input-field">
                   <i class="material-icons prefix">label</i>
-                  <input id="subject" type="text" name="name" >
+                  <input id="subject" type="text" name="title" >
                   <label for="subject" class="center-align">Subject</label>
                 </div><?php
 
@@ -28,7 +28,7 @@
                         $centers = $GLOBALS['JBLDB'] -> query( "SELECT name, avatar, id FROM ". _DBPREFIX ."users ORDER BY name" );
                         if ( $GLOBALS['JBLDB'] -> numRows( $centers ) > 0 );
                         while ( $center = $GLOBALS['JBLDB'] -> fetchAssoc( $centers ) ) {
-                          echo( '<li class="mdl-menu__item" data-val="'.$center['id'].'">'.$center['name'].'<span style=""><img class="alignright" style="padding-right:20px;margin:auto;" src="'.$center['avatar'].'" height="18px;"></span></li>' );
+                          echo( '<li class="mdl-menu__item" data-val="'.$center['id'].'">'.$center['title'].'<span style=""><img class="alignright" style="padding-right:20px;margin:auto;" src="'.$center['avatar'].'" height="18px;"></span></li>' );
                         } ?>
                     </ul>
                   </div><?php
@@ -41,7 +41,7 @@
                       $centers = $GLOBALS['JBLDB'] -> query( "SELECT name, avatar, id FROM ". _DBPREFIX ."users ORDER BY name" );
                       if ( $GLOBALS['JBLDB'] -> numRows( $centers ) > 0 );
                       while ( $center = $GLOBALS['JBLDB'] -> fetchAssoc( $centers ) ) {
-                        echo( '<li class="mdl-menu__item" data-val="'.$center['id'].'">'.$center['name'].'<span style=""><img class="alignright" style="padding-right:20px;margin:auto;" src="'.$center['avatar'].'" height="18px;"></span></li>' );
+                        echo( '<li class="mdl-menu__item" data-val="'.$center['id'].'">'.$center['title'].'<span style=""><img class="alignright" style="padding-right:20px;margin:auto;" src="'.$center['avatar'].'" height="18px;"></span></li>' );
                       } ?>
                   </ul>
                 </div>

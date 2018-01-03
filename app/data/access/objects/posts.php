@@ -12,7 +12,7 @@ namespace Jabali\Data\Access\Objects;
 
 class Posts {
 
-  public $name;
+  public $title;
   public $author;
   public $author_name;
   public $avatar;
@@ -34,7 +34,7 @@ class Posts {
   public $type;
   public $updated;
   public $allowed = array( 
-    "name", 
+    "title", 
     "author", 
     "author_name", 
     "avatar", 
@@ -61,7 +61,7 @@ class Posts {
   public function create()
   {
     $cols = array( 
-      "name", 
+      "title", 
       "author", 
       "author_name", 
       "avatar", 
@@ -84,7 +84,7 @@ class Posts {
     );
 
     $vals = array( 
-      $this -> name, 
+      $this -> title, 
       $this -> author, 
       $this -> author_name, 
       $this -> avatar, 
@@ -119,7 +119,7 @@ class Posts {
 
   public function update(){
     $cols = array( 
-      "name", 
+      "title", 
       "author", 
       "author_name", 
       "avatar", 
@@ -142,7 +142,7 @@ class Posts {
     );
 
     $vals = array( 
-      $this -> name, 
+      $this -> title, 
       $this -> author, 
       $this -> author_name, 
       $this -> avatar, 

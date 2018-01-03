@@ -11,9 +11,9 @@
 $getResourceCode = $GLOBALS['JBLDB'] -> query( "SELECT * FROM ". _DBPREFIX ."resources WHERE id = '".$code."'" );
 if ( $getResourceCode -> num_rows > 0 ) {
   while ( $resourceDetails = $GLOBALS['JBLDB'] -> fetchAssoc( $getResourceCode ) ){
-    $names = explode( " ", $resourceDetails['name'] );
+    $names = explode( " ", $resourceDetails['title'] );
 
-    ?><title>Editing <?php echo( $resourceDetails['name']." [ ".showOption( 'name' )." ]</title>" ); ?>
+    ?><title>Editing <?php echo( $resourceDetails['title']." [ ".showOption( 'name' )." ]</title>" ); ?>
     <form enctype="multipart/form-data" name="registerResource" method="POST" action="<?php echo( _ADMIN.'resource?create' ); ?>" class="mdl-grid" >
       <div class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--12-col-phone">
           <div class="mdl-card mdl-shadow--2dp <?php primaryColor(); ?>">
@@ -23,7 +23,7 @@ if ( $getResourceCode -> num_rows > 0 ) {
 
                   <div class="input-field">
                   <i class="material-icons prefix">label</i>
-                  <input id="name" name="name" type="text" value="<?php echo( $resourceDetails['name'] ); ?>">
+                  <input id="name" name="title" type="text" value="<?php echo( $resourceDetails['title'] ); ?>">
                   <label for="name">Resource Name</label>
                   </div>
 

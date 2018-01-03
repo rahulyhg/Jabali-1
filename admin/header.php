@@ -9,25 +9,18 @@
 
 if ( !isset( $_SESSION[JBLSALT.'Code'] ) ) {
   header( "Location: ". _ROOT ."/login/jabali" );
+  exit();
 }
 
-if ( isset( $_SESSION[JBLSALT.'Code' ] ) ) {
-  $skin = $GLOBALS['USERS'] -> getStyle( $_SESSION[JBLSALT.'Code' ] );
-  if ( !isset( $skin['error'] ) ) {
-    $key = !empty( $skin['style'] ) ? $skin['style'] : "zahra";
-  } else {
-    if ( defined('APP_SKIN') ) {
-      $key = APP_SKIN;
-    } else {
-      $key = "zahra";
-    }
-  }
+$skin = $GLOBALS['USERS'] -> getStyle( $_SESSION[JBLSALT.'Code' ] );
+if ( !isset( $skin['error'] ) ) {
+  $key = !empty( $skin['style'] ) ? $skin['style'] : "zahra";
 } else {
-    if ( defined('APP_SKIN') ) {
-      $key = APP_SKIN;
-    } else {
-      $key = "zahra";
-    }
+  if ( defined('APP_SKIN') ) {
+    $key = APP_SKIN;
+  } else {
+    $key = "zahra";
+  }
 }
 
 $GUSkin = $GLOBALS['SKINS'][$key];
@@ -41,7 +34,7 @@ $GLOBALS['GTextS'] = $GUSkin['texts']; ?>
   © 2017 Mauko Maunde. All rights reserved.
 
   Licensed under the MIT license (the "License" );
-  you may not use this file except in compliance with the License.
+  You may not use this file except in compliance with the License.
   You may obtain a copy of the License at https://opensource.org/licenses/MIT
 -->
 <html lang="en" xmlns="https://www.w3.org/1999/html">
@@ -87,15 +80,9 @@ $GLOBALS['GTextS'] = $GUSkin['texts']; ?>
       height: auto;
       }
     </style>
-    <script src="<?php echo _SCRIPTS ?>jquery-3.2.1.min.js"></script>
-    <script src="<?php echo _SCRIPTS ?>jquery.canvasjs.min.js"></script>
-    <?php if ( isLocalhost() ): ?>
-      <script src="<?php echo _SCRIPTS ?>ace/ace.js"></script>
-    <?php else: ?>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
-    <?php endif; ?>
-    <script src="<?php echo _SCRIPTS ?>jquery-ui.js"></script>
-    <script src="<?php echo _SCRIPTS ?>ckeditor/ckeditor.js"></script>
+    <?php
+      $ace = ( isLocalhost() ) ? _SCRIPTS."ace/ace.js" : "https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"; 
+      loadScripts([ _SCRIPTS."jquery-3.2.1.min.js", _SCRIPTS."jquery.canvasjs.min.js", _SCRIPTS."jquery-ui.js", _SCRIPTS."ckeditor/ckeditor.js", $ace ]); ?>
   </head>
   <body>
     <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">

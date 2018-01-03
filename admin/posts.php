@@ -12,7 +12,7 @@ require_once( '../load.php' );
 
 if ( isset( $_POST['create'] ) || isset( $_POST['copy'] ) ) {
 
-    if ( empty( $_POST['name'] ) ) { $_POST['name'] = 'name'; }
+    if ( empty( $_POST['title'] ) ) { $_POST['title'] = 'title'; }
     if ( empty( $_POST['author'] ) ) { $_POST['author'] = '1'; }
     if ( empty( $_POST['author_name'] ) ) { $_POST['author_name'] = 'Undefined'; }
     if ( empty( $_POST['categories'] ) ) { $_POST['categories'] = "Uncategorized"; }
@@ -34,26 +34,26 @@ if ( isset( $_POST['create'] ) || isset( $_POST['copy'] ) ) {
     if ( empty( $_FILES['new_avatar'] ) ) {
       $uploaddir = _ABSUP_.date('Y/m/d/');
 
-      $upload = _UPLOADS.date('Y/m/d/').basename( $_FILES['new_avatar']['name'] );
+      $upload = _UPLOADS.date('Y/m/d/').basetitle( $_FILES['new_avatar']['title'] );
       if ( file_exists( $upload) ) {
-        $new_avatar = _UPLOADS.date('Y/m/d/').basename( $_FILES['new_avatar']['name'] )."_".date('H_m_s');
+        $new_avatar = _UPLOADS.date('Y/m/d/').basetitle( $_FILES['new_avatar']['title'] )."_".date('H_m_s');
       } else {
-        $new_avatar = _UPLOADS.date('Y/m/d/').basename( $_FILES['new_avatar']['name'] );
+        $new_avatar = _UPLOADS.date('Y/m/d/').basetitle( $_FILES['new_avatar']['title'] );
       }
 
-      move_uploaded_file( $_FILES['new_avatar']["tmp_name"], $uploaddir);
+      move_uploaded_file( $_FILES['new_avatar']["tmp_title"], $uploaddir);
 
       $avatar = _UPLOADS.date('Y/m/d/').$new_avatar;
     } else {
       $avatar = $_POST['the_avatar'];
     }
 
-     // $fields = array( "name", "author", "author_name", "avatar", "categories", "created", "details", "gallery", "authkey", "level", "link", "excerpt", "readings", "status", "subtitle", "slug", "tags", "updated", "template", "type" );
+     // $fields = array( "title", "author", "author_name", "avatar", "categories", "created", "details", "gallery", "authkey", "level", "link", "excerpt", "readings", "status", "subtitle", "slug", "tags", "updated", "template", "type" );
     // foreach ($fields as $field ) {
     //     $GLOBALS['USERS'] -> $field = $_POST[$field];
     // }
 
-    $GLOBALS['POSTS'] -> name = htmlspecialchars($_POST['name']);
+    $GLOBALS['POSTS'] -> title = htmlspecialchars($_POST['title']);
     $GLOBALS['POSTS'] -> author = $_POST['author'];
     $GLOBALS['POSTS'] -> author_name = $_POST['author_name'];
     $GLOBALS['POSTS'] -> avatar = $avatar;
@@ -65,7 +65,7 @@ if ( isset( $_POST['create'] ) || isset( $_POST['copy'] ) ) {
     $GLOBALS['POSTS'] -> gallery = $_POST['gallery'];
     $GLOBALS['POSTS'] -> authkey = $_POST['authkey'];
     $GLOBALS['POSTS'] -> level = $_POST['level'];
-    $link = preg_replace('/\s+/', '-', $_POST['name'] );
+    $link = preg_replace('/\s+/', '-', $_POST['title'] );
     $GLOBALS['POSTS'] -> slug = strtolower( $link );
     $GLOBALS['POSTS'] -> link = _ROOT . '/' . $GLOBALS['POSTS'] -> slug ;
     $GLOBALS['POSTS'] -> excerpt = htmlentities($_POST['excerpt']);
@@ -87,7 +87,7 @@ if ( isset( $_POST['create'] ) || isset( $_POST['copy'] ) ) {
 
   } elseif ( isset( $_POST['update'] ) ) {
 
-    if ( empty( $_POST['name'] ) ) { $_POST['name'] = 'name'; }
+    if ( empty( $_POST['title'] ) ) { $_POST['title'] = 'title'; }
     if ( empty( $_POST['author'] ) ) { $_POST['author'] = '1'; }
     if ( empty( $_POST['author_name'] ) ) { $_POST['author_name'] = 'Undefined'; }
     if ( empty( $_POST['category'] ) ) { $_POST['category'] = "Uncategorized"; }
@@ -110,14 +110,14 @@ if ( isset( $_POST['create'] ) || isset( $_POST['copy'] ) ) {
     if ( empty( $_FILES['new_avatar'] ) ) {
       $uploaddir = _ABSUP_.date('Y/m/d/');
 
-      $upload = _UPLOADS.date('Y/m/d/').basename( $_FILES['new_avatar']['name'] );
+      $upload = _UPLOADS.date('Y/m/d/').basetitle( $_FILES['new_avatar']['title'] );
       if ( file_exists( $upload) ) {
-        $new_avatar = _UPLOADS.date('Y/m/d/').basename( $_FILES['new_avatar']['name'] )."_".date('H_m_s');
+        $new_avatar = _UPLOADS.date('Y/m/d/').basetitle( $_FILES['new_avatar']['title'] )."_".date('H_m_s');
       } else {
-        $new_avatar = _UPLOADS.date('Y/m/d/').basename( $_FILES['new_avatar']['name'] );
+        $new_avatar = _UPLOADS.date('Y/m/d/').basetitle( $_FILES['new_avatar']['title'] );
       }
 
-      move_uploaded_file( $_FILES['new_avatar']["tmp_name"], $uploaddir);
+      move_uploaded_file( $_FILES['new_avatar']["tmp_title"], $uploaddir);
 
       $avatar = _UPLOADS.date('Y/m/d/').$new_avatar;
     } else {
@@ -125,7 +125,7 @@ if ( isset( $_POST['create'] ) || isset( $_POST['copy'] ) ) {
     }
 
     $GLOBALS['POSTS'] -> id = $_POST['id'];
-    $GLOBALS['POSTS'] -> name = $_POST['name'];
+    $GLOBALS['POSTS'] -> title = $_POST['title'];
     $GLOBALS['POSTS'] -> author = $_POST['author'];
     $GLOBALS['POSTS'] -> author_name = $_POST['author_name'];
     $GLOBALS['POSTS'] -> avatar = $avatar;
@@ -137,7 +137,7 @@ if ( isset( $_POST['create'] ) || isset( $_POST['copy'] ) ) {
     $GLOBALS['POSTS'] -> gallery = $_POST['gallery'];
     $GLOBALS['POSTS'] -> authkey = $_POST['authkey'];
     $GLOBALS['POSTS'] -> level = $_POST['level'];
-    $link = preg_replace('/\s+/', '-', $_POST['name'] );
+    $link = preg_replace('/\s+/', '-', $_POST['title'] );
     $GLOBALS['POSTS'] -> slug = strtolower( $link );
     $GLOBALS['POSTS'] -> link = _ROOT . '/' . $GLOBALS['POSTS'] -> slug ;
     $GLOBALS['POSTS'] -> excerpt = htmlentities( $_POST['excerpt'] );
@@ -152,7 +152,7 @@ if ( isset( $_POST['create'] ) || isset( $_POST['copy'] ) ) {
     if ( isset( $update['error'] ) ) {
       _shout_( "Status: ".$update['status']."<br>Error: ".$update['error'], "error" );
     } else {
-      _shout_( "Status: ".$update['status'], "success" );
+      _shout_( $update['message'], "success" );
     }
   } elseif ( isset( $_POST['delete'] )) {
     $delete = $GLOBALS['POSTS'] -> delete( $_POST['delete'] );
@@ -170,8 +170,8 @@ showTitle('posts'); ?>
 
 $collumns = array( 'id', 'title', 'author', 'categories', 'tags', 'published');
  if ( isCap( 'admin' ) ) array_push( $collumns, 'actions');
-$fields = array( 'id', 'name', 'author_name', 'categories', 'tags', 'created' );
-$rows = array( 'id', 'name', 'author', 'categories', 'tags', 'created' );
+$fields = array( 'id', 'title', 'author_name', 'categories', 'tags', 'created' );
+$rows = array( 'id', 'title', 'author', 'categories', 'tags', 'created' );
 $actions = array( 'edit' => ['id'], 'view' => ['id'], 'copy' => ['id'] );
 
 

@@ -12,7 +12,7 @@
   <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--8-col-tablet mdl-cell--12-col-phone mdl-grid mdl-card mdl-shadow--2dp mdl-card--expand <?php primaryColor(); ?>"><br><br>
     <div class="mdl-card__supporting-text mdl-cell mdl-cell--12-col mdl-grid">
       <div class="input-field mdl-cell mdl-cell--12-col">
-        <input id="name" type="text" name="name" >
+        <input id="name" type="text" name="title" >
         <label for="name" data-error="wrong" data-success="right" class="center-align">Title</label>
       </div>
 
@@ -130,7 +130,7 @@
         </div>
       </div>
 
-      <input type="hidden" name="author" value="<?php echo $_SESSION[JBLSALT.'Code']; ?>">
+      <input type="hidden" name="author" value="<?php echo $_SESSION[JBLSALT.'Username']; ?>">
       <input type="hidden" name="author_name" value="<?php echo $_SESSION[JBLSALT.'Alias']; ?>">
       <input type="hidden" name="level" value="public">
       <input type="hidden" name="authkey" value="<?php str_shuffle( generateCode() ); ?>">

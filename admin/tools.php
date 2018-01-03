@@ -33,7 +33,7 @@ require_once( 'header.php' ); ?>
 
 				<div class="mdl-cell mdl-cell--8-col <?php primaryColor(); ?>"></div><?php
 		} elseif ( $_GET["page"] =="export" ) {?>
-		<title>Site Tools - <?php showOption( 'name' ); ?></title>
+		<title>Export Data - <?php showOption( 'name' ); ?></title>
 			<form action="" class="mdl-cell mdl-cell--5-col <?php primaryColor(); ?> mdl-card">
 				<div class="mdl-card__supporting-text">
 		             <div class="input-field mdl-js-textfield getmdl-select">

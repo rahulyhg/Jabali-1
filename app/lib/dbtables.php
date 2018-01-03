@@ -49,7 +49,7 @@ class DBTables
     level VARCHAR(12),
     link VARCHAR(100),
     location VARCHAR(50),
-    name VARCHAR(100),
+    title VARCHAR(100),
     password VARCHAR(50),
     phone VARCHAR(20),
     social TEXT,
@@ -65,7 +65,7 @@ SQL;
     $tables[] = <<<SQL
     CREATE TABLE IF NOT EXISTS {$this -> prefix}resources (
     id INT AUTO_INCREMENT,
-    name VARCHAR(100),
+    title VARCHAR(100),
     author VARCHAR(12),
     avatar VARCHAR(20),
     author_name VARCHAR(20), 
@@ -91,7 +91,7 @@ SQL;
     CREATE TABLE IF NOT EXISTS {$this -> prefix}messages(
     id INT AUTO_INCREMENT,
     authkey VARCHAR(100),
-    name VARCHAR(100),
+    title VARCHAR(100),
     author VARCHAR(20),
     author_name VARCHAR(20),
     created DATETIME,
@@ -110,7 +110,7 @@ SQL;
     CREATE TABLE IF NOT EXISTS {$this -> prefix}comments(
     id INT AUTO_INCREMENT,
     authkey VARCHAR(100),
-    name VARCHAR(100),
+    title VARCHAR(100),
     author VARCHAR(20),
     author_name VARCHAR(20),
     created DATETIME,
@@ -127,7 +127,7 @@ SQL;
 SQL;
     $tables[] = <<<SQL
     CREATE TABLE IF NOT EXISTS {$this -> prefix}posts(
-    name VARCHAR(300),
+    title VARCHAR(300),
     author VARCHAR(20),
     author_name VARCHAR(100),
     avatar VARCHAR(100),
@@ -154,7 +154,7 @@ SQL;
   $tables[] = <<<SQL
     CREATE TABLE IF NOT EXISTS {$this -> prefix}options (
     id INT AUTO_INCREMENT,
-    name VARCHAR(200),
+    title VARCHAR(200),
     code VARCHAR(100) UNIQUE,
     details TEXT,
     updated DATETIME,
@@ -164,7 +164,7 @@ SQL;
     $tables[] = <<<SQL
     CREATE TABLE IF NOT EXISTS {$this -> prefix}clients (
     id INT AUTO_INCREMENT,
-    name VARCHAR(200),
+    title VARCHAR(200),
     appkey VARCHAR(100) UNIQUE,
     appsecret VARCHAR(100) UNIQUE,
     status VARCHAR(20),
@@ -182,7 +182,7 @@ SQL;
     parent VARCHAR(20),
     link VARCHAR(100),
     location VARCHAR(100),
-    name VARCHAR(200),
+    title VARCHAR(200),
     type VARCHAR(50),
     status VARCHAR(50),
     updated DATETIME,
@@ -217,7 +217,7 @@ SQL;
     level       VARCHAR(12),
     link        VARCHAR(100),
     location    VARCHAR(50),
-    name        VARCHAR(100),
+    title        VARCHAR(100),
     password    VARCHAR(50),
     phone       VARCHAR(20),
     social      TEXT,
@@ -232,7 +232,7 @@ SQL;
     $tables[] = <<<SQL
     CREATE TABLE IF NOT EXISTS {$this -> prefix}resources (
     id          INTEGER           PRIMARY KEY AUTOINCREMENT,
-    name        VARCHAR(100),
+    title        VARCHAR(100),
     author      VARCHAR(12),
     avatar      VARCHAR(20),
     author_name VARCHAR(20),
@@ -257,7 +257,7 @@ SQL;
     CREATE TABLE IF NOT EXISTS {$this -> prefix}messages(
     id           INTEGER      PRIMARY KEY      AUTOINCREMENT,
     authkey      VARCHAR(100),
-    name         VARCHAR(100),
+    title         VARCHAR(100),
     author       VARCHAR(20),
     author_name  VARCHAR(20),
     created      DATETIME,
@@ -275,7 +275,7 @@ SQL;
     CREATE TABLE IF NOT EXISTS {$this -> prefix}comments(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     authkey VARCHAR(100),
-    name VARCHAR(100),
+    title VARCHAR(100),
     author VARCHAR(20),
     author_name VARCHAR(20),
     created DATETIME,
@@ -291,7 +291,7 @@ SQL;
 SQL;
     $tables[] = <<<SQL
     CREATE TABLE IF NOT EXISTS {$this -> prefix}posts(
-    name VARCHAR(300),
+    title VARCHAR(300),
     author VARCHAR(20),
     author_name VARCHAR(100),
     avatar VARCHAR(100),
@@ -317,7 +317,7 @@ SQL;
   $tables[] = <<<SQL
     CREATE TABLE IF NOT EXISTS {$this -> prefix}options (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name VARCHAR(200),
+    title VARCHAR(200),
     code VARCHAR(100) UNIQUE,
     details TEXT,
     updated REAL
@@ -326,7 +326,7 @@ SQL;
     $tables[] = <<<SQL
     CREATE TABLE IF NOT EXISTS {$this -> prefix}clients (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name VARCHAR(200),
+    title VARCHAR(200),
     appkey VARCHAR(100) UNIQUE,
     appsecret VARCHAR(100) UNIQUE,
     status VARCHAR(20),
@@ -343,7 +343,7 @@ SQL;
     parent VARCHAR(20),
     link VARCHAR(100),
     location VARCHAR(100),
-    name VARCHAR(200),
+    title VARCHAR(200),
     type VARCHAR(50),
     status VARCHAR(50),
     updated REAL
@@ -377,7 +377,7 @@ SQL;
     level VARCHAR(12),
     link VARCHAR(100),
     location VARCHAR(50),
-    name VARCHAR(100),
+    title VARCHAR(100),
     password VARCHAR(50),
     phone VARCHAR(20),
     social TEXT,
@@ -393,7 +393,7 @@ SQL;
     $tables[] = <<<SQL
     CREATE TABLE IF NOT EXISTS {$this -> prefix}resources (
     id INT AUTOINCREMENT,
-    name VARCHAR(100),
+    title VARCHAR(100),
     author VARCHAR(12),
     avatar VARCHAR(20),
     author_name VARCHAR(20), 
@@ -419,7 +419,7 @@ SQL;
     CREATE TABLE IF NOT EXISTS {$this -> prefix}messages(
     id INT AUTOINCREMENT,
     authkey VARCHAR(100),
-    name VARCHAR(100),
+    title VARCHAR(100),
     author VARCHAR(20),
     author_name VARCHAR(20),
     created DATETIME,
@@ -438,7 +438,7 @@ SQL;
     CREATE TABLE IF NOT EXISTS {$this -> prefix}comments(
     id INT AUTOINCREMENT,
     authkey VARCHAR(100),
-    name VARCHAR(100),
+    title VARCHAR(100),
     author VARCHAR(20),
     author_name VARCHAR(20),
     created DATETIME,
@@ -455,7 +455,7 @@ SQL;
 SQL;
     $tables[] = <<<SQL
     CREATE TABLE IF NOT EXISTS {$this -> prefix}posts(
-    name VARCHAR(300),
+    title VARCHAR(300),
     author VARCHAR(20),
     author_name VARCHAR(100),
     avatar VARCHAR(100),
@@ -482,7 +482,7 @@ SQL;
   $tables[] = <<<SQL
     CREATE TABLE IF NOT EXISTS {$this -> prefix}options (
     id INT AUTOINCREMENT,
-    name VARCHAR(200),
+    title VARCHAR(200),
     code VARCHAR(100) UNIQUE,
     details TEXT,
     updated DATETIME,
@@ -492,7 +492,7 @@ SQL;
     $tables[] = <<<SQL
     CREATE TABLE IF NOT EXISTS {$this -> prefix}clients (
     id INT AUTOINCREMENT,
-    name VARCHAR(200),
+    title VARCHAR(200),
     appkey VARCHAR(100) UNIQUE,
     appsecret VARCHAR(100) UNIQUE,
     status VARCHAR(20),
@@ -510,7 +510,7 @@ SQL;
     parent VARCHAR(20),
     link VARCHAR(100),
     location VARCHAR(100),
-    name VARCHAR(200),
+    title VARCHAR(200),
     type VARCHAR(50),
     status VARCHAR(50),
     updated DATETIME,

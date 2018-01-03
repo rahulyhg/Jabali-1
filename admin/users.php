@@ -13,7 +13,7 @@ require_once( '../load.php' );
 if ( isset( $_POST['register'] ) ) {
 
     if ( empty( $_POST['authkey'] ) ) { $_POST['authkey'] = str_shuffle( generateCode() ); }
-    if ( empty( $_POST['fname'] ) ) { $_POST['name'] = 'User Name'; } else { $_POST['name'] = $_POST['fname'].' '.$_POST['lname']; }
+    if ( empty( $_POST['ftitle'] ) ) { $_POST['title'] = 'User Name'; } else { $_POST['title'] = $_POST['ftitle'].' '.$_POST['ltitle']; }
     if ( empty( $_POST['author'] ) ) { $_POST['author'] = '1'; }
     if ( empty( $_POST['author_name'] ) ) { $_POST['author_name'] = 'Undefined'; }
     if ( empty( $_POST['categories'] ) ) { $_POST['categories'] = "uncategorized"; }
@@ -33,24 +33,24 @@ if ( isset( $_POST['register'] ) ) {
     if ( empty( $_POST['status'] ) ) { $_POST['status'] = "active"; } 
     if ( empty( $_POST['type'] ) ) { $_POST['type'] = "subscriber"; } 
     if ( empty( $_POST['tags'] ) ) { $_POST['tags'] = ""; } 
-    if ( empty( $_POST['password'] ) ) { $_POST['password'] = md5($_POST['name'].date("Y-m-d H:i:s")); } 
+    if ( empty( $_POST['password'] ) ) { $_POST['password'] = md5($_POST['title'].date("Y-m-d H:i:s")); } 
     if ( empty( $_POST['updated'] ) ) { $_POST['updated'] = date('Y-m-d H:i:s'); }
 
     if ( !empty( $_FILES['new_avatar'] ) ) {
-      $upload = _ABSUP_.date('Y/m/d/').basename( $_FILES['new_avatar']['name'] );
+      $upload = _ABSUP_.date('Y/m/d/').basetitle( $_FILES['new_avatar']['title'] );
       if ( file_exists( $upload) ) {
-        $avatar = _UPLOADS.date('Y/m/d/').basename( $_FILES['new_avatar']['name'] )."_".date('H_m_s');
+        $avatar = _UPLOADS.date('Y/m/d/').basetitle( $_FILES['new_avatar']['title'] )."_".date('H_m_s');
       } else {
-        $avatar = _UPLOADS.date('Y/m/d/').basename( $_FILES['new_avatar']['name'] );
+        $avatar = _UPLOADS.date('Y/m/d/').basetitle( $_FILES['new_avatar']['title'] );
       }
 
-      move_uploaded_file( $_FILES['new_avatar']["tmp_name"], $upload );
+      move_uploaded_file( $_FILES['new_avatar']["tmp_title"], $upload );
     } else {
       $avatar = $_POST['the_avatar'];
     }
 
     $GLOBALS['USERS'] -> authkey = $_POST['authkey'];
-    $GLOBALS['USERS'] -> name = $_POST['name']; 
+    $GLOBALS['USERS'] -> title = $_POST['title']; 
     $GLOBALS['USERS'] -> author = $_POST['author'];
     $GLOBALS['USERS'] -> author_name = $_POST['author_name'];
     $GLOBALS['USERS'] -> avatar = $avatar;
@@ -65,7 +65,7 @@ if ( isset( $_POST['register'] ) ) {
     $GLOBALS['USERS'] -> excerpt = $_POST['excerpt'];
     $GLOBALS['USERS'] -> gender = strtolower( $_POST['gender'] );
     $GLOBALS['USERS'] -> level = $_POST['level'];
-    $link = preg_replace('/\s+/', '', $_POST['name'] );
+    $link = preg_replace('/\s+/', '', $_POST['title'] );
     $GLOBALS['USERS'] -> username = strtolower( $link );
     $GLOBALS['USERS'] -> link = _ROOT . '/users/' . $GLOBALS['USERS'] -> username ;
     $GLOBALS['USERS'] -> location = $_POST['location'];
@@ -90,7 +90,7 @@ if ( isset( $_POST['register'] ) ) {
 if ( isset( $_POST['update'] ) ) {
 
     if ( empty( $_POST['authkey'] ) ) { $_POST['authkey'] = str_shuffle( generateCode() ); }
-    if ( empty( $_POST['fname'] ) ) { $_POST['name'] = 'User Name'; } else { $_POST['name'] = $_POST['fname'].' '.$_POST['lname']; }
+    if ( empty( $_POST['ftitle'] ) ) { $_POST['title'] = 'User Name'; } else { $_POST['title'] = $_POST['ftitle'].' '.$_POST['ltitle']; }
     if ( empty( $_POST['author'] ) ) { $_POST['author'] = '1'; }
     if ( empty( $_POST['author_name'] ) ) { $_POST['author_name'] = 'Undefined'; }
     if ( empty( $_POST['categories'] ) ) { $_POST['categories'] = "Uncategorized"; }
@@ -114,25 +114,25 @@ if ( isset( $_POST['update'] ) ) {
     if ( empty( $_POST['updated'] ) ) { $_POST['updated'] = date('Y-m-d H:i:s'); }
 
     if ( !empty( $_FILES['new_avatar'] ) ) {
-      $upload = _ABSUP_.date('Y/m/d/').basename( $_FILES['new_avatar']['name'] );
+      $upload = _ABSUP_.date('Y/m/d/').basetitle( $_FILES['new_avatar']['title'] );
       if ( file_exists( $upload) ) {
-        $avatar = _UPLOADS.date('Y/m/d/').basename( $_FILES['new_avatar']['name'] )."_".date('H_m_s');
+        $avatar = _UPLOADS.date('Y/m/d/').basetitle( $_FILES['new_avatar']['title'] )."_".date('H_m_s');
       } else {
-        $avatar = _UPLOADS.date('Y/m/d/').basename( $_FILES['new_avatar']['name'] );
+        $avatar = _UPLOADS.date('Y/m/d/').basetitle( $_FILES['new_avatar']['title'] );
       }
 
-      move_uploaded_file( $_FILES['new_avatar']["tmp_name"], $upload );
+      move_uploaded_file( $_FILES['new_avatar']["tmp_title"], $upload );
     } else {
       $avatar = $_POST['the_avatar'];
     }
 
-    // $fields = array( "authkey", "author", "author_name", "avatar", "categories", "company", "created", "custom", "details", "email","excerpt", "gender", "level", "link", "location", "name", "phone", "social", "status", "style", "type", "updated", "username", "password" );
+    // $fields = array( "authkey", "author", "author_name", "avatar", "categories", "company", "created", "custom", "details", "email","excerpt", "gender", "level", "link", "location", "title", "phone", "social", "status", "style", "type", "updated", "username", "password" );
     // foreach ($fields as $field ) {
     //     $GLOBALS['USERS'] -> $field = $_POST[$field];
     // }
 
     $GLOBALS['USERS'] -> authkey = $_POST['authkey'];
-    $GLOBALS['USERS'] -> name = $_POST['name']; 
+    $GLOBALS['USERS'] -> title = $_POST['title']; 
     $GLOBALS['USERS'] -> author = $_POST['author'];
     $GLOBALS['USERS'] -> author_name = $_POST['author_name'];
     $GLOBALS['USERS'] -> avatar = $avatar;
@@ -171,9 +171,9 @@ require_once( 'header.php' );
 showTitle('users'); ?>
 <div class="mdl-grid"><?php
 
-$collumns = array( 'id','username', 'name', 'email', 'phone', 'location', 'created', 'actions');
-$fields = array( 'id','username', 'name', 'email', 'phone', 'location', 'created');
-$rows = array( 'id','username', 'name', 'email', 'phone', 'location', 'created');
+$collumns = array( 'id','username', 'title', 'email', 'phone', 'location', 'created', 'actions');
+$fields = array( 'id','username', 'title', 'email', 'phone', 'location', 'created');
+$rows = array( 'id','username', 'title', 'email', 'phone', 'location', 'created');
 $actions = array( 'edit' => ['id'], 'profile' => ['id'] );
 
 if ( isset( $_GET['create'] ) ) {
@@ -198,7 +198,7 @@ if ( isset( $_GET['create'] ) ) {
         newButton('users', $_GET['type'], 'create' );
     }
 } elseif ( isset( $_GET['location'] ) ) { ?>
-    <title>Users In <?php echo( ucwords( $_GET['location'] ) ); ?>s - <?php showOption( 'name' ); ?></title><?php
+    <title>Users In <?php echo( ucwords( $_GET['location'] ) ); ?>s - <?php showOption( 'title' ); ?></title><?php
     tableHeader( $collumns );
     tableBody( $GLOBALS['USERS']-> getCity( $_GET['location'] ), $fields, $rows, "No Users Found", $actions );
     tableFooter();
@@ -207,7 +207,7 @@ if ( isset( $_GET['create'] ) ) {
     }
 } elseif ( isset( $_GET['status'] ) ) {
     tableHeader( $collumns );
-    tableBody( $GLOBALS['USERS']-> getState( $_GET['status'] ), $fields, $rows, "No ".ucwords($_GET['status'])." Users Found", $actions );
+    tableBody( $GLOBALS['USERS']-> getStatus( $_GET['status'] ), $fields, $rows, "No ".ucwords($_GET['status'])." Users Found", $actions );
     tableFooter();
     if ( isCap( 'admin' ) ) {
         newButton('users', 'subscriber', 'create' );

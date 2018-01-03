@@ -7,14 +7,14 @@
 * @version 0.17.06
 * @license MIT - https://opensource.org/licenses/MIT
 **/ ?>
-<title><?php echo( $resourceDetails['name'] ); ?> Create <?php echo( ucfirst( $_GET['create'] ) ); ?> - <?php showOption( 'name' ); ?></title>
+<title><?php echo( $resourceDetails['title'] ); ?> Create <?php echo( ucfirst( $_GET['create'] ) ); ?> - <?php showOption( 'name' ); ?></title>
         <div class="mdl-cell mdl-cell--12-col mdl-grid <?php primaryColor(); ?>">
         <form enctype="multipart/form-data" name="registerResource" method="POST" action="<?php echo( _ADMIN."resource?create=organization" ); ?>" class="mdl-cell mdl-cell--12-col-desktop mdl-cell--12-col-tablet mdl-cell--12-col-phone mdl-grid">
             <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--8-col-tablet mdl-cell--12-col-phone">
 
               <div class="input-field">
                 <i class="material-icons prefix">label</i>
-              <input id="name" name="name" type="text" >
+              <input id="name" name="title" type="text" >
               <label for="name">Resource Name</label>
               </div>
 
@@ -52,7 +52,7 @@
                   $centers = $GLOBALS['JBLDB'] -> query( "SELECT name, id FROM ". _DBPREFIX ."users WHERe type = 'center' ORDER BY name" );
                   if ( $GLOBALS['JBLDB'] -> numRows( $centers ) > 0 );
                   while ( $center = $GLOBALS['JBLDB'] -> fetchAssoc( $centers ) ) {
-                      echo '<li class="mdl-menu__item" data-val="'.$center['id'].'">'.$center['name'].'</li>';
+                      echo '<li class="mdl-menu__item" data-val="'.$center['id'].'">'.$center['title'].'</li>';
                   }
                    ?>
               </ul>
@@ -78,7 +78,7 @@
                   $centers = $GLOBALS['JBLDB'] -> query( "SELECT name, id FROM ". _DBPREFIX ."users WHERe type = 'doctor' ORDER BY name" );
                   if ( $GLOBALS['JBLDB'] -> numRows( $centers ) > 0 );
                   while ( $center = $GLOBALS['JBLDB'] -> fetchAssoc( $centers ) ) {
-                      echo '<li class="mdl-menu__item" data-val="'.$center['id'].'">'.$center['name'].'</li>';
+                      echo '<li class="mdl-menu__item" data-val="'.$center['id'].'">'.$center['title'].'</li>';
                   }
                    ?>
               </ul>

@@ -8,17 +8,17 @@
 * @license MIT - https://opensource.org/licenses/MIT
 **/
 
-$user = $GLOBALS['USERS'] -> getId( $data );
+$user = $GLOBALS['USERS'] -> getSingle( $data );
 $GLOBALS['grecord'] = $user;
 if ( !isset( $user['error'] ) ) {
+  $name = explode( " ", $user['title'] );
+  
   if ( $_SESSION[JBLSALT.'Code'] !== $user['id'] ) {
-    $name = explode( " ", $user['name'] );
     $greettype = 'About '.ucfirst( $name[0] );
   } else {
-    $name = explode( " ", $user['name'] );
     $greettype = '<b>Hello </b> '.ucfirst( $name[0] )."!";
   } ?>
-  <title><?php echo( $user['name'] ); ?> - <?php showOption( 'name' ); ?></title>
+  <title><?php echo( $user['title'] ); ?> - <?php showOption( 'name' ); ?></title>
   <div class="mdl-cell mdl-cell--8-col-desktop mdl-cell--8-col-tablet mdl-cell--12-col-phone">
     <div class="mdl-card mdl-shadow--2dp <?php primaryColor(); ?>">
       <div class="mdl-card__supporting-text mdl-card--expand mdl-grid">
@@ -77,9 +77,9 @@ if ( !isset( $user['error'] ) ) {
 
       <div class="mdl-card__menu"><?php if ( strtolower( $user['type'] ) == "organization" ) { ?>
           <a href="./resource?author=<?php echo( $user['id'] ); ?>" class="material-icons mdl-badge mdl-badge--overlap">business</a><?php } ?>
-          <a href="./users?view=<?php echo( $user['id'] ); ?>&key=<?php echo( $user['name'] ); ?>&fav=true" class="material-icons mdl-badge mdl-badge--overlap">favorite</a><?php 
+          <a href="./users?view=<?php echo( $user['id'] ); ?>&key=<?php echo( $user['title'] ); ?>&fav=true" class="material-icons mdl-badge mdl-badge--overlap">favorite</a><?php 
           if ( isCap( 'admin' ) || isProfile( $user['id'] ) ) { ?>
-          <a href="./users?edit=<?php echo( $user['id'] ); ?>&key=<?php echo( $user['name'] ); ?>" ><i class="material-icons">edit</i></a><?php } ?>
+          <a href="./users?edit=<?php echo( $user['id'] ); ?>&key=<?php echo( $user['title'] ); ?>" ><i class="material-icons">edit</i></a><?php } ?>
       </div>
     </div>
   </div>
@@ -102,7 +102,7 @@ if ( !isset( $user['error'] ) ) {
                     <li>
                       <div class="collapsible-header"><i class="material-icons">label_outline</i>
                         
-                          <b><?php echo( $note['name'] ); ?></b><span class="alignright"><?php 
+                          <b><?php echo( $note['title'] ); ?></b><span class="alignright"><?php 
                           echo( $note['created'] ); ?></span>
                       </div>
                       <div class="collapsible-body"><span class="alignright">

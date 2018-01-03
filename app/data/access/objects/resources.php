@@ -12,7 +12,7 @@ namespace Jabali\Data\Access\Objects;
 
 class Resources {
 
-  public $name;
+  public $title;
   public $author;
   public $author_name;
   public $avatar;
@@ -33,14 +33,14 @@ class Resources {
   public $template;
   public $type;
   public $updated;
-  public $allowed = array( "name", "author", "author_name", "avatar", "categories", "id", "created", "details", "gallery", "level", "link", "excerpt", "readings", "status", "subtitle", "slug", "tags", "template", "type", "updated" );
+  public $allowed = array( "title", "author", "author_name", "avatar", "categories", "id", "created", "details", "gallery", "level", "link", "excerpt", "readings", "status", "subtitle", "slug", "tags", "template", "type", "updated" );
 
   private $table = "resources";
 
   public function create(){
-    $cols = array( "name", "author", "author_name", "avatar", "categories", "created", "details", "gallery", "authkey", "level", "link", "excerpt", "readings", "status", "subtitle", "slug", "tags", "updated", "template", "type" );
+    $cols = array( "title", "author", "author_name", "avatar", "categories", "created", "details", "gallery", "authkey", "level", "link", "excerpt", "readings", "status", "subtitle", "slug", "tags", "updated", "template", "type" );
 
-    $vals = array( $this -> name, $this -> author, $this -> author_name, $this -> avatar, $this -> categories, $this -> created, $this -> details, $this -> gallery, $this -> authkey, $this -> level, $this -> link, $this -> excerpt, $this -> readings, $this -> status, $this -> subtitle, $this -> slug, $this -> tags, $this -> updated, $this -> template, $this -> type );
+    $vals = array( $this -> title, $this -> author, $this -> author_name, $this -> avatar, $this -> categories, $this -> created, $this -> details, $this -> gallery, $this -> authkey, $this -> level, $this -> link, $this -> excerpt, $this -> readings, $this -> status, $this -> subtitle, $this -> slug, $this -> tags, $this -> updated, $this -> template, $this -> type );
 
     if ( $GLOBALS['JBLDB'] -> insert( $this -> table, $cols, $vals ) ) {
       return array( "status" => "Resource created successfully with id ". $GLOBALS['JBLDB'] -> insertId() );
@@ -50,9 +50,9 @@ class Resources {
   }
 
   public function update(){
-    $cols = array( "name", "author", "author_name", "avatar", "categories", "created", "details", "gallery", "authkey", "level", "link", "excerpt", "readings", "status", "subtitle", "slug", "tags", "updated", "template", "type" );
+    $cols = array( "title", "author", "author_name", "avatar", "categories", "created", "details", "gallery", "authkey", "level", "link", "excerpt", "readings", "status", "subtitle", "slug", "tags", "updated", "template", "type" );
 
-    $vals = array( $this -> name, $this -> author, $this -> author_name, $this -> avatar, $this -> categories, $this -> created, $this -> details, $this -> gallery, $this -> authkey, $this -> level, $this -> link, $this -> excerpt, $this -> readings, $this -> status, $this -> subtitle, $this -> slug, $this -> tags, $this -> updated, $this -> template, $this -> type );
+    $vals = array( $this -> title, $this -> author, $this -> author_name, $this -> avatar, $this -> categories, $this -> created, $this -> details, $this -> gallery, $this -> authkey, $this -> level, $this -> link, $this -> excerpt, $this -> readings, $this -> status, $this -> subtitle, $this -> slug, $this -> tags, $this -> updated, $this -> template, $this -> type );
 
     $conds = array( "id" => $this -> id );
 

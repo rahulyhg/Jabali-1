@@ -16,15 +16,15 @@ class Options {
   public $author;
   public $created;
   public $details;
-  public $name;
+  public $title;
   public $updated;
-  public $allowed = array( "id", "author", "created", "details", "name", "updated" );
+  public $allowed = array( "id", "author", "created", "details", "title", "updated" );
 
 	/**
 	* Create option
 	**/
-	function create ( $name, $code, $details, $updated ) {
-		if( $GLOBALS['JBLDB'] -> query( "INSERT INTO ". _DBPREFIX ."options (name, code, details, updated ) VALUES ( '".$name."', '".$code."', '".$details."', '".$updated."' )" ) ) {
+	function create ( $title, $code, $details, $updated ) {
+		if( $GLOBALS['JBLDB'] -> query( "INSERT INTO ". _DBPREFIX ."options (title, code, details, updated ) VALUES ( '".$title."', '".$code."', '".$details."', '".$updated."' )" ) ) {
 			_shout_( "Setting Created Sucessfully!", "success");
           } else {
           	return array ( "error" => $GLOBALS['JBLDB'] -> error() );
@@ -35,8 +35,8 @@ class Options {
     * Create initial menu
     * Suppress success message
     **/
-    function install ( $name, $code, $details, $updated ) {
-        if( !$GLOBALS['JBLDB'] -> query( "INSERT INTO ". _DBPREFIX ."options (name, code, details, updated ) VALUES ( '".$name."', '".$code."', '".$details."', '".$updated."' )" ) ) {
+    function install ( $title, $code, $details, $updated ) {
+        if( !$GLOBALS['JBLDB'] -> query( "INSERT INTO ". _DBPREFIX ."options (title, code, details, updated ) VALUES ( '".$title."', '".$code."', '".$details."', '".$updated."' )" ) ) {
             _shout_( "Error: " . $GLOBALS['JBLDB'] -> error(), "error");
         }
     }
@@ -101,8 +101,8 @@ class Options {
 
                     <div class="input-field mdl-cell mdl-cell--12-col">
                             <i class="material-icons prefix">label</i>
-                        <input id="name" type="text" name="name" value="<?php showOption( 'name' ); ?>">
-                        <label for="name" data-error="wrong" data-success="right" class="center-align">Site Name </label>
+                        <input id="title" type="text" name="name" value="<?php showOption( 'name' ); ?>">
+                        <label for="title" data-error="wrong" data-success="right" class="center-align">Site Name </label>
                     </div>
 
                     <div class="input-field mdl-cell mdl-cell--12-col">
@@ -304,13 +304,13 @@ class Options {
 
                     <div class="input-field">
                             <i class="material-icons prefix">description</i>
-                        <input id="name" type="text" name="name" value="<?php showOption( 'homepage' ); ?>">
-                        <label for="name" data-error="wrong" data-success="right" class="center-align">Home Page </label>
+                        <input id="title" type="text" name="title" value="<?php showOption( 'homepage' ); ?>">
+                        <label for="title" data-error="wrong" data-success="right" class="center-align">Home Page </label>
                     </div>
                     <div class="input-field">
                             <i class="material-icons prefix">description</i>
-                        <input id="name" type="text" name="name" value="<?php showOption( 'postspage' ); ?>">
-                        <label for="name" data-error="wrong" data-success="right" class="center-align">Posts Page </label>
+                        <input id="title" type="text" name="title" value="<?php showOption( 'postspage' ); ?>">
+                        <label for="title" data-error="wrong" data-success="right" class="center-align">Posts Page </label>
                     </div>
 
                     <?php $GLOBALS['hGlobal'] -> currencyCode(); ?>
@@ -736,8 +736,8 @@ class Options {
 
 	                    <div class="input-field inline">
 	                        <i class="mdi mdi-label prefix"></i>
-	                        <input id="name" type="text" name="name">
-	                        <label for="name" data-error="wrong" data-success="right" class="center-align">Skin Name </label>
+	                        <input id="title" type="text" name="title">
+	                        <label for="title" data-error="wrong" data-success="right" class="center-align">Skin Name </label>
 	                    </div>
 	                    <?php csrf(); ?>
 
@@ -836,7 +836,7 @@ class Options {
                         </div>
                         <div class="input-field">
                             <i class="material-icons prefix">label</i>
-                            <input id="cname" type="text" name="cname" value="<?php echo( $client['name']) ?>">
+                            <input id="cname" type="text" name="cname" value="<?php echo( $client['title']) ?>">
                             <label for="cname">App Name</label>
                         </div>
                         <div class="input-field">
@@ -870,7 +870,7 @@ class Options {
               </div>
               <div class="mdl-card__supporting-text"">
                 <?php tableHeader(['ID', 'Client', 'App Key', 'App Secret', 'Actions']);
-                tableBody(getClients(), ['id', 'name', 'appkey', 'appsecret'], ['ID', 'Client', 'App Key', 'App Secret'], "No Clients Found", ['edit' => ['id']]);
+                tableBody(getClients(), ['id', 'title', 'appkey', 'appsecret'], ['ID', 'Client', 'App Key', 'App Secret'], "No Clients Found", ['edit' => ['id']]);
                 tableFooter(); ?>
               </div>
             </div><?php
@@ -883,7 +883,7 @@ class Options {
             </div>
             <div class="mdl-card__supporting-text">
                 <?php tableHeader(['ID', 'Client', 'App Key', 'App Secret', 'Actions']);
-                tableBody(getClients(), ['id', 'name', 'appkey', 'appsecret'], ['ID', 'Client', 'App Key', 'App Secret'], "No Clients Found", ['edit' => ['id']]);
+                tableBody(getClients(), ['id', 'title', 'appkey', 'appsecret'], ['ID', 'Client', 'App Key', 'App Secret'], "No Clients Found", ['edit' => ['id']]);
                 tableFooter(); ?>
 
                 <h5>Create New App</h5>

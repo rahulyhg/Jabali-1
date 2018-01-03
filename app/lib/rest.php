@@ -12,12 +12,21 @@ namespace Jabali\Lib;
 
 class REST
 {
+  // Jabali Client's Key
   public $key;
+
+  // Jabali Client's Secret
   public $secret;
+
+  // Input Data
   public $data;
 
+  // JSON Payload Ouput
   public $retval;
 
+  /**
+   *
+   */
   public function __construct( $elements = [], $key = null, $secret = null, $data = null )
   {
     $this -> key = $key;
@@ -34,6 +43,9 @@ class REST
     }
   }
 
+  /**
+   *
+   */
   public function process( $elements, $table )
   {
     if ( empty( $elements[1] ) ) {
@@ -44,7 +56,7 @@ class REST
         break;
 
       case 'update':
-        $details = json_decode( $data, true );
+        $details = json_decode( $this -> data, true );
         foreach ($details as $field => $value) {
           $props = get_class_vars( $GLOBALS[$table] );
 
@@ -57,7 +69,7 @@ class REST
         break;
       
       case 'delete':
-        $details = json_decode( $data, true );
+        $details = json_decode( $this -> data, true );
         $this -> retval = $GLOBALS[$table] -> delete( $details['id'] );
         break;
 
@@ -71,6 +83,9 @@ class REST
     }
   }
 
+  /**
+   *
+   */
   public function app()
   {
     $this -> retval = array( 
@@ -80,28 +95,33 @@ class REST
       "author" => "Mauko Maunde", 
       "screenshot" => "https://mauko.co.ke/app/assets/images/avatar.png", 
       "description" => "Opensource web application framework with material design components for quick deployment.", 
+      "website" => "https://jabalicms.org/",
+      "support" => "https://jabalicms.org/support",
+      "documentation" => "https://docs.jabalicms.org",
+      "download" => "https://jabalicms.org/dl/jabali/jabali_0.17.11.zip",
       "social" => array(
         "facebook" => "https://facebook.com/jabalicms",
         "twitter" => "https://twitter.com/jabalicms",
         "github" => "https://github.com/JabaliCMS",
         "email" => "dev@jabalicms.org"
       ),
-      "website" => "https://jabalicms.org/",
-      "support" => "https://jabalicms.org/support",
-      "documentation" => "https://docs.jabalicms.org",
-      "download" => "https://jabalicms.org/dl/jabali/jabali_0.17.11.zip",
       "licenses" => array(
         "MIT" => "https://opensource.org/licenses/MIT",
         "GNU" => "https://opensource.org/licenses/gpl-license",
         "Apache" => "https://opensource.org/licenses/Apache-2.0"
       ),
-      "php" => "7.0+",
-      "mysql" => "5.0+",
-      "sqlite" => "3.0+",
-      "postgresql" => "5.0+"
+      "requires" => array(
+        "php" => "7.0+",
+        "mysql" => "5.0+",
+        "sqlite" => "3.0+",
+        "postgresql" => "5.0+"
+      )
     );
   }
 
+  /**
+   *
+   */
   public function themes()
   {
     $themes = array();
@@ -126,6 +146,9 @@ class REST
     }
   }
 
+  /**
+   *
+   */
   public function create()
   {
     if ( is_null( $this -> key ) || is_null( $this -> secret ) ) {
@@ -133,14 +156,14 @@ class REST
         'status' => 'fail', 
         'message' => 'App Key/Secret Missing' 
       );
-    } elseif( !validateClient( $this -> key, $this -> secret )){
+    } elseif( !validateClient( $this -> key, $this -> secret ) ){
       $this -> retval = array( 
         'status' => 'fail', 
         'message' => 'Wrong App Key/Secret' 
       );
     } else {
       $details = json_decode( $data, true );
-      foreach ($details as $field => $value) {
+      foreach ( $details as $field => $value) {
         $props = get_class_vars( $GLOBALS[$table] );
         
         if ( in_array( $field, $props ) ) {
@@ -152,6 +175,9 @@ class REST
       }
   }
 
+  /**
+   *
+   */
   public function view( $elements, $table )
   {
     if ( empty( $elements[2] ) ) {

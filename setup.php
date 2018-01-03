@@ -174,25 +174,29 @@ if ( isset( $_POST['setup'] ) && $_POST['host'] != "" && $_POST['user'] != "" &&
 * @param $server["dbuser"] Your server username
 * @param $server["dbpass"] Your server password
 * @param $server["dbname"] The name of the database to use
-* @param $server["dbtype"] The type of database management system. Jabali supports
+* @param $server["dbtype"] The type of database management system - MySQL/SQLite/PostgreSQL/MongoDB or CouchDB
 * @param $server["dbport"] Port through which to communicate with server
 * @param $server["dbip"] IP address of the server
 * 
 * @param _ROOT The app\'s home/root url
-* @param _DBPRFIX A prefix to be added before all database tables. 
-* Allows multiple Jabali installations on same database.
-* @param JBLSALT A unique, app-specific string for authentication.
+* @param _DBPRFIX A prefix to be added before all database tables
+* Allows multiple Jabali installations on same database
+* @param JBLSALT A unique, app-specific string for authentication
 * @param JBLAUTH Used in conjuction with JBLSALT for authentication and 
 * prevention of Cross-site Request Forgery(CSRF). Also unique and app-specific
 **/
 
+$server = [];
 $server["dbhost"] = "'.$dbhost.'";
 $server["dbuser"] = "'.$dbuser.'";
 $server["dbpass"] = "'.$dbpass.'";
 $server["dbname"] = "'.$dbname.'";
+$server["dbprefix"] = "'.$dbprefix.'";
 $server["dbtype"] = "'.$dbtype.'";
 $server["dbport"] = "'.$dbport.'";
 $server["dbip"] = "'.$dbip.'";
+
+define( "appconfig", $server );
 
 define( "_ROOT", "'.$home.'" );
 define( "_DBPREFIX", "'.$dbprefix.'" );

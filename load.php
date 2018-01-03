@@ -13,7 +13,7 @@
 * For security, we flush the $server variable(set in init.php) here so 
 * configuration details are not available beyond this point
 **/
-unset( $server );
+$server = [];
 
 /**
 * Set initial values for Loopy
@@ -42,6 +42,8 @@ $GLOBALS['GTypes']['messages'] = isOption ( 'usertypes' ) ? getOption( 'messaget
 $GLOBALS['gattribution'] = getOption('attribution');
 $GLOBALS['gattributionlink'] = getOption('attribution_link');
 $GLOBALS['gcopyright'] = getOption('copyright');
+$GLOBALS['gemail'] = getOption('email');
+$GLOBALS['gphone'] = getOption('phone');
 
 /**
 * Load color skins - sets the $GLOBALS['SKINS'] variable

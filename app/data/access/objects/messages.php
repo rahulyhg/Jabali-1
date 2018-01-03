@@ -12,7 +12,7 @@ namespace Jabali\Data\Access\Objects;
 
 class Messages {
 
-  public $name;
+  public $title;
   public $author;
   public $author_name;
   public $id;
@@ -27,15 +27,15 @@ class Messages {
   public $status;
   public $type;
 
-  public $allowed = array( "id", "authkey", "name", "author", "author_name", "created", "details", "email", "receipient", "level", "phone", "status", "type" );
+  public $allowed = array( "id", "authkey", "title", "author", "author_name", "created", "details", "email", "receipient", "level", "phone", "status", "type" );
 
   private $table = "messages";
 
   public function create()
   {
-    $cols = array( "id", "authkey", "name", "author", "author_name", "created", "details", "email", "receipient", "level", "phone", "status", "type" );
+    $cols = array( "id", "authkey", "title", "author", "author_name", "created", "details", "email", "receipient", "level", "phone", "status", "type" );
     
-    $vals = array( $this -> id, $this -> authkey, $this -> name, $this -> author, $this -> author_name, $this -> created, $this -> details, $this -> email, $this -> receipient, $this -> level, $this -> phone, $this -> status, $this -> type ); 
+    $vals = array( $this -> id, $this -> authkey, $this -> title, $this -> author, $this -> author_name, $this -> created, $this -> details, $this -> email, $this -> receipient, $this -> level, $this -> phone, $this -> status, $this -> type ); 
 
     if ( $GLOBALS['JBLDB'] -> insert( $this -> table, $cols, $vals ) ) {
       return array( "status" => "success", "message" => "Message created successfully with id ". $GLOBALS['JBLDB'] -> insertId() );

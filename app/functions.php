@@ -505,6 +505,26 @@ function theCopyright()
 }
 
 /**
+* Echoes out the app copyright text
+* @param $class Optional class to style the link
+**/
+function appEmail( $text = null )
+{
+	$text = is_null( $text ) ? $GLOBALS['gemail'] : $text;
+    echo( '<a href="mailto:'.$GLOBALS['gemail'].'">'.$text.'</a>' );
+}
+
+/**
+* Echoes out the app copyright text
+* @param $class Optional class to style the link
+**/
+function appPhone( $text = null )
+{
+	$text = is_null( $text ) ? $GLOBALS['gphone'] : $text;
+    echo( '<a href="mailto:'.$GLOBALS['gphone'].'">'.$text.'</a>' );
+}
+
+/**
 * Include active theme's header
 **/
 function getHeader()
@@ -621,12 +641,20 @@ function showTitle( $class = "dashboard" )
     </title><?php
 }
 
-
 /**
 * Outputs specific html document title
 * @param $text The text to output as title
 **/
 function headTitle( $text )
+{
+    echo( '<title>'.ucwords( $text ).' - '.getOption( 'name' ).'</title>' );
+}
+
+/**
+* Outputs specific html document title
+* @param $text The text to output as title
+**/
+function htmlTitle( $text )
 {
     echo( '<title>'.ucwords( $text ).' - '.getOption( 'name' ).'</title>' );
 }
@@ -653,6 +681,11 @@ function tableHeader( $collums )
 
 /**
 * Outputs the body of table with defined data variables
+* @param array $results Array of records from a database query
+* @param array $fields Array of table collunms to display
+* @param array $names Array of names to use as labels for table header
+* @param $error Error message to sho when no records are found
+* @param array $actions Array of actions with links and icons for each record
 **/
 function tableBody( $results, $fields, $names, $error = "No Records Found", $actions = null )
 {
@@ -701,7 +734,7 @@ function tableBody( $results, $fields, $names, $error = "No Records Found", $act
 								$icon = 'perm_identity';
 								break;
 						}
-						echo( '<a class="mdl-button mdl-button--icon" href="?'.$action.'='.$item[$link[0]].'&key='.$item['name'].'"><i class="material-icons">'.$icon.'</i></a>');
+						echo( '<a class="mdl-button mdl-button--icon" href="?'.$action.'='.$item[$link[0]].'&key='.$item['title'].'"><i class="material-icons">'.$icon.'</i></a>');
 					}
 					echo( '<form action="" method="POST" style="display: inline;" >');
 					csrf();
@@ -1464,7 +1497,7 @@ function resetLoop( $callback = "sweep", $args = [], $table = "posts" )
 **/
 function theTitle()
 {
-	echo $GLOBALS['grecord']['name'];
+	echo $GLOBALS['grecord']['title'];
 }
 
 /**
@@ -1472,7 +1505,7 @@ function theTitle()
 **/
 function recordTitle()
 {
-	return $GLOBALS['grecord']['name'];
+	return $GLOBALS['grecord']['title'];
 }
 
 /**

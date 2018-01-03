@@ -142,3 +142,8 @@ $GLOBALS['GUZZLE'] = new \GuzzleHttp\Client;
 $GLOBALS['MAILER'] = new \PHPMailer\PHPMailer\PHPMailer;
 $hGlobal = new Jabali\Lib\Uniform();
 $GLOBALS['UNI'] = new Jabali\Lib\Uniform();
+
+$tables = [ 'USERS', 'POSTS', 'RESOURCES', 'COMMENTS', 'MESSAGES', 'OPTIONS', 'MENUS' ];
+foreach ($tables as $table ) {
+	$GLOBALS['N'.$table] = new Data\Bases\MySQL\SANDAL( strtolower( $table ) );
+}
